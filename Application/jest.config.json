@@ -1,0 +1,32 @@
+{
+  "coveragePathIgnorePatterns": [
+    "/node_modules/"
+  ],
+  "collectCoverage": false,
+  "collectCoverageFrom": [
+    "./**/*.{js,jsx,ts,tsx}"
+  ],
+  "testMatch": [
+    "**/__tests__/**/*.+(ts|tsx|js)",
+    "**/?(*.)+(spec|test).+(ts|tsx|js)"
+  ],
+  "transform": {
+    "^.+\\.(ts|tsx)$": "ts-jest",
+    "^.+\\.(js|jsx)$": "babel-jest"
+  },
+  "globals": {
+    "ts-jest": {
+      "diagnostics": false
+    }
+  },
+  "moduleNameMapper": {
+    "^.+\\.(css|less|scss)$": "identity-obj-proxy",
+    "^Config(.*)$": "<rootDir>/config$1",
+    "^Assets(.*)$": "<rootDir>/assets$1",
+    "^Components(.*)$": "<rootDir>/components$1",
+    "^Build(.*)$": "<rootDir>/build$1",
+    "^Hooks(.*)$": "<rootDir>/hooks$1",
+    "^Utils(.*)$": "<rootDir>/utils$1"
+  },
+  "coverageDirectory": "./__tests__/coverage/"
+}

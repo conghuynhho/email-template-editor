@@ -1,0 +1,37 @@
+:root {
+    /* Set the deafult values */
+    --selected-primary-color: var(--light-primary-color);
+    --selected-background-color: var(--light-background-color);
+    --selected-disabled-color: var(--light-disabled-color);
+
+    /* Set the 'light' theme */
+    --light-primary-color: #007bff;
+    --light-background-color: #fff;
+    --light-disabled-color: #6c757d;
+
+    /* Set the 'dark' theme */
+    --dark-primary-color: #30475e;
+    --dark-background-color: #222831;
+    --dark-disabled-color: #4a4a4b;
+  }
+
+  .primary-btn {
+    color: #fff;
+    position: relative;
+    font-size: 16px;
+    padding: 10px;
+    min-width: 120px;
+    border-radius: 5px;
+    background-color: var(--selected-primary-color);
+    outline: unset;
+    transition: background-color 0.3s ease, box-shadow 0.7s ease;
+  }
+
+  .primary-btn:disabled{
+    background-color: var(--selected-disabled-color);
+  }
+
+.theme {
+    background-color: var(--selected-background-color);
+    height: 100vh
+  }

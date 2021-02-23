@@ -1,0 +1,65 @@
+{
+    "compilerOptions": {
+        "outDir": "./build",
+        "target": "es6",
+        "lib": [
+            "dom",
+            "esnext"
+        ],
+        "module": "esnext",
+        "esModuleInterop": true,
+        "jsx": "react",
+        "noUnusedLocals": true, // Declare variable but not use -> warning error
+        "noUnusedParameters": true,
+        "noImplicitAny": false,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        "sourceMap": false,
+        "strict": true,
+        "declaration": true,
+        "baseUrl": ".",
+        "noImplicitThis": true,
+        "types": [
+            "jest",
+            "node",
+            "react",
+            "@types/jest"
+        ],
+        "typeRoots": [
+            "../node_modules/@types"
+        ],
+        "paths": {
+            "Assets/*": [
+                "assets/*"
+            ],
+            "Components/*": [
+                "components/*"
+            ],
+            "Hooks/*": [
+                "hooks/*"
+            ],
+            "Docs/*": [
+                "docs/*"
+            ],
+            "Utils/*": [
+                "utils/*"
+            ]
+        },
+        "plugins": [
+            {
+                "name": "typescript-plugin-css-modules"
+            }
+        ],
+    },
+    "include": [
+        "components/**/*",
+        "assets/**/*"
+    ],
+    "exclude": [
+        "node_modules", 
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+    ]
+}

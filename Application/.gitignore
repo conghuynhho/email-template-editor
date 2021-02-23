@@ -1,0 +1,25 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+package-lock.json
+.idea/*
+
+jsconfig.json
+WSConfig.js
+yarn.lock
+
+#static/*
+.vscode
+.history/*
+# production
+build
+# misc
+.DS_Store
+credentials.json
+debug.log
+.env
+version.txt
+
+static/sandbox/campaign/*
+static/assets/campaign/*
