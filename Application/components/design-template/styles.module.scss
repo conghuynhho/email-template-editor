@@ -1,0 +1,16 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: auto 338px;
+    grid-template-rows: 100vh auto;
+    grid-template-areas: "workspace sidepanel";
+
+    .grid-workspace {
+        grid-area: workspace;
+        background-color: #E3EEF1;
+    }
+
+    .grid-sidepanel {
+        grid-area: sidepanel;
+
+    }
+}
