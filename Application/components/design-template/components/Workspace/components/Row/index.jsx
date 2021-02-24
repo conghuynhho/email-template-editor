@@ -10,14 +10,28 @@ const Row = (props) => {
     const {data, generalStyle} = props;
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => data.values._meta.htmlClassNames);
+    const styleBackgroundImage = {
+        backgroundImage: `url(${getObjectPropSafely(() => {
+            return data.values.backgroundImage.url;
+        })})`,
+        backgroundRepeat: getObjectPropSafely(() => {
+            return data.values.backgroundImage.repeat ? 'repeat' : 'no-repeat';
+        }),
+        backgroundPosition: getObjectPropSafely(() => {
+            return data.values.backgroundImage.center ? 'center top' : 'left top';
+        })
+    };
+    const fullWidth = getObjectPropSafely(() => data.values.backgroundImage.fullWidth);
     const styleRow = {
         padding: getObjectPropSafely(() => data.values.padding),
-        backgroundColor: getObjectPropSafely(() => data.values.backgroundColor)
+        backgroundColor: getObjectPropSafely(() => data.values.backgroundColor),
+        ...(fullWidth ? styleBackgroundImage : {})
     };
     const styleContainer = {
         maxWidth: getObjectPropSafely(() => generalStyle.contentWidth),
         backgroundColor: getObjectPropSafely(() => data.values.columnsBackgroundColor),
-        margin: '0px auto'
+        margin: '0px auto',
+        ...(!fullWidth ? styleBackgroundImage : {})
     };
 
     const renderContents = (contents) => {
