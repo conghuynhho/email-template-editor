@@ -4,6 +4,7 @@ import styles from 'Components/design-template/components/Workspace/components/R
 import Divider from 'Components/design-template/components/Workspace/components/Divider';
 import Image from 'Components/design-template/components/Workspace/components/Image';
 import Text from 'Components/design-template/components/Workspace/components/Text';
+import Button from 'Components/design-template/components/Workspace/components/Button';
 
 const Row = (props) => {
     const {data, generalStyle} = props;
@@ -37,6 +38,11 @@ const Row = (props) => {
                 case 'text': {
                     return (
                         <Text data={content} />
+                    );
+                }
+                case 'button': {
+                    return (
+                        <Button data={content} />
                     );
                 }
             }
