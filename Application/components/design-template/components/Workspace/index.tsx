@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {Fragment, useContext} from 'react';
 import classnames from 'classnames';
 import styles from 'Components/design-template/components/Workspace/styles.module.scss';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
@@ -14,7 +14,7 @@ const Workspace = () => {
     const id = getObjectPropSafely(() => nestedData.body.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => nestedData.body.values._meta.htmlClassNames);
     const styleBody = {
-        minHeight: '100vh',
+        minHeight: 'max-content',
         backgroundColor: getObjectPropSafely(() => nestedData.body.values.backgroundColor),
         fontFamily: getObjectPropSafely(() => nestedData.body.values.fontFamily.value)
     };
@@ -25,11 +25,13 @@ const Workspace = () => {
 
         return rows.map((row, index) => {        
             return (
-                <Row 
-                    key={index}
-                    data={row} 
-                    generalStyle={generalStyle}
-                />
+                <Fragment key={index}>
+                    <Row 
+                        data={row} 
+                        generalStyle={generalStyle}
+                    />
+                    <div className="blockbuilder-placeholder" data-name="Drag it here" />
+                </Fragment>
             );
         }); 
     };
@@ -41,7 +43,9 @@ const Workspace = () => {
                 className={classnames(classTitle, styles['inner-content'])}
                 style={styleBody}
             >
-                {renderRow()}
+                <div className={'layer-group-row'}>
+                    {renderRow()}
+                </div>
             </div>
         </div>
     );

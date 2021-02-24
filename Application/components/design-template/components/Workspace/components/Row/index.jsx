@@ -2,6 +2,8 @@ import React, {Fragment} from 'react';
 import {getObjectPropSafely} from 'Utils';
 import styles from 'Components/design-template/components/Workspace/components/Row/styles.module.scss';
 import Divider from 'Components/design-template/components/Workspace/components/Divider';
+import Image from 'Components/design-template/components/Workspace/components/Image';
+import Text from 'Components/design-template/components/Workspace/components/Text';
 
 const Row = (props) => {
     const {data, generalStyle} = props;
@@ -27,6 +29,16 @@ const Row = (props) => {
                         <Divider data={content} />
                     );
                 }
+                case 'image': {
+                    return (
+                        <Image data={content} />
+                    );
+                }
+                case 'text': {
+                    return (
+                        <Text data={content} />
+                    );
+                }
             }
         };
 
@@ -36,8 +48,8 @@ const Row = (props) => {
                     contents.length ? contents.map((content, index) => {
                         return (
                             <Fragment key={index}>
-                                <div className="blockbuilder-placeholder" data-name="Drag it here" />
                                 <div className={'layer-selectable'}>
+                                    <div className={'layer-selector'} />
                                     {getContent(content)}
                                 </div>
                                 <div className="blockbuilder-placeholder" data-name="Drag it here" />
@@ -115,6 +127,7 @@ const Row = (props) => {
 
     return (
         <div className={'row-layer'}>
+            <div className={'row-selector'} />
             <div
                 id={id}
                 className={classTitle}
