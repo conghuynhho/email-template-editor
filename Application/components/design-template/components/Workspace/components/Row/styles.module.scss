@@ -1,0 +1,26 @@
+.u_row {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-left: 0;
+    margin-right: 0;
+
+    .u_column {
+        position: relative;
+        width: 100%;
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+.empty_column {
+    background-color: rgba(222, 242, 250, 0.85);
+    outline: #2faade dashed 1px;
+    min-height: 100px;
+    font-size: 13px;
+    color: #2faade;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
