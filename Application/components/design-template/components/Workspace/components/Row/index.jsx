@@ -5,6 +5,7 @@ import Divider from 'Components/design-template/components/Workspace/components/
 import Image from 'Components/design-template/components/Workspace/components/Image';
 import Text from 'Components/design-template/components/Workspace/components/Text';
 import Button from 'Components/design-template/components/Workspace/components/Button';
+import Menu from 'Components/design-template/components/Workspace/components/Menu';
 
 const Row = (props) => {
     const {data, generalStyle} = props;
@@ -57,6 +58,11 @@ const Row = (props) => {
                 case 'button': {
                     return (
                         <Button data={content} />
+                    );
+                }
+                case 'menu': {
+                    return (
+                        <Menu data={content} />
                     );
                 }
             }
