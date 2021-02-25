@@ -14,7 +14,7 @@ const Menu = (props) => {
     };
 
     const renderMenu = () => {
-        const menus = getObjectPropSafely(() => data.values.menu.items);
+        const menus = getObjectPropSafely(() => data.values.menu.items) || [];
 
         return menus.map((menu, index) => {
             const href = getObjectPropSafely(() => menu.link.values.href);

@@ -1,19 +1,19 @@
 export const nestedData = {
     'counters': {
-        'u_row': 13,
+        'u_row': 14,
         'u_column': 17,
         'u_content_menu': 3,
         'u_content_text': 11,
         'u_content_image': 3,
         'u_content_button': 4,
         'u_content_social': 1,
-        'u_content_divider': 8
+        'u_content_divider': 6,
+        'u_content_html': 2
     },
     'body': {
         'rows': [
             {
                 'cells': [
-                    1,
                     1
                 ],
                 'columns': [
@@ -41,52 +41,6 @@ export const nestedData = {
                                     'hideDesktop': false,
                                     'hideMobile': false
                                 }
-                            },
-                            {
-                                'type': 'divider',
-                                'values': {
-                                    'containerPadding': '10px',
-                                    '_meta': {
-                                        'htmlID': 'u_content_divider_7',
-                                        'htmlClassNames': 'u_content_divider'
-                                    },
-                                    'selectable': true,
-                                    'draggable': true,
-                                    'duplicatable': true,
-                                    'deletable': true,
-                                    'width': '100%',
-                                    'border': {
-                                        'borderTopWidth': '3px',
-                                        'borderTopStyle': 'solid',
-                                        'borderTopColor': '#2dc26b'
-                                    },
-                                    'textAlign': 'center',
-                                    'hideDesktop': false,
-                                    'hideMobile': false
-                                }
-                            },
-                            {
-                                'type': 'divider',
-                                'values': {
-                                    'containerPadding': '10px',
-                                    '_meta': {
-                                        'htmlID': 'u_content_divider_8',
-                                        'htmlClassNames': 'u_content_divider'
-                                    },
-                                    'selectable': true,
-                                    'draggable': true,
-                                    'duplicatable': true,
-                                    'deletable': true,
-                                    'width': '100%',
-                                    'border': {
-                                        'borderTopWidth': '5px',
-                                        'borderTopStyle': 'solid',
-                                        'borderTopColor': '#b96ad9'
-                                    },
-                                    'textAlign': 'center',
-                                    'hideDesktop': false,
-                                    'hideMobile': false
-                                }
                             }
                         ],
                         'values': {
@@ -94,42 +48,17 @@ export const nestedData = {
                                 'htmlID': 'u_column_16',
                                 'htmlClassNames': 'u_column'
                             },
-                            'border': {
-                                'borderTopWidth': '5px',
-                                'borderTopStyle': 'solid',
-                                'borderTopColor': '#CCC',
-                                'borderLeftWidth': '5px',
-                                'borderLeftStyle': 'solid',
-                                'borderLeftColor': '#CCC',
-                                'borderRightWidth': '5px',
-                                'borderRightStyle': 'solid',
-                                'borderRightColor': '#CCC',
-                                'borderBottomWidth': '5px',
-                                'borderBottomStyle': 'solid',
-                                'borderBottomColor': '#CCC'
-                            },
-                            'padding': '3px',
-                            'backgroundColor': '#cca9a9'
-                        }
-                    },
-                    {
-                        'contents': [],
-                        'values': {
-                            'backgroundColor': '',
-                            'padding': '0px',
                             'border': {},
-                            '_meta': {
-                                'htmlID': 'u_column_17',
-                                'htmlClassNames': 'u_column'
-                            }
+                            'padding': '0px',
+                            'backgroundColor': ''
                         }
                     }
                 ],
                 'values': {
                     'displayCondition': null,
                     'columns': false,
-                    'backgroundColor': '#95a5a6',
-                    'columnsBackgroundColor': '#d37070',
+                    'backgroundColor': '',
+                    'columnsBackgroundColor': '',
                     'backgroundImage': {
                         'url': '',
                         'fullWidth': true,
@@ -137,7 +66,7 @@ export const nestedData = {
                         'center': true,
                         'cover': false
                     },
-                    'padding': '7px',
+                    'padding': '0px',
                     'hideDesktop': false,
                     'hideMobile': false,
                     'noStackMobile': false,
@@ -366,6 +295,68 @@ export const nestedData = {
                     'noStackMobile': false,
                     '_meta': {
                         'htmlID': 'u_row_1',
+                        'htmlClassNames': 'u_row'
+                    },
+                    'selectable': true,
+                    'draggable': true,
+                    'duplicatable': true,
+                    'deletable': true
+                }
+            },
+            {
+                'cells': [
+                    1
+                ],
+                'columns': [
+                    {
+                        'contents': [
+                            {
+                                'type': 'html',
+                                'values': {
+                                    'containerPadding': '18px',
+                                    '_meta': {
+                                        'htmlID': 'u_content_html_2',
+                                        'htmlClassNames': 'u_content_html'
+                                    },
+                                    'selectable': true,
+                                    'draggable': true,
+                                    'duplicatable': true,
+                                    'deletable': true,
+                                    'html': '<strong>Hello, world!</strong>',
+                                    'hideDesktop': false,
+                                    'hideMobile': false
+                                }
+                            }
+                        ],
+                        'values': {
+                            'backgroundColor': '',
+                            'padding': '0px',
+                            'border': {},
+                            '_meta': {
+                                'htmlID': 'u_column_17',
+                                'htmlClassNames': 'u_column'
+                            }
+                        }
+                    }
+                ],
+                'values': {
+                    'displayCondition': null,
+                    'columns': false,
+                    'backgroundColor': '',
+                    'columnsBackgroundColor': '',
+                    'backgroundImage': {
+                        'url': '',
+                        'fullWidth': true,
+                        'repeat': false,
+                        'center': true,
+                        'cover': false
+                    },
+                    'padding': '0px',
+                    'hideDesktop': false,
+                    'hideMobile': false,
+                    'noStackMobile': false,
+                    '_meta': {
+                        'htmlID': 'u_row_14',
                         'htmlClassNames': 'u_row'
                     },
                     'selectable': true,

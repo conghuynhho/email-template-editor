@@ -7,6 +7,7 @@ import Image from 'Components/design-template/components/Workspace/components/Im
 import Text from 'Components/design-template/components/Workspace/components/Text';
 import Button from 'Components/design-template/components/Workspace/components/Button';
 import Menu from 'Components/design-template/components/Workspace/components/Menu';
+import RenderCode from 'Components/design-template/components/Workspace/components/RenderCode';
 import {Icon} from '@antscorp/components';
 
 const Row = (props) => {
@@ -66,6 +67,11 @@ const Row = (props) => {
                 case 'menu': {
                     return (
                         <Menu data={content} />
+                    );
+                }
+                case 'html': {
+                    return (
+                        <RenderCode data={content} />
                     );
                 }
             }
