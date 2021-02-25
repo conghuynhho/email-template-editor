@@ -169,6 +169,19 @@ const Row = (props) => {
                 )}>
                     <Icon className={classnames('icon-ants-add')} />
                 </div>
+                <div className={classnames(
+                    styles['layer-action-row']
+                )}>
+                    <div className={classnames(styles['duplicate-row'])}>
+                        <Icon className={classnames('icon-ants-copy-report')} />
+                    </div>
+                    <div className={classnames(styles['delete-row'])}>
+                        <Icon className={classnames('icon-ants-delete')} />
+                    </div>
+                </div>
+                <div className={classnames(styles['layer-drag-row'])} >
+                    <Icon className={classnames('icon-ants-double-three-dots', styles['drag-row'])} />
+                </div>
             </div>
         );
     };

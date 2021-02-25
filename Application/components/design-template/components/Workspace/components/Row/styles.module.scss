@@ -35,7 +35,7 @@
             width: 100px;
             left: calc(50% - 50px);
             text-align: center;
-            z-index: 112;
+            z-index: 101;
             cursor: pointer;
 
             &.layer-add-row-top {
@@ -58,6 +58,63 @@
             .layer-add-row {
                 display: inline-block; 
             }
+
+            .layer-drag-row {
+                display: flex;
+            }
+        }
+
+        .layer-action-row {
+            position: absolute;
+            right: 2px;
+            top: 2px;
+            display: none;
+            z-index: 101;
+
+            .duplicate-row {
+                display: inline-block;
+                background-color: #13ABD7;
+                border-style: solid;
+                border-color: #13ABD7;
+                border-width: 1px;
+                color: #fff;
+                width: 35px;
+                font-size: 14px;
+                border-radius: 3px 0px 0px 3px;
+                padding: 0px 7px 0px 9px;
+                margin: 0px 1px;
+                cursor: pointer;            
+            }
+
+            .delete-row {
+                display: inline-block;
+                background-color: #13ABD7;
+                border-style: solid;
+                border-color: #13ABD7;
+                border-width: 1px;
+                color: #fff;
+                padding: 0px 7px 0px 11px;
+                width: 35px;
+                font-size: 14px;
+                border-radius: 0px 3px 3px 0px;
+                cursor: pointer;
+            }
+        }
+
+        .layer-drag-row {
+            position: absolute;
+            display: none; 
+            align-items: center;
+            background-color: #7aabc0;
+            height: 100%;
+            color: #fff;
+            z-index: 101;
+            
+            .drag-row {
+                cursor: grabbing;
+                cursor: -moz-grabbing;
+                cursor: -webkit-grabbing;   
+            }
         }
     }
 
@@ -65,12 +122,21 @@
         .layer-selector-row {
             &::after {
                 opacity: 1;
-                outline: #4cb9ea solid 2px;
+                outline: #13ABD7 solid 2px;
             }
 
             .layer-add-row {
                 display: inline-block;
-                background-color: #4cb9ea;
+                background-color: #13ABD7;
+            }
+
+            .layer-action-row {
+                display: inline-block;
+            }
+
+            .layer-drag-row {
+                display: flex;
+                background-color: #13ABD7;
             }
         }
     }
