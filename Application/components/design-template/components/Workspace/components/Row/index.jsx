@@ -1,4 +1,5 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
+import classnames from 'classnames';
 import {getObjectPropSafely} from 'Utils';
 import styles from 'Components/design-template/components/Workspace/components/Row/styles.module.scss';
 import Divider from 'Components/design-template/components/Workspace/components/Divider';
@@ -8,6 +9,7 @@ import Button from 'Components/design-template/components/Workspace/components/B
 import Menu from 'Components/design-template/components/Workspace/components/Menu';
 
 const Row = (props) => {
+    const [isSelected, setSelected] = useState(false);
     const {data, generalStyle} = props;
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => data.values._meta.htmlClassNames);
@@ -152,11 +154,18 @@ const Row = (props) => {
     };
 
     return (
-        <div className={'row-layer'}>
-            <div className={'row-selector'} />
+        <div   
+            className={classnames(
+                'layer-selectable', 
+                styles['layer-row'],
+                {[styles['layer-selected']] : isSelected}
+            )}
+            onClick={() => setSelected(!isSelected)}
+        >
+            <div className={classnames(styles['layer-selector-row'])} />
             <div
                 id={id}
-                className={classTitle}
+                className={classnames('u_row', classTitle)}
                 style={styleRow}
             >
                 <div 
