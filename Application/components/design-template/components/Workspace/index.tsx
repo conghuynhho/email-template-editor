@@ -30,7 +30,6 @@ const Workspace = () => {
                         data={row} 
                         generalStyle={generalStyle}
                     />
-                    <div className="blockbuilder-placeholder" data-name="Drag it here" />
                 </Fragment>
             );
         }); 

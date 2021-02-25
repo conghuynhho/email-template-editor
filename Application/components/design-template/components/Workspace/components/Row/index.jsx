@@ -84,7 +84,7 @@ const Row = (props) => {
                                     {renderSelector({isShowAddTop: false, isShowAddBottom: false})}
                                     {getContent(content)}
                                 </div>
-                                <div className="blockbuilder-placeholder" data-name="Drag it here" />
+                                {renderDragItHere()}
                             </Fragment>
                         );
                     }) : (
@@ -200,31 +200,46 @@ const Row = (props) => {
         );
     };
 
+    const renderDragItHere = () => {
+        return (
+            <div 
+                className={classnames(
+                    styles['drag-it-here'],
+                    {[styles['active']] : false}
+                )} 
+                data-name="Drag it here" 
+            />
+        );
+    };
+
     return (
-        <div   
-            className={classnames(
-                'layer-selectable', 
-                styles['layer-row'],
-                {[styles['layer-selected']] : isSelected}
-            )}
-            onClick={() => setSelected(!isSelected)}
-        >
-            {renderSelector()}
-            <div
-                id={id}
-                className={classnames('u_row', classTitle)}
-                style={styleRow}
+        <>
+            <div   
+                className={classnames(
+                    'layer-selectable', 
+                    styles['layer-row'],
+                    {[styles['layer-selected']] : isSelected}
+                )}
+                onClick={() => setSelected(!isSelected)}
             >
-                <div 
-                    className={classnames(styles['container'])}
-                    style={styleContainer}
+                {renderSelector()}
+                <div
+                    id={id}
+                    className={classnames('u_row', classTitle)}
+                    style={styleRow}
                 >
-                    <div className={styles[classTitle]}>
-                        {renderColumns()}
+                    <div 
+                        className={classnames(styles['container'])}
+                        style={styleContainer}
+                    >
+                        <div className={styles[classTitle]}>
+                            {renderColumns()}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            {renderDragItHere()}
+        </>
     );
 };
 
