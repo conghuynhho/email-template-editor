@@ -9,7 +9,8 @@ import Row from 'Components/design-template/components/Workspace/components/Row'
 const Workspace = () => {
     const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
 
-    console.log(nestedData, 'nestedData');
+    // console.log(nestedData, 'nestedData');
+    // console.log(store, 'store');
 
     const id = getObjectPropSafely(() => nestedData.body.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => nestedData.body.values._meta.htmlClassNames);
