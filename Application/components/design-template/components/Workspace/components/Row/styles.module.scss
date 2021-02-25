@@ -1,15 +1,6 @@
 .layer-row {
     position: relative;
 
-    &.layer-selected {
-        .layer-selector-row {
-            &::after {
-                opacity: 1;
-                outline: #4cb9ea solid 2px;
-            }
-        }
-    }
-
     .layer-selector-row {
         position: absolute;
         top: 0;
@@ -17,8 +8,6 @@
         right: 0;
         bottom: 0;
         width: 100%;
-
-        
 
         &::after {
             content: ' ';
@@ -34,6 +23,55 @@
 
         &:hover::after {
             opacity: 1;
+        }
+
+        .layer-add-row {
+            position: absolute;
+            display: none;
+            bottom: -20px;
+            background-color: #7aabc0;
+            opacity: 0.5;
+            color: #fff;
+            width: 100px;
+            left: calc(50% - 50px);
+            text-align: center;
+            z-index: 112;
+            cursor: pointer;
+
+            &.layer-add-row-top {
+                bottom: auto;
+                top: -23px;
+            }
+
+            &.layer-add-row-bottom {
+                top: auto;
+                bottom: -23px;
+            }
+
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+        &:hover {
+            .layer-add-row {
+                display: inline-block; 
+            }
+        }
+    }
+
+    &.layer-selected {
+        .layer-selector-row {
+            &::after {
+                opacity: 1;
+                outline: #4cb9ea solid 2px;
+            }
+
+            .layer-add-row {
+                display: inline-block;
+                background-color: #4cb9ea;
+            }
         }
     }
 

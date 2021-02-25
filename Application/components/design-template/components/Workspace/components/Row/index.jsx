@@ -7,6 +7,7 @@ import Image from 'Components/design-template/components/Workspace/components/Im
 import Text from 'Components/design-template/components/Workspace/components/Text';
 import Button from 'Components/design-template/components/Workspace/components/Button';
 import Menu from 'Components/design-template/components/Workspace/components/Menu';
+import {Icon} from '@antscorp/components';
 
 const Row = (props) => {
     const [isSelected, setSelected] = useState(false);
@@ -153,6 +154,25 @@ const Row = (props) => {
         });
     };
 
+    const renderSelector = () => {
+        return (
+            <div className={classnames(styles['layer-selector-row'])}>
+                <div className={classnames(
+                    styles['layer-add-row'],
+                    styles['layer-add-row-top']
+                )}>
+                    <Icon className={classnames('icon-ants-add')} />
+                </div>
+                <div className={classnames(
+                    styles['layer-add-row'],
+                    styles['layer-add-row-bottom']
+                )}>
+                    <Icon className={classnames('icon-ants-add')} />
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div   
             className={classnames(
@@ -162,7 +182,7 @@ const Row = (props) => {
             )}
             onClick={() => setSelected(!isSelected)}
         >
-            <div className={classnames(styles['layer-selector-row'])} />
+            {renderSelector()}
             <div
                 id={id}
                 className={classnames('u_row', classTitle)}
