@@ -75,7 +75,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "@antscorp/components": "0.0.186",
+    "@antscorp/components": "0.0.151-beta.97",
     "@antscorp/document": "0.0.35",
     "@babel/polyfill": "^7.8.7",
     "@popperjs/core": "^2.6.0",

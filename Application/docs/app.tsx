@@ -5,6 +5,7 @@ import DesignTemplate from './../components/design-template';
 // Components
 // import Testing from './testing';
 // import Document from './document';
+import '@antscorp/components/main.css';
 
 const App = () => {
     // const routes = [

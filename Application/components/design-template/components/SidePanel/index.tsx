@@ -1,10 +1,11 @@
 import React from 'react';
+import Style from 'Components/design-template/components/SidePanel/Style';
 
 const SidePanel = () => {
     return (
-        <div>
-            this is side panel
-        </div>
+        <>
+            <Style />
+        </>
     );
 };
 
