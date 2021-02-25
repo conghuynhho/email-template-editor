@@ -79,7 +79,8 @@ const Row = (props) => {
                             <Fragment key={index}>
                                 <div className={classnames(
                                     'layer-selectable', 
-                                    styles['layer-row']
+                                    styles['layer-content'],
+                                    {[styles['layer-selected']] : false}
                                 )}>
                                     {renderSelector({isShowAddTop: false, isShowAddBottom: false})}
                                     {getContent(content)}
@@ -98,11 +99,15 @@ const Row = (props) => {
                                     <div>
                                         No content here. Drag content from right.
                                     </div>
-                                    <div>
-                                        <button className={classnames('btn', styles['add-content'])}>
+                                    {
+                                        false && (
+                                            <div>
+                                                <button className={classnames('btn', styles['add-content'])}>
                                             Add Content
-                                        </button>
-                                    </div>
+                                                </button>
+                                            </div>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>
