@@ -89,7 +89,7 @@ const Row = (props) => {
                         );
                     }) : (
                         <div className="blockbuilder-placeholder" data-name="Drag it here">
-                            <div className={styles['empty_column']}>
+                            <div className={styles['empty-column']}>
                                 <div 
                                     style={{
                                         zIndex: 112
@@ -97,6 +97,11 @@ const Row = (props) => {
                                 >
                                     <div>
                                         No content here. Drag content from right.
+                                    </div>
+                                    <div>
+                                        <button className={classnames('btn', styles['add-content'])}>
+                                            Add Content
+                                        </button>
                                     </div>
                                 </div>
                             </div>
