@@ -1,3 +1,4 @@
+.layer-content,
 .layer-row {
     position: relative;
 
@@ -146,12 +147,15 @@
         flex-wrap: nowrap;
         margin-left: 0;
         margin-right: 0;
-    
-        .u_column {
-            position: relative;
-            width: 100%;
-            padding-right: 0;
-            padding-left: 0;
+
+        .container {
+
+            .u_column {
+                position: relative;
+                width: 100%;
+                padding-right: 0;
+                padding-left: 0;
+            }
         }
     }
     

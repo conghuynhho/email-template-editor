@@ -77,8 +77,11 @@ const Row = (props) => {
                     contents.length ? contents.map((content, index) => {
                         return (
                             <Fragment key={index}>
-                                <div className={'layer-selectable'}>
-                                    <div className={'layer-selector'} />
+                                <div className={classnames(
+                                    'layer-selectable', 
+                                    styles['layer-row']
+                                )}>
+                                    {renderSelector({isShowAddTop: false, isShowAddBottom: false})}
                                     {getContent(content)}
                                 </div>
                                 <div className="blockbuilder-placeholder" data-name="Drag it here" />
@@ -154,21 +157,27 @@ const Row = (props) => {
         });
     };
 
-    const renderSelector = () => {
+    const renderSelector = ({isShowAddTop = true, isShowAddBottom = true} = {}) => {
         return (
             <div className={classnames(styles['layer-selector-row'])}>
-                <div className={classnames(
-                    styles['layer-add-row'],
-                    styles['layer-add-row-top']
-                )}>
-                    <Icon className={classnames('icon-ants-add')} />
-                </div>
-                <div className={classnames(
-                    styles['layer-add-row'],
-                    styles['layer-add-row-bottom']
-                )}>
-                    <Icon className={classnames('icon-ants-add')} />
-                </div>
+                {isShowAddTop && (
+                    <div className={classnames(
+                        styles['layer-add-row'],
+                        styles['layer-add-row-top']
+                    )}>
+                        <Icon className={classnames('icon-ants-add')} />
+                    </div>
+                )}
+
+                {isShowAddBottom && (
+                    <div className={classnames(
+                        styles['layer-add-row'],
+                        styles['layer-add-row-bottom']
+                    )}>
+                        <Icon className={classnames('icon-ants-add')} />
+                    </div>
+                )}
+                
                 <div className={classnames(
                     styles['layer-action-row']
                 )}>
@@ -202,7 +211,7 @@ const Row = (props) => {
                 style={styleRow}
             >
                 <div 
-                    className="container"
+                    className={classnames(styles['container'])}
                     style={styleContainer}
                 >
                     <div className={styles[classTitle]}>
