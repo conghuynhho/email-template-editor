@@ -1,0 +1,64 @@
+.shortcut-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    z-index: 1000;
+    box-shadow: rgb(8 73 93 / 30%) 3px 0px 10px 0px;
+    border-radius: 8px;
+    background-color: #fff;
+
+    div:last-child {
+        border-right: 0px;
+    }
+
+    .group-shortcut {
+        display: flex;
+        border-right: 1px #D2D8D9 solid;
+        padding: 8px;
+
+        .element-shortcut {
+            width: 30px;
+            height: 30px;
+            color: #889199;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            cursor: pointer;
+            
+            &:hover {
+                color: #fff;
+                background-color: #13ABD7;
+            }
+        }
+
+        .undo {
+            color: #889199;
+        }
+
+        .redo {
+            transform: scaleX(-1);
+        }
+
+        .view {
+            color: #889199;
+        }
+
+        .desktop {
+            color: #889199;
+        }
+
+        .smart-phone {
+            color: #D7D8D9;
+        }
+
+        .left-side-panel {
+            color: #D7D8D9;
+        }
+
+        .right-side-panel {
+            transform: scaleX(-1);
+        }
+    }
+}

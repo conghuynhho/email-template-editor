@@ -3,6 +3,7 @@
     grid-template-columns: auto 338px;
     grid-template-rows: auto auto;
     grid-template-areas: "workspace sidepanel";
+    position: relative;
 
     .grid-workspace {
         grid-area: workspace;
