@@ -12,5 +12,15 @@ export const typeComponent = {
     FONT_SIZE: 'FONT_SIZE',
     TEXT_INPUT: 'TEXT_INPUT',
     SWITCH: 'SWITCH',
-    ALIGNMENT: 'ALIGNMENT'
+    ALIGNMENT: 'ALIGNMENT',
+    LABEL: 'LABEL',
+    COMPONENT_CHILD: 'COMPONENT_CHILD'
+};
+
+export const typeElement = {
+    TEXT: 'TEXT',
+    BUTTON: 'BUTTON',
+    COLUMNS: 'COLUMNS',
+    LINE: 'LINE',
+    GENERAL: 'GENERAL'
 };

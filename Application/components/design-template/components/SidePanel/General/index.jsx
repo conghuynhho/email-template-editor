@@ -25,24 +25,24 @@ import {getObjectPropSafely} from 'Utils/index.ts';
 import {typeComponent} from 'Components/design-template/constants';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
 
-const PATH = 'Components/design-template/components/SidePanel/Style/index.jsx';
+const PATH = 'Components/design-template/components/SidePanel/General/index.jsx';
 
 const Style = props => {
     const {
-        style = [],
+        general = [],
         translate = (lal) => lal
     } = props;
     const [config, setConfig] = useState({});
 
     useEffect(() => {
         try {
-            if (style && style.length) {
-                setConfig(style);
+            if (general && general.length) {
+                setConfig(general);
             }
         } catch (error) {
             //
         }
-    }, [style]);
+    }, [general]);
 
     const findValue = (name, options) => {
         try {
@@ -92,13 +92,11 @@ const Style = props => {
                     isShowUnit = false,
                     isShowMessage = false,
                     isShowIcon = false,
-                    elementChild = [],
-                    keyShow = '',
                     isShowMessageLeft = false,
                     isShowMessageRight = false
                 } = element;
-                const valueStyle = '';
                 // const valueStyle = getObjectPropSafely(() => props.style[idParent][idChild]) || '';
+                const valueStyle = '';
 
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
@@ -221,7 +219,6 @@ const Style = props => {
                                     menu: {minWidth: 70, maxHeight: 150, overflowX: 'auto', ...getObjectPropSafely(() => style.styleChild)}
                                 }}
                                 sources={options}
-                                label={label || null}
                                 tooltipName={label || tooltip}
                                 showIcon={isShowIcon}
                                 default={findValue(valueStyle || defaultValue, options)}
@@ -276,7 +273,7 @@ const Style = props => {
                                 />
                                 {
                                     isShowUnit ? (
-                                        <span style={{fontSize: 12, marginLeft: 5}}>{unit}</span>
+                                        <span style={{fontSize: 12, marginLeft: 8}}>{unit}</span>
                                     ) : null
                                 }
                                 {
@@ -335,28 +332,6 @@ const Style = props => {
                             // value={valueStyle || defaultValue}
                             />
                         );
-                    }
-                    case typeComponent.LABEL: {
-                        return (
-                            <div className="section-label text-nowrap font-weight-normal">
-                                <span style={{fontSize: 12}}>{translate(label, label)}</span>
-                            </div>
-                        );
-                    }
-                    case typeComponent.COMPONENT_CHILD: {
-                        let isShow = true;
-
-                        if (keyShow) {
-                            const isValid = getObjectPropSafely(() => props.style[idParent][keyShow]);
-
-                            isShow = typeof isValid === 'boolean' ? isValid : true;
-                        }
-
-                        return isShow ? (
-                            <div className={classnames(styles['content-child'])}>
-                                {renderComponent(elementChild, idParent)}
-                            </div>
-                        ) : null;
                     }
                 }
             }
