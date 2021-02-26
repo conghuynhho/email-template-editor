@@ -17,6 +17,15 @@ const ShortcutBar = () => {
         });
     };
 
+    const onClickViewMode = (mode) => () => {
+        if (!mode) {return false}
+
+        dispatchStore({
+            type: actionType.UPDATE_MODE,
+            payload: {viewMode: mode}
+        });
+    };
+
     const onClickSidePanelMode = (mode) => () => {
         if (!mode) {return false}
 
@@ -33,10 +42,22 @@ const ShortcutBar = () => {
                 {[styles['on-right']] : sidePanelMode === CONSTANTS.SIDE_PANEL_MODE.LEFT}
             )}>
                 <div className={classnames(styles['group-shortcut'])}>
-                    <div className={classnames(styles['element-shortcut'], styles['undo'])}>
+                    <div 
+                        className={classnames(
+                            styles['element-shortcut'], 
+                            styles['undo'],
+                            {[styles['active']] : true}
+                        )}
+                    >
                         <Icon type='icon-ants-undo' />                
                     </div>
-                    <div className={classnames(styles['element-shortcut'], styles['redo'])}>
+                    <div 
+                        className={classnames(
+                            styles['element-shortcut'], 
+                            styles['redo'],
+                            {[styles['active']] : true}
+                        )}
+                    >
                         <Icon type='icon-ants-undo' />                
                     </div>
                 </div>
@@ -53,10 +74,24 @@ const ShortcutBar = () => {
                     </div>
                 </div>
                 <div className={classnames(styles['group-shortcut'])}>
-                    <div className={classnames(styles['element-shortcut'], styles['desktop'])}>           
+                    <div 
+                        className={classnames(
+                            styles['element-shortcut'], 
+                            styles['desktop'],
+                            {[styles['active']] : viewMode === CONSTANTS.VIEW_MODE.DESKTOP}
+                        )}
+                        onClick={onClickViewMode(CONSTANTS.VIEW_MODE.DESKTOP)}
+                    >           
                         <Icon type='icon-ants-desktop' />
                     </div>
-                    <div className={classnames(styles['element-shortcut'], styles['smart-phone'])}>           
+                    <div 
+                        className={classnames(
+                            styles['element-shortcut'], 
+                            styles['smart-phone'],
+                            {[styles['active']] : viewMode === CONSTANTS.VIEW_MODE.MOBILE}
+                        )}
+                        onClick={onClickViewMode(CONSTANTS.VIEW_MODE.MOBILE)}
+                    >           
                         <Icon type='icon-ants-smart-phone' />
                     </div>
                 </div>
