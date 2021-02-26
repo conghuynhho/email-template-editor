@@ -26,7 +26,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'FILL_COLOR',
-                            id: 'backgroundColor',
+                            id: 'backgroundColorGeneral',
                             label: 'Background color',
                             defaultValue: '#333333',
                             style: {
@@ -331,7 +331,7 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'FILL_COLOR',
-                            id: 'backgroundColor',
+                            id: 'backgroundColorButton',
                             label: 'Background color',
                             defaultValue: '#F75F2D',
                             style: {
@@ -342,7 +342,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'FILL_COLOR',
-                            id: 'textColor',
+                            id: 'textColorButton',
                             label: 'Text color',
                             defaultValue: '#FFFFFF',
                             style: {
@@ -600,7 +600,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'textInput',
+                                    id: 'inputBorderTop',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -615,7 +615,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'backgroundColor',
+                                    id: 'colorBorderTop',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -678,7 +678,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'textInput',
+                                    id: 'inputBorderRight',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -693,7 +693,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'backgroundColor',
+                                    id: 'colorBorderRight',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -713,9 +713,9 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderRight',
+                                    id: 'borderBottom',
                                     defaultValue: 'solid',
-                                    tooltip: 'Border right',
+                                    tooltip: 'Border bottom',
                                     options: [
                                         {
                                             name: 'none',
@@ -756,7 +756,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'textInput',
+                                    id: 'input',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -771,7 +771,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'backgroundColor',
+                                    id: 'colorBoderBottom',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -791,9 +791,9 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderRight',
+                                    id: 'borderLeft',
                                     defaultValue: 'solid',
-                                    tooltip: 'Border right',
+                                    tooltip: 'Border left',
                                     options: [
                                         {
                                             name: 'none',
@@ -834,7 +834,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'textInput',
+                                    id: 'inputBorderLeft',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -849,7 +849,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'backgroundColor',
+                                    id: 'colorBorderLeft',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -979,7 +979,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'TEXT_INPUT',
-                            id: 'textInput',
+                            id: 'inputBorderStyle',
                             defaultValue: '1',
                             unit: 'px',
                             isShowUnit: true,
@@ -994,7 +994,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'FILL_COLOR',
-                            id: 'backgroundColor',
+                            id: 'colorLine',
                             defaultValue: '#000000',
                             style: {
                                 styleParent: {
@@ -1038,7 +1038,7 @@ const sidePanelConfig = [
                             isShowUnit: true,
                             style: {
                                 styleParent: {
-                                    width: '50%'
+                                    width: '60%'
                                 },
                                 styleChild: {
                                     width: 40
@@ -1053,7 +1053,7 @@ const sidePanelConfig = [
                             defaultValue: false,
                             style: {
                                 styleParent: {
-                                    width: '50%'
+                                    width: '40%'
                                 }
                             }
                         }
