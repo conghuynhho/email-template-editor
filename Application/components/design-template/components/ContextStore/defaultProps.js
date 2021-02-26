@@ -1,4 +1,4 @@
-import {typeContent} from 'Components/design-template/constants';
+import {CONSTANTS} from 'Components/design-template/constants';
 
 const defaultStyleGeneral = {
     backgroundColor: '#e8d4bb',
@@ -81,7 +81,7 @@ const defaultStyleColumn = {
 };
 
 const defaultStyleContent = {
-    [typeContent.divider]: {
+    [CONSTANTS.TYPE_CONTENT.DIVIDER]: {
         containerPadding: '5px',
         selectable: true,
         draggable: true,

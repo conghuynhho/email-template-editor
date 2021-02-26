@@ -4,7 +4,7 @@ import {
     defaultStyleColumn,
     defaultStyleContent
 } from 'Components/design-template/components/ContextStore/defaultProps';
-import {typeContent} from 'Components/design-template/constants';
+import {CONSTANTS} from 'Components/design-template/constants';
 
 export const initialState = {
     pages: {
@@ -39,7 +39,7 @@ export const initialState = {
     contents: {
         '5': {
             location: {'collection': 'contents','id': '5'},
-            type: typeContent.divider,
+            type: CONSTANTS.TYPE_CONTENT.DIVIDER,
             values: defaultStyleContent.divider
         }
     },
@@ -67,5 +67,7 @@ export const initialState = {
         u_content_html: 0,
         u_content_social: 0
     },
-    schemaVersion: 5
+    schemaVersion: 5,
+    viewMode: CONSTANTS.VIEW_MODE.DESKTOP,
+    sidePanelMode: CONSTANTS.SIDE_PANEL_MODE.RIGHT
 };

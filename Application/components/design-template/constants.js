@@ -25,18 +25,28 @@ export const typeElement = {
     GENERAL: 'GENERAL'
 };
 
-export const typeContent = {
-    // unused
-    body: 'body',
-    row: 'row',
-    column: 'column',
-    social: 'social',
-
-    // main content
-    divider: 'divider',
-    button: 'button',
-    image: 'image',
-    menu: 'menu',
-    text: 'text',
-    html: 'html'
+export const CONSTANTS = {
+    TYPE_CONTENT: {
+        // unused
+        BODY: 'body',
+        ROW: 'row',
+        COLUMN: 'column',
+        SOCIAL: 'social',
+    
+        // main content
+        DIVIDER: 'divider',
+        BUTTON: 'button',
+        IMAGE: 'image',
+        MENU: 'menu',
+        TEXT: 'text',
+        HTML: 'html'
+    },
+    VIEW_MODE: {
+        DESKTOP: 'desktop',
+        MOBILE: 'mobile'
+    },
+    SIDE_PANEL_MODE: {
+        LEFT: 'left',
+        RIGHT: 'right'
+    }
 };
