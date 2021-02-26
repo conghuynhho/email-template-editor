@@ -5,9 +5,11 @@ import {StoreContext} from 'Components/design-template/components/ContextStore';
 import {nestedData} from 'Components/design-template/components/Workspace/constants';
 import {getObjectPropSafely} from 'Utils';
 import Row from 'Components/design-template/components/Workspace/components/Row';
+import {CONSTANTS} from 'Components/design-template/constants';
 
 const Workspace = () => {
-    const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
+    const {state: store = {}} = useContext(StoreContext);
+    const {viewMode} = store;
 
     // console.log(nestedData, 'nestedData');
     // console.log(store, 'store');
@@ -40,7 +42,11 @@ const Workspace = () => {
         <div>
             <div 
                 id={id}
-                className={classnames(classTitle, styles['inner-content'])}
+                className={classnames(
+                    classTitle, 
+                    styles['inner-content'],
+                    {[styles['inner-content-layout-mobile']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE}
+                )}
                 style={styleBody}
             >
                 <div className={'layer-group-row'}>

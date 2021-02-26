@@ -22,6 +22,17 @@
             outline: #7aabc0 solid 2px;
         }
 
+        &.layout-mobile-row {
+            &::after{
+                right: -48px;
+                left: -48px
+            }
+
+            .layer-drag-row {
+                left: -50px;
+            }
+        }
+
         &:hover::after {
             opacity: 1;
         }
@@ -110,6 +121,7 @@
             height: 100%;
             color: #fff;
             z-index: 101;
+            overflow: hidden;
             
             .drag-row {
                 cursor: grabbing;
@@ -147,6 +159,16 @@
         flex-wrap: nowrap;
         margin-left: 0;
         margin-right: 0;
+
+        &.layout-mobile {
+            flex-wrap: wrap;
+
+            .u_column {
+                color: inherit;
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
 
         .container {
 

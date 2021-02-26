@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useState, useContext} from 'react';
 import classnames from 'classnames';
 import {getObjectPropSafely} from 'Utils';
 import styles from 'Components/design-template/components/Workspace/components/Row/styles.module.scss';
@@ -9,8 +9,12 @@ import Button from 'Components/design-template/components/Workspace/components/B
 import Menu from 'Components/design-template/components/Workspace/components/Menu';
 import RenderCode from 'Components/design-template/components/Workspace/components/RenderCode';
 import {Icon} from '@antscorp/components';
+import {CONSTANTS} from 'Components/design-template/constants';
+import {StoreContext} from 'Components/design-template/components/ContextStore';
 
 const Row = (props) => {
+    const {state: store = {}} = useContext(StoreContext);
+    const {viewMode} = store;
     const [isSelected, setSelected] = useState(false);
     const {data, generalStyle} = props;
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
@@ -88,7 +92,7 @@ const Row = (props) => {
                                     styles['layer-content'],
                                     {[styles['layer-selected']] : false}
                                 )}>
-                                    {renderSelector({isShowAddTop: false, isShowAddBottom: false})}
+                                    {renderSelector({isShowAddTop: false, isShowAddBottom: false, isRow: false})}
                                     {getContent(content)}
                                 </div>
                                 {renderDragItHere()}
@@ -173,9 +177,12 @@ const Row = (props) => {
         });
     };
 
-    const renderSelector = ({isShowAddTop = true, isShowAddBottom = true} = {}) => {
+    const renderSelector = ({isShowAddTop = true, isShowAddBottom = true, isRow = true} = {}) => {
         return (
-            <div className={classnames(styles['layer-selector-row'])}>
+            <div className={classnames(
+                styles['layer-selector-row'],
+                {[styles['layout-mobile-row']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE && isRow}
+            )}>
                 {isShowAddTop && (
                     <div className={classnames(
                         styles['layer-add-row'],
@@ -243,7 +250,11 @@ const Row = (props) => {
                         className={classnames(styles['container'])}
                         style={styleContainer}
                     >
-                        <div className={styles[classTitle]}>
+                        <div className={classnames(
+                            styles[classTitle],
+                            styles['u_row'],
+                            {[styles['layout-mobile']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE}
+                        )}>
                             {renderColumns()}
                         </div>
                     </div>

@@ -2,6 +2,11 @@
     background-color: #fff;
     margin: 50px 80px 50px 80px;
 
+    &.inner-content-layout-mobile {
+        max-width: 320px;
+        margin: 50px auto;
+    }
+
     p {
         margin: 0;
     }
