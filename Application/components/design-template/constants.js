@@ -24,3 +24,19 @@ export const typeElement = {
     LINE: 'LINE',
     GENERAL: 'GENERAL'
 };
+
+export const typeContent = {
+    // unused
+    body: 'body',
+    row: 'row',
+    column: 'column',
+    social: 'social',
+
+    // main content
+    divider: 'divider',
+    button: 'button',
+    image: 'image',
+    menu: 'menu',
+    text: 'text',
+    html: 'html'
+};

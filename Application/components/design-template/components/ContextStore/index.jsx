@@ -1,22 +1,19 @@
 // Libraries
 import React, {createContext, useReducer} from 'react';
+import produce from 'immer';
+
+// Constants
+import {initialState} from 'Components/design-template/components/ContextStore/initialState';
+import {actionType} from 'Components/design-template/components/ContextStore/constants';
 
 // Utils
 import {getObjectPropSafely} from 'Utils';
-import {initialState} from 'Components/design-template/components/ContextStore/initialState';
-import {actionType} from 'Components/design-template/components/ContextStore/constants';
 
 const StoreContext = createContext(initialState);
 const {Provider} = StoreContext;
 
 const reducer = (state, action) => {
-    const {type, payload} = getObjectPropSafely(
-        () =>
-            action || {
-                type: undefined,
-                payload: undefined
-            }
-    );
+    const {type, payload} = getObjectPropSafely(() => action || {type: undefined, payload: undefined});
 
     switch (type) {
         case actionType.INITIAL_DATA: {
@@ -26,10 +23,25 @@ const reducer = (state, action) => {
 
             const newState = {
                 ...state,
-                leftSideBar: {
-                    ...state.leftSideBar,
-                    ...payload
+                ...payload
+            };
+
+            return {...newState};
+        }
+        case actionType.UPDATE_ROW: {
+            if (!getObjectPropSafely(() => Object.keys(payload.values).length && payload.id)) {
+                return state;
+            }
+
+            const rows = produce(state.rows, draft => {
+                if (draft[payload.id]) {
+                    draft[payload.id] = {...draft[payload.id], ...payload.values};
                 }
+            });
+
+            const newState = {
+                ...state,
+                rows: rows
             };
 
             return {...newState};
