@@ -5,6 +5,12 @@
     grid-template-areas: "workspace sidepanel";
     position: relative;
 
+    &.side-panel-left {
+        grid-template-columns: 338px auto;
+        grid-template-rows: auto auto;
+        grid-template-areas: "sidepanel workspace";
+    }
+
     .grid-workspace {
         grid-area: workspace;
         background-color: #E3EEF1;

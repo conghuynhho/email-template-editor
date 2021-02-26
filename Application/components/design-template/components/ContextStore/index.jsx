@@ -46,6 +46,18 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
+        case actionType.UPDATE_SIDE_PANEL_MODE: {
+            if (!getObjectPropSafely(() => payload.sidePanelMode)) {
+                return state;
+            }
+
+            const newState = {
+                ...state,
+                sidePanelMode: payload.sidePanelMode
+            };
+
+            return {...newState};
+        }
     }
 };
 
