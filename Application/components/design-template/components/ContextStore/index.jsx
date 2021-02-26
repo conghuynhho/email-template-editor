@@ -46,14 +46,18 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
-        case actionType.UPDATE_SIDE_PANEL_MODE: {
-            if (!getObjectPropSafely(() => payload.sidePanelMode)) {
+        case actionType.UPDATE_MODE: {
+            const checkValid = Object(payload).hasOwnProperty('viewMode') 
+            || Object(payload).hasOwnProperty('sidePanelMode')
+            || Object(payload).hasOwnProperty('isOpenPreview');
+
+            if (!checkValid) {
                 return state;
             }
 
             const newState = {
                 ...state,
-                sidePanelMode: payload.sidePanelMode
+                ...payload
             };
 
             return {...newState};

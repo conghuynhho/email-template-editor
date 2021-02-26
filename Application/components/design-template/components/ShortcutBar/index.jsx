@@ -14,7 +14,7 @@ const ShortcutBar = () => {
         if (!mode) {return false}
 
         dispatchStore({
-            type: actionType.UPDATE_SIDE_PANEL_MODE,
+            type: actionType.UPDATE_MODE,
             payload: {sidePanelMode: mode}
         });
     };
