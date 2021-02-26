@@ -100,6 +100,57 @@ const defaultStyleContent = {
             'htmlID': 'u_content_divider_6',
             'htmlClassNames': 'u_content_divider'
         }
+    },
+    [CONSTANTS.TYPE_CONTENT.BUTTON]: {
+        containerPadding: '10px 10px 50px',
+        selectable: true,
+        draggable: true,
+        duplicatable: true,
+        deletable: true,
+        href: {
+            'name': 'web',
+            'values': {
+                'href': '',
+                'target': '_blank'
+            }
+        },
+        buttonColors: {
+            color: '#463a41',
+            backgroundColor: '#ffffff',
+            hoverColor: '#FFFFFF',
+            hoverBackgroundColor: '#3AAEE0'
+        },
+        size: {
+            autoWidth: true,
+            width: '100%'
+        },
+        textAlign: 'center',
+        lineHeight: '120%',
+        padding: '12px 22px',
+        border: {
+            borderBottomColor: '#CCC',
+            borderBottomStyle: 'solid',
+            borderBottomWidth: '8px',
+            borderLeftColor: '#CCC',
+            borderLeftStyle: 'solid',
+            borderLeftWidth: '8px',
+            borderRightColor: '#CCC',
+            borderRightStyle: 'solid',
+            borderRightWidth: '8px',
+            borderTopColor: '#CCC',
+            borderTopStyle: 'solid',
+            borderTopWidth: '8px'
+        },
+        borderRadius: '0px',
+        hideDesktop: false,
+        hideMobile: false,
+        text: '<strong><span style="font-size: 14px; line-height: 16.8px;">VIEW MORE</span></strong>',
+        calculatedWidth: 134,
+        calculatedHeight: 40,
+        _meta: {
+            htmlID: 'u_content_button_1',
+            htmlClassNames: 'u_content_button'
+        }
     }
 };
 

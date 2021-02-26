@@ -12,7 +12,7 @@ const Workspace = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
     const {viewMode} = store;
 
-    // console.log(nestedData, 'nestedData');
+    console.log(nestedData, 'nestedData');
     // console.log(store, 'store');
 
     const id = getObjectPropSafely(() => nestedData.body.values._meta.htmlID);
