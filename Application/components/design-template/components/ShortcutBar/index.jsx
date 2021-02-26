@@ -8,7 +8,14 @@ import {actionType} from 'Components/design-template/components/ContextStore/con
 
 const ShortcutBar = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
-    const {viewMode, sidePanelMode} = store;
+    const {viewMode, sidePanelMode, isOpenPreview} = store;
+
+    const onClickPreview = () => {
+        dispatchStore({
+            type: actionType.UPDATE_MODE,
+            payload: {isOpenPreview: !isOpenPreview}
+        });
+    };
 
     const onClickSidePanelMode = (mode) => () => {
         if (!mode) {return false}
@@ -34,7 +41,14 @@ const ShortcutBar = () => {
                     </div>
                 </div>
                 <div className={classnames(styles['group-shortcut'])}>
-                    <div className={classnames(styles['element-shortcut'], styles['view'])}>           
+                    <div 
+                        className={classnames(
+                            styles['element-shortcut'], 
+                            styles['view'],
+                            {[styles['active']] : !isOpenPreview}
+                        )}
+                        onClick={onClickPreview}
+                    >           
                         <Icon type='icon-ants-view' />                
                     </div>
                 </div>
