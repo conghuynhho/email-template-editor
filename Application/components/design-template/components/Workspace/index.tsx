@@ -6,9 +6,10 @@ import {nestedData} from 'Components/design-template/components/Workspace/consta
 import {getObjectPropSafely} from 'Utils';
 import Row from 'Components/design-template/components/Workspace/components/Row';
 import {CONSTANTS} from 'Components/design-template/constants';
+import {actionType} from 'Components/design-template/components/ContextStore/constants';
 
 const Workspace = () => {
-    const {state: store = {}} = useContext(StoreContext);
+    const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
     const {viewMode} = store;
 
     // console.log(nestedData, 'nestedData');
@@ -38,8 +39,18 @@ const Workspace = () => {
         }); 
     };
 
+    const onClickWorkspace = () => {
+        dispatchStore({
+            type: actionType.ACTIVE_ELEMENT,
+            payload: {activeElement: 'u_body'}
+        });
+    };
+
     return (
-        <div>
+        <div 
+            className={classnames(styles['outer-content'])}
+            onClick={onClickWorkspace}
+        >
             <div 
                 id={id}
                 className={classnames(

@@ -70,5 +70,6 @@ export const initialState = {
     schemaVersion: 5,
     viewMode: CONSTANTS.VIEW_MODE.DESKTOP,
     sidePanelMode: CONSTANTS.SIDE_PANEL_MODE.RIGHT,
-    isOpenPreview: false
+    isOpenPreview: false,
+    activeElement: 'u_body' // Example: u_row_13, u_column_16, u_content_divider_6
 };

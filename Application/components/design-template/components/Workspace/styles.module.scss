@@ -1,13 +1,16 @@
-.inner-content {
-    background-color: #fff;
-    margin: 50px 80px 50px 80px;
+.outer-content {
+    padding: 50px 80px 50px 80px;
 
-    &.inner-content-layout-mobile {
-        max-width: 320px;
-        margin: 50px auto;
-    }
-
-    p {
-        margin: 0;
+    .inner-content {
+        background-color: #fff;
+    
+        &.inner-content-layout-mobile {
+            max-width: 320px;
+            margin: 0px auto;
+        }
+    
+        p {
+            margin: 0;
+        }
     }
 }

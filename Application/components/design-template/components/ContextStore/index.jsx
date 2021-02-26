@@ -62,6 +62,20 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
+        case actionType.ACTIVE_ELEMENT: {
+            const checkValid = Object(payload).hasOwnProperty('activeElement'); 
+
+            if (!checkValid) {
+                return state;
+            }
+
+            const newState = {
+                ...state,
+                activeElement: payload.activeElement
+            };
+
+            return {...newState};
+        }
     }
 };
 

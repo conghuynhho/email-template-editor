@@ -11,10 +11,11 @@ import RenderCode from 'Components/design-template/components/Workspace/componen
 import {Icon} from '@antscorp/components';
 import {CONSTANTS} from 'Components/design-template/constants';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
+import {actionType} from 'Components/design-template/components/ContextStore/constants';
 
 const Row = (props) => {
-    const {state: store = {}} = useContext(StoreContext);
-    const {viewMode} = store;
+    const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
+    const {viewMode, activeElement} = store;
     const [isSelected, setSelected] = useState(false);
     const {data, generalStyle} = props;
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
@@ -85,14 +86,24 @@ const Row = (props) => {
             <div className={'layer-group-content'}>
                 {
                     contents.length ? contents.map((content, index) => {
+                        const id = getObjectPropSafely(() => content.values._meta.htmlID);
+
                         return (
                             <Fragment key={index}>
-                                <div className={classnames(
-                                    'layer-selectable', 
-                                    styles['layer-content'],
-                                    {[styles['layer-selected']] : false}
-                                )}>
-                                    {renderSelector({isShowAddTop: false, isShowAddBottom: false, isRow: false})}
+                                <div 
+                                    className={classnames(
+                                        'layer-selectable', 
+                                        styles['layer-content'],
+                                        {[styles['layer-selected']]: activeElement === id}
+                                    )}
+                                    onClick={(e) => onClickSelectContent(e, id)}
+                                >
+                                    {renderSelector({
+                                        isShowAddTop: false, 
+                                        isShowAddBottom: false, 
+                                        isRow: false, 
+                                        isSelected: activeElement === id
+                                    })}
                                     {getContent(content)}
                                 </div>
                                 {renderDragItHere()}
@@ -177,10 +188,16 @@ const Row = (props) => {
         });
     };
 
-    const renderSelector = ({isShowAddTop = true, isShowAddBottom = true, isRow = true} = {}) => {
+    const renderSelector = ({
+        isShowAddTop = true, 
+        isShowAddBottom = true, 
+        isRow = true, 
+        isSelected = false
+    } = {}) => {
         return (
             <div className={classnames(
                 styles['layer-selector-row'],
+                {[styles['active']]: isSelected},
                 {[styles['layout-mobile-row']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE && isRow}
             )}>
                 {isShowAddTop && (
@@ -230,17 +247,33 @@ const Row = (props) => {
         );
     };
 
+    const onClickSelectContent = (e, id) => {
+        e.stopPropagation();
+        dispatchStore({
+            type: actionType.ACTIVE_ELEMENT,
+            payload: {activeElement: id}
+        });
+    };
+
+    const onClickSelectRow = (e) => {
+        e.stopPropagation();
+        dispatchStore({
+            type: actionType.ACTIVE_ELEMENT,
+            payload: {activeElement: id}
+        });
+    };
+
     return (
         <>
             <div   
                 className={classnames(
                     'layer-selectable', 
                     styles['layer-row'],
-                    {[styles['layer-selected']] : isSelected}
+                    {[styles['layer-selected']]: activeElement === id}
                 )}
-                onClick={() => setSelected(!isSelected)}
+                onClick={onClickSelectRow}
             >
-                {renderSelector()}
+                {renderSelector({isSelected: activeElement === id})}
                 <div
                     id={id}
                     className={classnames('u_row', classTitle)}

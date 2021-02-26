@@ -31,6 +31,10 @@
             .layer-drag-row {
                 left: -50px;
             }
+
+            .layer-action-row {
+                right: -46px;
+            }
         }
 
         &:hover::after {
@@ -133,23 +137,25 @@
 
     &.layer-selected {
         .layer-selector-row {
-            &::after {
-                opacity: 1;
-                outline: #13ABD7 solid 2px;
-            }
-
-            .layer-add-row {
-                display: inline-block;
-                background-color: #13ABD7;
-            }
-
-            .layer-action-row {
-                display: inline-block;
-            }
-
-            .layer-drag-row {
-                display: flex;
-                background-color: #13ABD7;
+            &.active {
+                &::after {
+                    opacity: 1;
+                    outline: #13ABD7 solid 2px;
+                }
+    
+                .layer-add-row {
+                    display: inline-block;
+                    background-color: #13ABD7;
+                }
+    
+                .layer-action-row {
+                    display: inline-block;
+                }
+    
+                .layer-drag-row {
+                    display: flex;
+                    background-color: #13ABD7;
+                }
             }
         }
     }
