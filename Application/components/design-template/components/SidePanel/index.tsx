@@ -14,7 +14,7 @@ import sidePanelConfig from 'Components/design-template/components/SidePanel/con
 const SidePanel = props => {
     const renderHtml = () => {
         try {
-            const type = 'BUTTON';
+            const type = 'COLUMNS';
             const config = sidePanelConfig.find(item => item.type === type);
 
             switch (type) {

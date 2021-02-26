@@ -261,6 +261,525 @@ const sidePanelConfig = [
         type: 'COLUMNS',
         resource: {
             style: [
+                {
+                    id: 'columnProperties',
+                    label: 'Column properties',
+                    elements: [
+                        {
+                            type: 'FILL_COLOR',
+                            id: 'backgroundColorColumn',
+                            label: 'Background color',
+                            defaultValue: '#707070',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'paddingRow',
+                            label: 'Padding',
+                            defaultValue: '10',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
+                        {
+                            type: 'SWITCH',
+                            id: 'moreOptionsPaddingRow',
+                            isShowMessageLeft: true,
+                            message: 'More options',
+                            defaultValue: false,
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'LABEL',
+                            id: 'border',
+                            label: 'Border',
+                            style: {
+                                styleParent: {
+                                    width: '60%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'SWITCH',
+                            id: 'moreOptionsBorder',
+                            isShowMessageLeft: true,
+                            message: 'More options',
+                            defaultValue: true,
+                            style: {
+                                styleParent: {
+                                    width: '40%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'COMPONENT_CHILD',
+                            id: 'childBorder',
+                            // keyShow: 'moreOptionsBorder',
+                            elementChild: [
+                                {
+                                    type: 'LABEL',
+                                    id: 'labelBorderTop',
+                                    label: 'Border top',
+                                    style: {
+                                        styleParent: {
+                                            width: '100%'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'LINE_STYLE',
+                                    id: 'borderTop',
+                                    defaultValue: 'solid',
+                                    tooltip: 'Border top',
+                                    options: [
+                                        {
+                                            name: 'none',
+                                            label: 'None',
+                                            textDecorationStyle: 'solid',
+                                            textDecorationLine: 'none'
+                                        },
+                                        {
+                                            name: 'solid',
+                                            label: 'Solid',
+                                            textDecorationStyle: 'solid',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'dashed',
+                                            label: 'Dashed',
+                                            textDecorationStyle: 'dashed',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'dotted',
+                                            label: 'Dotted',
+                                            textDecorationStyle: 'dotted',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'double',
+                                            label: 'Double',
+                                            textDecorationStyle: 'double',
+                                            textDecorationLine: 'underline'
+                                        }
+                                    ],
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'inputBorderTop',
+                                    defaultValue: '1',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'FILL_COLOR',
+                                    id: 'colorBorderTop',
+                                    defaultValue: '#000000',
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'LABEL',
+                                    id: 'labelBorderRight',
+                                    label: 'Border right',
+                                    style: {
+                                        styleParent: {
+                                            width: '100%'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'LINE_STYLE',
+                                    id: 'borderRight',
+                                    defaultValue: 'solid',
+                                    tooltip: 'Border right',
+                                    options: [
+                                        {
+                                            name: 'none',
+                                            label: 'None',
+                                            textDecorationStyle: 'solid',
+                                            textDecorationLine: 'none'
+                                        },
+                                        {
+                                            name: 'solid',
+                                            label: 'Solid',
+                                            textDecorationStyle: 'solid',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'dashed',
+                                            label: 'Dashed',
+                                            textDecorationStyle: 'dashed',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'dotted',
+                                            label: 'Dotted',
+                                            textDecorationStyle: 'dotted',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'double',
+                                            label: 'Double',
+                                            textDecorationStyle: 'double',
+                                            textDecorationLine: 'underline'
+                                        }
+                                    ],
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'inputBorderRight',
+                                    defaultValue: '1',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'FILL_COLOR',
+                                    id: 'colorBorderRight',
+                                    defaultValue: '#000000',
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'LABEL',
+                                    id: 'labelBorderBottom',
+                                    label: 'Border bottom',
+                                    style: {
+                                        styleParent: {
+                                            width: '100%'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'LINE_STYLE',
+                                    id: 'borderBottom',
+                                    defaultValue: 'solid',
+                                    tooltip: 'Border bottom',
+                                    options: [
+                                        {
+                                            name: 'none',
+                                            label: 'None',
+                                            textDecorationStyle: 'solid',
+                                            textDecorationLine: 'none'
+                                        },
+                                        {
+                                            name: 'solid',
+                                            label: 'Solid',
+                                            textDecorationStyle: 'solid',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'dashed',
+                                            label: 'Dashed',
+                                            textDecorationStyle: 'dashed',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'dotted',
+                                            label: 'Dotted',
+                                            textDecorationStyle: 'dotted',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'double',
+                                            label: 'Double',
+                                            textDecorationStyle: 'double',
+                                            textDecorationLine: 'underline'
+                                        }
+                                    ],
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'input',
+                                    defaultValue: '1',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'FILL_COLOR',
+                                    id: 'colorBoderBottom',
+                                    defaultValue: '#000000',
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'LABEL',
+                                    id: 'labelBorderLeft',
+                                    label: 'Border left',
+                                    style: {
+                                        styleParent: {
+                                            width: '100%'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'LINE_STYLE',
+                                    id: 'borderLeft',
+                                    defaultValue: 'solid',
+                                    tooltip: 'Border left',
+                                    options: [
+                                        {
+                                            name: 'none',
+                                            label: 'None',
+                                            textDecorationStyle: 'solid',
+                                            textDecorationLine: 'none'
+                                        },
+                                        {
+                                            name: 'solid',
+                                            label: 'Solid',
+                                            textDecorationStyle: 'solid',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'dashed',
+                                            label: 'Dashed',
+                                            textDecorationStyle: 'dashed',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'dotted',
+                                            label: 'Dotted',
+                                            textDecorationStyle: 'dotted',
+                                            textDecorationLine: 'underline'
+                                        },
+                                        {
+                                            name: 'double',
+                                            label: 'Double',
+                                            textDecorationStyle: 'double',
+                                            textDecorationLine: 'underline'
+                                        }
+                                    ],
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'inputBorderLeft',
+                                    defaultValue: '1',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'FILL_COLOR',
+                                    id: 'colorBorderLeft',
+                                    defaultValue: '#000000',
+                                    style: {
+                                        styleParent: {
+                                            width: '33%'
+                                        }
+                                    }
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'rowProperties',
+                    label: 'Row properties',
+                    elements: [
+                        {
+                            type: 'FILL_COLOR',
+                            id: 'backgroundColorRow',
+                            label: 'Background color',
+                            defaultValue: '#707070',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'LABEL',
+                            id: 'backgroundImage',
+                            label: 'Background image',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'SELECT_RADIO',
+                            id: 'selectRadioImage',
+                            defaultValue: 'uploadImage',
+                            options: [
+                                {
+                                    name: 'uploadImage',
+                                    label: 'Upload image'
+                                },
+                                {
+                                    name: 'imageUrl',
+                                    label: 'Image URL'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'UPLOAD',
+                            id: 'imageUpload',
+                            keyShow: 'selectRadioImage',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'inputUrl',
+                            keyShow: 'selectRadioImage',
+                            defaultValue: '',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 200
+                                }
+                            }
+                        },
+                        {
+                            type: 'FILL_COLOR',
+                            id: 'contentBackgroundColorRow',
+                            label: 'Content background color',
+                            defaultValue: '#707070',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'paddingRow',
+                            label: 'Padding',
+                            defaultValue: '10',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
+                        {
+                            type: 'SWITCH',
+                            id: 'moreOptionsPaddingRow',
+                            isShowMessageLeft: true,
+                            message: 'More options',
+                            defaultValue: false,
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'responsiveDesign',
+                    label: 'Responsive design',
+                    elements: [
+                        {
+                            type: 'SWITCH',
+                            id: 'responsive',
+                            isShowMessageRight: true,
+                            message: 'Hide on desktop',
+                            defaultValue: false,
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        }
+                    ]
+                }
             ]
         }
     },
@@ -882,7 +1401,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'SWITCH',
-                            id: 'moreOptions',
+                            id: 'moreOptionsPaddingButton',
                             isShowMessageLeft: true,
                             message: 'More options',
                             defaultValue: false,
@@ -1047,7 +1566,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'SWITCH',
-                            id: 'moreOptions',
+                            id: 'moreOptionsPaddingLine',
                             isShowMessageLeft: true,
                             message: 'More options',
                             defaultValue: false,
@@ -1158,7 +1677,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'SWITCH',
-                            id: 'moreOptions',
+                            id: 'moreOptionsPaddingText',
                             isShowMessageLeft: true,
                             message: 'More options',
                             defaultValue: false,

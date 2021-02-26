@@ -14,7 +14,9 @@ export const typeComponent = {
     SWITCH: 'SWITCH',
     ALIGNMENT: 'ALIGNMENT',
     LABEL: 'LABEL',
-    COMPONENT_CHILD: 'COMPONENT_CHILD'
+    SELECT_RADIO: 'SELECT_RADIO',
+    COMPONENT_CHILD: 'COMPONENT_CHILD',
+    UPLOAD: 'UPLOAD'
 };
 
 export const typeElement = {

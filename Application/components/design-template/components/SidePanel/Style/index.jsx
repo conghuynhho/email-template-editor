@@ -10,6 +10,7 @@ import {
     FillColor,
     Opacity,
     BorderRadius,
+    SelectRadio,
     BorderColor,
     LineWeight,
     LineStyle,
@@ -19,6 +20,7 @@ import {
     Switch
 } from '@antscorp/components';
 import Alignment from 'Components/design-template/components/SidePanel/Style/components/Alignment';
+import Upload from 'Components/design-template/components/SidePanel/Style/components/Upload';
 
 // Assets
 import {getObjectPropSafely} from 'Utils/index.ts';
@@ -139,11 +141,22 @@ const Style = props => {
                             />
                         );
                     }
+                    case typeComponent.SELECT_RADIO: {
+                        return (
+                            <SelectRadio 
+                                styleLabel={{height: 10}}
+                                defaultName={defaultValue}
+                                sources={options}
+                                // onChange={handleOnChange}
+                            />
+                        );
+                    }
                     case typeComponent.FILL_COLOR: {
                         return (
                             <FillColor
                                 styleCustom={getObjectPropSafely(() => style.styleChild) || {width: 44}}
                                 label={label || null}
+                                styleLabel={{marginBottom: 6}}
                                 tooltipName={label || tooltip}
                                 // selectColor={(color) => updateComponent(idParent, idChild, color)}
                                 color={defaultValue}
@@ -265,7 +278,15 @@ const Style = props => {
                         );
                     }
                     case typeComponent.TEXT_INPUT: {
-                        return (
+                        let isShow = true;
+
+                        if (keyShow) {
+                            const type = getObjectPropSafely(() => props.style[idParent][keyShow]);
+
+                            isShow = type === 'imageUrl' ? true : false;
+                        }
+
+                        return isShow ? (
                             <>
                                 <TextInput
                                     label={label || null}
@@ -287,7 +308,7 @@ const Style = props => {
                                     ) : null
                                 }
                             </>
-                        );
+                        ) : null;
                     }
                     case typeComponent.SWITCH: {
                         return (
@@ -342,6 +363,36 @@ const Style = props => {
                                 <span style={{fontSize: 12}}>{translate(label, label)}</span>
                             </div>
                         );
+                    }
+                    case typeComponent.UPLOAD: {
+                        let isShow = true;
+
+                        // if (keyShow) {
+                        //     const type = getObjectPropSafely(() => props.style[idParent][keyShow]);
+
+                        //     isShow = type === 'uploadImage' ? true : false;
+                        // }
+
+                        return isShow ? (
+                            <>
+                                {
+                                    label && (
+                                        <div className="section-label text-nowrap font-weight-normal" style={{height: 22}}>
+                                            <span style={{fontSize: 12}}>{translate(label, label)}</span>
+                                        </div>
+                                    )
+                                }
+                                <Upload
+                                    isShowMessage
+                                    extensions={['jpg', 'gif', 'png']}
+                                    labelButton={'Browse Image'}
+                                    // isShowError={getObjectPropSafely(() => stateUpload.error.file.length)}
+                                    // messageError={translate(msgError[stateUpload.error.file[0]])}
+                                    // callback={handleUploadFile}
+                                    translate={translate}
+                                />
+                            </>
+                        ) : null;
                     }
                     case typeComponent.COMPONENT_CHILD: {
                         let isShow = true;
