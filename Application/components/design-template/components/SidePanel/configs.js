@@ -1,3 +1,5 @@
+import {random} from 'Utils/index.ts';
+
 const sidePanelConfig = [
     {
         id: 'General',
@@ -261,6 +263,37 @@ const sidePanelConfig = [
         type: 'COLUMNS',
         resource: {
             style: [
+                {
+                    id: 'blockRow',
+                    elements: [
+                        {
+                            type: 'BLOCK_COLUMNS',
+                            id: `blockColumn${random(3)}`,
+                            listBlock: [
+                                {
+                                    id: random(3),
+                                    width: '100%'
+                                }
+                            ],
+                            className: 'col-6'
+                        },
+                        {
+                            type: 'BLOCK_COLUMNS',
+                            id: `blockColumn${random(3)}`,
+                            listBlock: [
+                                {
+                                    id: random(3),
+                                    width: '33%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '67%'
+                                }
+                            ],
+                            className: 'col-6'
+                        }
+                    ]
+                },
                 {
                     id: 'columnProperties',
                     label: 'Column properties',

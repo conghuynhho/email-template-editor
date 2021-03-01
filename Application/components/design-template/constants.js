@@ -16,7 +16,8 @@ export const typeComponent = {
     LABEL: 'LABEL',
     SELECT_RADIO: 'SELECT_RADIO',
     COMPONENT_CHILD: 'COMPONENT_CHILD',
-    UPLOAD: 'UPLOAD'
+    UPLOAD: 'UPLOAD',
+    BLOCK_COLUMNS: 'BLOCK_COLUMNS'
 };
 
 export const typeElement = {

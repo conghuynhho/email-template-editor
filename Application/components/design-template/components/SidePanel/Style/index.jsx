@@ -90,6 +90,7 @@ const Style = props => {
                     id: idChild = '',
                     style = {},
                     message = '',
+                    listBlock = [],
                     unit = '',
                     isShowUnit = false,
                     isShowMessage = false,
@@ -143,11 +144,11 @@ const Style = props => {
                     }
                     case typeComponent.SELECT_RADIO: {
                         return (
-                            <SelectRadio 
+                            <SelectRadio
                                 styleLabel={{height: 10}}
                                 defaultName={defaultValue}
                                 sources={options}
-                                // onChange={handleOnChange}
+                            // onChange={handleOnChange}
                             />
                         );
                     }
@@ -409,6 +410,21 @@ const Style = props => {
                             </div>
                         ) : null;
                     }
+                    case typeComponent.BLOCK_COLUMNS: {
+                        const component = listBlock.length ? listBlock.map(item => {
+                            return (
+                                <div key={item.id} className={classnames(styles['blockbuilder-column'])} style={{width: item.width}}>
+                                    <div className={styles['blockbuilder-column-content']} title={item.width} />
+                                </div>
+                            );
+                        }) : null;
+
+                        return (
+                            <div className={classnames(styles['blockbuilder-row'], 'row')}>
+                                {component}
+                            </div>
+                        );
+                    }
                 }
             }
         } catch (error) {
@@ -425,7 +441,7 @@ const Style = props => {
             if (elements && elements.length) {
                 return elements.map(item => {
                     return (
-                        <div key={item.id} className='mb-15' style={{...getObjectPropSafely(() => item.style.styleParent), marginBottom: 15}}>
+                        <div key={item.id} className={classnames(styles[`${item.className}`], `mb-15 ${item.className}`)} style={{...getObjectPropSafely(() => item.style.styleParent), marginBottom: 15}}>
                             {switchCaseComponent(item, id)}
                         </div>
                     );
@@ -444,7 +460,7 @@ const Style = props => {
                         <div key={item.id}>
                             <div className="section">
                                 <div className={classnames(styles['section-label'])}>{translate(item.label, item.label)}</div>
-                                <div className='section-container pl-15 mb-15' style={{display: 'flex', flexWrap: 'wrap', marginLeft: 10}}>
+                                <div className='section-container pl-15 mb-15' style={{display: 'flex', flexWrap: 'wrap', marginLeft: 10, justifyContent: 'space-between'}}>
                                     {renderComponent(item.elements, item.id)}
                                 </div>
                             </div>
