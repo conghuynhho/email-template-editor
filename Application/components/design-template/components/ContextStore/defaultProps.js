@@ -151,6 +151,124 @@ const defaultStyleContent = {
             htmlID: 'u_content_button_1',
             htmlClassNames: 'u_content_button'
         }
+    },
+    [CONSTANTS.TYPE_CONTENT.IMAGE]: {
+        containerPadding: '10px',
+        selectable: true,
+        draggable: true,
+        duplicatable: true,
+        deletable: true,
+        src: {
+            url: 'https://cdn.templates.unlayer.com/assets/1606934810497-02.png',
+            width: 626,
+            height: 418
+        },
+        textAlign: 'center',
+        altText: 'Image',
+        action: {
+            name: 'web',
+            values: {
+                href: '',
+                target: '_blank'
+            }
+        },
+        hideDesktop: false,
+        hideMobile: false,
+        _meta: {
+            htmlID: 'u_content_image_3',
+            htmlClassNames: 'u_content_image'
+        }
+    },
+    [CONSTANTS.TYPE_CONTENT.MENU]: {
+        containerPadding: '25px 10px 10px',
+        selectable: true,
+        draggable: true,
+        duplicatable: true,
+        deletable: true,
+        menu: {
+            items: [
+                {
+                    key: '1606923979328',
+                    link: {
+                        name: 'web',
+                        values: {
+                            href: '',
+                            target: '_self'
+                        }
+                    },
+                    text: 'NEWS'
+                },
+                {
+                    key: '1606924033905',
+                    link: {
+                        name: 'web',
+                        values: {
+                            href: '',
+                            target: '_self'
+                        }
+                    },
+                    text: 'SERVICE'
+                }
+            ]
+        },
+        fontFamily: {
+            label: 'Montserrat',
+            value: '\'Montserrat\',sans-serif',
+            url: 'https://fonts.googleapis.com/css?family=Montserrat:400,700',
+            defaultFont: true
+        },
+        fontSize: '14px',
+        textColor: '#444444',
+        linkColor: '#0068A5',
+        align: 'center',
+        layout: 'horizontal',
+        separator: '',
+        padding: '5px 15px',
+        hideDesktop: false,
+        hideMobile: false,
+        _meta: {
+            htmlID: 'u_content_menu_3',
+            htmlClassNames: 'u_content_menu'
+        }
+    },
+    [CONSTANTS.TYPE_CONTENT.TEXT]: {
+        containerPadding: '10px',
+        selectable: true,
+        draggable: true,
+        duplicatable: true,
+        deletable: true,
+        color: '#ffffff',
+        textAlign: 'center',
+        lineHeight: '140%',
+        linkStyle: {
+            inherit: true,
+            linkColor: '#0000ee',
+            linkHoverColor: '#0000ee',
+            linkUnderline: true,
+            linkHoverUnderline: true
+        },
+        hideDesktop: false,
+        hideMobile: false,
+        text: '<p style="font-size: 14px; line-height: 140%;"><span style="font-family: Montserrat, sans-serif; font-size: 14px; line-height: 19.6px;"><strong><span style="font-size: 44px; line-height: 61.6px;">NEW ARRIVAL</span></strong></span></p>',
+        _meta: {
+            htmlID: 'u_content_text_1',
+            htmlClassNames: 'u_content_text'
+        }
+    },
+    [CONSTANTS.TYPE_CONTENT.HTML]: {
+        containerPadding: '18px',
+        
+        selectable: true,
+        draggable: true,
+        duplicatable: true,
+        deletable: true,
+        html: '<strong>Hello, world!</strong>',
+        hideDesktop: false,
+        hideMobile: false,
+        _meta: {
+            htmlID: 'u_content_html_2',
+            htmlClassNames: 'u_content_html'
+        }
     }
 };
 
