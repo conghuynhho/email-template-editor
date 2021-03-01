@@ -2,17 +2,19 @@ import React, {Fragment, useContext} from 'react';
 import classnames from 'classnames';
 import styles from 'Components/design-template/components/Workspace/styles.module.scss';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
-import {nestedData} from 'Components/design-template/components/Workspace/constants';
+import {nestedData, designData} from 'Components/design-template/components/Workspace/constants';
 import {getObjectPropSafely} from 'Utils';
 import Row from 'Components/design-template/components/Workspace/components/Row';
 import {CONSTANTS} from 'Components/design-template/constants';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
+import {hierarchyDesignData} from 'Components/design-template/components/Workspace/utils';
 
 const Workspace = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
     const {viewMode} = store;
 
     console.log(nestedData, 'nestedData');
+    console.log(hierarchyDesignData(designData), 'hierarchyDesignData');
     // console.log(store, 'store');
 
     const id = getObjectPropSafely(() => nestedData.body.values._meta.htmlID);
