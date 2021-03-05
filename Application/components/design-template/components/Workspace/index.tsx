@@ -8,13 +8,14 @@ import Row from 'Components/design-template/components/Workspace/components/Row'
 import {CONSTANTS} from 'Components/design-template/constants';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import {hierarchyDesignData} from 'Components/design-template/components/Workspace/utils';
+import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 
 const Workspace = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
     const {viewMode} = store;
 
-    console.log(nestedData, 'nestedData');
-    console.log(hierarchyDesignData(designData), 'hierarchyDesignData');
+    // console.log(nestedData, 'nestedData');
+    // console.log(hierarchyDesignData(designData), 'hierarchyDesignData');
     // console.log(store, 'store');
 
     const id = getObjectPropSafely(() => nestedData.body.values._meta.htmlID);
@@ -31,12 +32,18 @@ const Workspace = () => {
 
         return rows.map((row, index) => {        
             return (
-                <Fragment key={index}>
-                    <Row 
-                        data={row} 
-                        generalStyle={generalStyle}
-                    />
-                </Fragment>
+                <Draggable key={index} draggableId={`draggable-row-${index}`} index={index}>
+                    {(provided, snapshot) => (
+                        <div ref={provided.innerRef} {...provided.draggableProps} style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
+                            <Row 
+                                data={row} 
+                                generalStyle={generalStyle}
+                                rowIndex={index}
+                                provided={provided}
+                            />
+                        </div>
+                    )}
+                </Draggable>
             );
         }); 
     };
@@ -48,25 +55,46 @@ const Workspace = () => {
         });
     };
 
+    const onDragEnd = (result) => {
+        console.log('result', result);
+    };
+
+    const getItemStyle = (isDragging, draggableStyle) => {
+        return {
+            background: isDragging ? '#D7AEB5' : styleBody.backgroundColor,       
+            ...draggableStyle
+        };
+    };
+
     return (
-        <div 
-            className={classnames(styles['outer-content'])}
-            onClick={onClickWorkspace}
-        >
+        <DragDropContext onDragEnd={onDragEnd}>
             <div 
-                id={id}
-                className={classnames(
-                    classTitle, 
-                    styles['inner-content'],
-                    {[styles['inner-content-layout-mobile']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE}
-                )}
-                style={styleBody}
+                className={classnames(styles['outer-content'])}
+                onClick={onClickWorkspace}
             >
-                <div className={'layer-group-row'}>
-                    {renderRow()}
-                </div>
+                <Droppable droppableId='droppable-rows' type='rows'>
+                    {(provided) => (
+
+                        <div 
+                            id={id}
+                            className={classnames(
+                                classTitle, 
+                                styles['inner-content'],
+                                {[styles['inner-content-layout-mobile']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE}
+                            )}
+                            style={styleBody}
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                        >
+                            <div className={'layer-group-row'}>
+                                {renderRow()}
+                                {provided.placeholder}
+                            </div>
+                        </div>
+                    )}
+                </Droppable>
             </div>
-        </div>
+        </DragDropContext>
     );
 };
 

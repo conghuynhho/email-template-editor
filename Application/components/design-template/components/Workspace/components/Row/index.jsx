@@ -12,6 +12,7 @@ import {Icon} from '@antscorp/components';
 import {CONSTANTS} from 'Components/design-template/constants';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
+import {Droppable, Draggable} from 'react-beautiful-dnd'; 
 
 const Row = (props) => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
@@ -42,6 +43,17 @@ const Row = (props) => {
         backgroundColor: getObjectPropSafely(() => data.values.columnsBackgroundColor),
         margin: '0px auto',
         ...(!fullWidth ? styleBackgroundImage : {})
+    };
+
+    const getRndInteger = (min, max) => {
+        return Math.floor(Math.random() * (max - min + 1) ) + min;
+    };
+
+    const getItemStyle = (isDragging, draggableStyle) => {
+        return {
+            background: isDragging ? '#D7AEB5' : '',        
+            ...draggableStyle
+        };
     };
 
     const renderContents = (contents) => {
@@ -82,58 +94,74 @@ const Row = (props) => {
             }
         };
 
-        return (
-            <div className={'layer-group-content'}>
-                {
-                    contents.length ? contents.map((content, index) => {
-                        const id = getObjectPropSafely(() => content.values._meta.htmlID);
+        const randomId = getRndInteger(1,100000);
 
-                        return (
-                            <Fragment key={index}>
-                                <div 
-                                    className={classnames(
-                                        'layer-selectable', 
-                                        styles['layer-content'],
-                                        {[styles['layer-selected']]: activeElement === id}
-                                    )}
-                                    onClick={(e) => onClickSelectContent(e, id)}
-                                >
-                                    {renderSelector({
-                                        isShowAddTop: false, 
-                                        isShowAddBottom: false, 
-                                        isRow: false, 
-                                        isSelected: activeElement === id
-                                    })}
-                                    {getContent(content)}
-                                </div>
-                                {renderDragItHere()}
-                            </Fragment>
-                        );
-                    }) : (
-                        <div className="blockbuilder-placeholder" data-name="Drag it here">
-                            <div className={styles['empty-column']}>
-                                <div 
-                                    style={{
-                                        zIndex: 112
-                                    }}
-                                >
-                                    <div>
-                                        No content here. Drag content from right.
-                                    </div>
-                                    {
-                                        false && (
-                                            <div>
-                                                <button className={classnames('btn', styles['add-content'])}>
-                                            Add Content
-                                                </button>
+        return (
+            <Droppable droppableId={`droppable-content-${randomId}`} type='contents'>
+                {(provided) => (
+                    <div className={'layer-group-content'} ref={provided.innerRef} {...provided.droppableProps}>
+                        {contents.length ? contents.map((content, index) => {
+                            const id = getObjectPropSafely(() => content.values._meta.htmlID);
+
+                            return (
+
+                                <Draggable key={index} draggableId={`draggable-${id}`} index={index}>
+                                    {(provided, snapshot) => (
+                                        <>
+                                            <div 
+                                                className={classnames(
+                                                    'layer-selectable', 
+                                                    styles['layer-content'],
+                                                    {[styles['layer-selected']]: activeElement === id}
+                                                )}
+                                                onClick={(e) => onClickSelectContent(e, id)}
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+                                            >
+                                                {renderSelector({
+                                                    isShowAddTop: false, 
+                                                    isShowAddBottom: false, 
+                                                    isRow: false, 
+                                                    isSelected: activeElement === id,
+                                                    dragHandleProps: provided.dragHandleProps
+                                                })}
+                                                {getContent(content)}
                                             </div>
-                                        )
-                                    }
+                                            {renderDragItHere()}
+                                        </>
+
+                                    )}
+                                </Draggable>
+                            );
+                        }) : (
+                            <div className="blockbuilder-placeholder" data-name="Drag it here">
+                                <div className={styles['empty-column']}>
+                                    <div 
+                                        style={{
+                                            zIndex: 112
+                                        }}
+                                    >
+                                        <div>
+                                                No content here. Drag content from right.
+                                        </div>
+                                        {
+                                            false && (
+                                                <div>
+                                                    <button className={classnames('btn', styles['add-content'])}>
+                                                    Add Content
+                                                    </button>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
-            </div>
+                        )}
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
         );
     };
 
@@ -192,7 +220,8 @@ const Row = (props) => {
         isShowAddTop = true, 
         isShowAddBottom = true, 
         isRow = true, 
-        isSelected = false
+        isSelected = false,
+        dragHandleProps = {}
     } = {}) => {
         return (
             <div className={classnames(
@@ -229,7 +258,9 @@ const Row = (props) => {
                     </div>
                 </div>
                 <div className={classnames(styles['layer-drag-row'])} >
-                    <Icon className={classnames('icon-ants-double-three-dots', styles['drag-row'])} />
+                    <span {...dragHandleProps}>
+                        <Icon className={classnames('icon-ants-double-three-dots', styles['drag-row'])} />  
+                    </span>
                 </div>
             </div>
         );
@@ -273,7 +304,7 @@ const Row = (props) => {
                 )}
                 onClick={onClickSelectRow}
             >
-                {renderSelector({isSelected: activeElement === id})}
+                {renderSelector({isSelected: activeElement === id, dragHandleProps: props.provided.dragHandleProps})}
                 <div
                     id={id}
                     className={classnames('u_row', classTitle)}
