@@ -118,14 +118,15 @@ const Row = (props) => {
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
                                                 style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+                                                {...provided.dragHandleProps}
                                             >
-                                                {renderSelector({
+                                                {/* {renderSelector({
                                                     isShowAddTop: false, 
                                                     isShowAddBottom: false, 
                                                     isRow: false, 
                                                     isSelected: activeElement === id,
                                                     dragHandleProps: provided.dragHandleProps
-                                                })}
+                                                })} */}
                                                 {getContent(content)}
                                             </div>
                                             {renderDragItHere()}
@@ -216,6 +217,10 @@ const Row = (props) => {
         });
     };
 
+    const onClickSelector = () => {
+        console.log('clicking selector');
+    };
+
     const renderSelector = ({
         isShowAddTop = true, 
         isShowAddBottom = true, 
@@ -224,7 +229,7 @@ const Row = (props) => {
         dragHandleProps = {}
     } = {}) => {
         return (
-            <div className={classnames(
+            <div onClick={onClickSelector} className={classnames(
                 styles['layer-selector-row'],
                 {[styles['active']]: isSelected},
                 {[styles['layout-mobile-row']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE && isRow}
@@ -304,7 +309,7 @@ const Row = (props) => {
                 )}
                 onClick={onClickSelectRow}
             >
-                {renderSelector({isSelected: activeElement === id, dragHandleProps: props.provided.dragHandleProps})}
+                {/* {renderSelector({isSelected: activeElement === id, dragHandleProps: props.provided.dragHandleProps})} */}
                 <div
                     id={id}
                     className={classnames('u_row', classTitle)}

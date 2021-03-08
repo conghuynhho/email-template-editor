@@ -79,6 +79,7 @@
     "@antscorp/document": "0.0.35",
     "@babel/polyfill": "^7.8.7",
     "@popperjs/core": "^2.6.0",
+    "@tinymce/tinymce-react": "^3.10.3",
     "bootstrap": "^4.5.0",
     "canvas": "^2.6.1",
     "classnames": "^2.2.6",

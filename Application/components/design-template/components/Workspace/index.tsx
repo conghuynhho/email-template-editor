@@ -34,7 +34,12 @@ const Workspace = () => {
             return (
                 <Draggable key={index} draggableId={`draggable-row-${index}`} index={index}>
                     {(provided, snapshot) => (
-                        <div ref={provided.innerRef} {...provided.draggableProps} style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
+                        <div 
+                            ref={provided.innerRef} 
+                            {...provided.draggableProps} 
+                            style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+                            {...provided.dragHandleProps}
+                        >
                             <Row 
                                 data={row} 
                                 generalStyle={generalStyle}
