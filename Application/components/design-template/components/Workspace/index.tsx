@@ -38,7 +38,7 @@ const Workspace = () => {
                             ref={provided.innerRef} 
                             {...provided.draggableProps} 
                             style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                            {...provided.dragHandleProps}
+                            // {...provided.dragHandleProps}
                         >
                             <Row 
                                 data={row} 
@@ -61,7 +61,7 @@ const Workspace = () => {
     };
 
     const onDragEnd = (result) => {
-        console.log('result', result);
+        //
     };
 
     const getItemStyle = (isDragging, draggableStyle) => {

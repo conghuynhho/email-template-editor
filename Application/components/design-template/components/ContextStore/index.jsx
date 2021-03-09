@@ -117,7 +117,7 @@ const reducer = (state, action) => {
             return {...newState};
         }
         case actionType.ACTIVE_ELEMENT: {
-            const checkValid = Object(payload).hasOwnProperty('activeElement'); 
+            const checkValid = Object(payload).hasOwnProperty('activeElement') && Object(payload).hasOwnProperty('isEditing'); 
 
             if (!checkValid) {
                 return state;
@@ -125,7 +125,8 @@ const reducer = (state, action) => {
 
             const newState = {
                 ...state,
-                activeElement: payload.activeElement
+                activeElement: payload.activeElement,
+                isEditing: payload.isEditing
             };
 
             return {...newState};

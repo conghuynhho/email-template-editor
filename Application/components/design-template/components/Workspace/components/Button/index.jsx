@@ -1,9 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {getObjectPropSafely} from 'Utils';
 import styles from 'Components/design-template/components/Workspace/components/Button/styles.module.scss';
 import {Editor} from '@tinymce/tinymce-react';
+import {StoreContext} from 'Components/design-template/components/ContextStore';
 
 const Button = (props) => {
+    const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
+    const {isEditing = false, activeElement} = store;
     const {data} = props; 
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => data.values._meta.htmlClassNames);
@@ -30,23 +33,8 @@ const Button = (props) => {
     const href = getObjectPropSafely(() => data.values.href.values.href);
     const target = getObjectPropSafely(() => data.values.href.values.target);
 
-    const [isEditing, setIsEditing] = useState(false);
-
-    useEffect(() => {
-        window.addEventListener('click', closeTab);
-
-        return () => {
-            window.removeEventListener('click', closeTab);
-        };
-    },[]);
-
-    const closeTab = () => {
-        setIsEditing(false);
-    };
-
-    const onClickButton = (e) => {
-        e.stopPropagation();
-        setIsEditing(!isEditing);
+    const handleEditorChange = (content) => {
+        //
     };
 
     return (
@@ -54,16 +42,16 @@ const Button = (props) => {
             id={id}
             className={styles[classTitle]}
             style={style}
-            onClick={onClickButton}
         >
             <div 
                 className="v-text-align" 
                 style={styleExtra}
                 
             >
-                {isEditing ? (
+                {isEditing && activeElement === id ? (
 
                     <Editor
+                        apiKey={'pj3be4r7csm282qh8gsssq1cywkvjh2j7iic281901rof8aw'}
                         id={`tiny-${id}`}
                         initialValue={text}
                         tagName='span'
@@ -71,7 +59,7 @@ const Button = (props) => {
                         init={{
                             menubar: false,
                             toolbar: 'fontselect fontsizeselect | bold italic underline strikethrough',
-                            auto_focus: isEditing ? `tiny-${id}` : '',
+                            auto_focus: isEditing && activeElement === id ? `tiny-${id}` : '',
                             content_style: `#tiny-${id} {
                                 text-align: ${styleInner.textAlign};
                                 padding: ${styleInner.padding};
@@ -86,10 +74,10 @@ const Button = (props) => {
                                 word-wrap: ${styleInner.wordWrap};
                             }`
                         }}
+                        onEditorChange={handleEditorChange}
                     />
                 ) : (
                     <a
-                        // href={href}
                         target={target}
                         className={'v-size-width v-line-height v-padding v-button-colors v-border v-border-radius'}
                         style={styleInner}
@@ -100,21 +88,6 @@ const Button = (props) => {
                 )}
 
             </div>
-
-            {/* <div 
-                className="v-text-align" 
-                style={styleExtra}
-            >
-                <a
-                    href={href}
-                    target={target}
-                    className={'v-size-width v-line-height v-padding v-button-colors v-border v-border-radius'}
-                    style={styleInner}
-                    dangerouslySetInnerHTML={{
-                        __html: text
-                    }}
-                />
-            </div> */}
         </div>
     );
 };

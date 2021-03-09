@@ -1,6 +1,7 @@
 import moment from 'moment';
 import configs from './constant';
 import localforage from 'localforage';
+import {any, string} from 'prop-types';
 
 export const isNil = value => typeof value === 'object' && value !== null;
 
@@ -487,4 +488,64 @@ export const removeAccent = (str) => {
     } catch (error) {
         console.error(error);
     }
+};
+
+export const convertDataToSaveDesign = (data) => {
+    let bodyValues = {};
+    const rows:Record<string,any> = [];
+
+    for (const key in data.design.bodies) {
+        bodyValues = data.design.bodies[key].values;
+    }
+
+    for (const key in data.design.rows) {
+
+        const columnKeys = data.design.rows[key].columns;
+
+        const columns = columnKeys.map(columnKey => {
+            
+            for (const key in data.design.columns) {
+                if (key === columnKey) {
+
+                    const contentKeys = data.design.columns[key].contents;
+
+                    const contents = contentKeys.map(contentKey => {
+
+                        for (const key in data.design.contents) {
+                            if (key === contentKey) {
+
+                                return {
+                                    type: data.design.contents[key].type,
+                                    slug: undefined,
+                                    values: data.design.contents[key].values
+                                };
+                            }
+                        }
+                    });
+
+                    return {
+                        contents: contents,
+                        values: data.design.columns[key].values
+                    };
+                }
+            }
+        });
+
+        rows.push({
+            cells: data.design.rows[key].cells,
+            values: data.design.rows[key].values,
+            columns: columns
+        });
+    }
+
+    const saveDesignData = {
+        body: {
+            rows: rows,
+            values: bodyValues
+        },
+        counters: data.design.idCounters,
+        schemaVersion: data.design.schemaVersion
+    };
+
+    return saveDesignData;
 };

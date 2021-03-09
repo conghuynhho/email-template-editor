@@ -1,6 +1,6 @@
 import React, {Fragment, useState, useContext} from 'react';
 import classnames from 'classnames';
-import {getObjectPropSafely} from 'Utils';
+import {getObjectPropSafely, convertDataToSaveDesign} from 'Utils';
 import styles from 'Components/design-template/components/Workspace/components/Row/styles.module.scss';
 import Divider from 'Components/design-template/components/Workspace/components/Divider';
 import Image from 'Components/design-template/components/Workspace/components/Image';
@@ -13,10 +13,11 @@ import {CONSTANTS} from 'Components/design-template/constants';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import {Droppable, Draggable} from 'react-beautiful-dnd'; 
+import {designData} from 'Components/design-template/components/Workspace/constants';
 
 const Row = (props) => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
-    const {viewMode, activeElement} = store;
+    const {viewMode, activeElement, isEditing = false} = store;
     const [isSelected, setSelected] = useState(false);
     const {data, generalStyle} = props;
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
@@ -118,15 +119,15 @@ const Row = (props) => {
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
                                                 style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                                                {...provided.dragHandleProps}
+                                                // {...provided.dragHandleProps}
                                             >
-                                                {/* {renderSelector({
+                                                {renderSelector({
                                                     isShowAddTop: false, 
                                                     isShowAddBottom: false, 
                                                     isRow: false, 
                                                     isSelected: activeElement === id,
                                                     dragHandleProps: provided.dragHandleProps
-                                                })} */}
+                                                })}
                                                 {getContent(content)}
                                             </div>
                                             {renderDragItHere()}
@@ -229,7 +230,8 @@ const Row = (props) => {
                 styles['layer-selector-row'],
                 {[styles['active']]: isSelected},
                 {[styles['layout-mobile-row']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE && isRow}
-            )}>
+            )}
+            style={isEditing ? {} : {zIndex: 100}}>
                 {isShowAddTop && (
                     <div className={classnames(
                         styles['layer-add-row'],
@@ -283,7 +285,10 @@ const Row = (props) => {
         e.stopPropagation();
         dispatchStore({
             type: actionType.ACTIVE_ELEMENT,
-            payload: {activeElement: id}
+            payload: {
+                activeElement: id,
+                isEditing: true
+            }
         });
     };
 
@@ -305,7 +310,7 @@ const Row = (props) => {
                 )}
                 onClick={onClickSelectRow}
             >
-                {/* {renderSelector({isSelected: activeElement === id, dragHandleProps: props.provided.dragHandleProps})} */}
+                {renderSelector({isSelected: activeElement === id, dragHandleProps: props.provided.dragHandleProps})}
                 <div
                     id={id}
                     className={classnames('u_row', classTitle)}
