@@ -54,9 +54,7 @@ const Text = (props) => {
                         'searchreplace visualblocks code fullscreen emoticons textcolor',
                         'insertdatetime media paste code help wordcount directionality'
                     ],
-                    toolbar_mode: 'sliding',
-                    toolbar1:
-                            'fontselect fontsizeselect | bold italic underline strikethrough superscript subscript | emoticons ',
+                    toolbar1: 'fontselect fontsizeselect | bold italic underline strikethrough superscript subscript | emoticons ',
                     toolbar2: 'alignleft aligncenter alignright | bullist numlist | forecolor backcolor | ltr rtl | link unlink',
                     fontsize_formats: '8px 10px 12px 14px 16px 18px 20px 22px 24px 26px 28px 30px 32px 34px 36px 38px 40px 44px 48px 72px',
                     content_style: `#tiny-${id} {
@@ -72,4 +70,3 @@ const Text = (props) => {
 };
 
 export default Text;
-

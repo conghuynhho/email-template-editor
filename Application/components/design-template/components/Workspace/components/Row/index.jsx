@@ -217,10 +217,6 @@ const Row = (props) => {
         });
     };
 
-    const onClickSelector = () => {
-        console.log('clicking selector');
-    };
-
     const renderSelector = ({
         isShowAddTop = true, 
         isShowAddBottom = true, 
@@ -229,7 +225,7 @@ const Row = (props) => {
         dragHandleProps = {}
     } = {}) => {
         return (
-            <div onClick={onClickSelector} className={classnames(
+            <div className={classnames(
                 styles['layer-selector-row'],
                 {[styles['active']]: isSelected},
                 {[styles['layout-mobile-row']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE && isRow}

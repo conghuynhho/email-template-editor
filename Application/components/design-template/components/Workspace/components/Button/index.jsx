@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {getObjectPropSafely} from 'Utils';
 import styles from 'Components/design-template/components/Workspace/components/Button/styles.module.scss';
 import {Editor} from '@tinymce/tinymce-react';
@@ -32,6 +32,18 @@ const Button = (props) => {
 
     const [isEditing, setIsEditing] = useState(false);
 
+    useEffect(() => {
+        window.addEventListener('click', closeTab);
+
+        return () => {
+            window.removeEventListener('click', closeTab);
+        };
+    },[]);
+
+    const closeTab = () => {
+        setIsEditing(false);
+    };
+
     const onClickButton = (e) => {
         e.stopPropagation();
         setIsEditing(!isEditing);
@@ -42,11 +54,12 @@ const Button = (props) => {
             id={id}
             className={styles[classTitle]}
             style={style}
+            onClick={onClickButton}
         >
             <div 
                 className="v-text-align" 
                 style={styleExtra}
-                onClick={onClickButton}
+                
             >
                 {isEditing ? (
 
@@ -57,25 +70,26 @@ const Button = (props) => {
                         inline={true}
                         init={{
                             menubar: false,
-                            auto_focus: isEditing && id === 'u_content_button_1' ? `tiny-${id}` : '',
+                            toolbar: 'fontselect fontsizeselect | bold italic underline strikethrough',
+                            auto_focus: isEditing ? `tiny-${id}` : '',
                             content_style: `#tiny-${id} {
-                            text-align: ${styleInner.textAlign};
-                            padding: ${styleInner.padding};
-                            background-color: ${styleInner.backgroundColor};
-                            border-radius: ${styleInner.borderRadius};
-                            color: ${styleInner.color};
-                            display: ${styleInner.display};
-                            line-height: ${styleInner.lineHeight};
-                            max-width: ${styleInner.maxWidth};
-                            text-decoration: ${styleInner.textDecoration};
-                            width: ${styleInner.width};
-                            word-wrap: ${styleInner.wordWrap};
-                        }`
+                                text-align: ${styleInner.textAlign};
+                                padding: ${styleInner.padding};
+                                background-color: ${styleInner.backgroundColor};
+                                border-radius: ${styleInner.borderRadius};
+                                color: ${styleInner.color};
+                                display: ${styleInner.display};
+                                line-height: ${styleInner.lineHeight};
+                                max-width: ${styleInner.maxWidth};
+                                text-decoration: ${styleInner.textDecoration};
+                                width: ${styleInner.width};
+                                word-wrap: ${styleInner.wordWrap};
+                            }`
                         }}
                     />
                 ) : (
                     <a
-                        href={href}
+                        // href={href}
                         target={target}
                         className={'v-size-width v-line-height v-padding v-button-colors v-border v-border-radius'}
                         style={styleInner}
