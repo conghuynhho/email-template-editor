@@ -80,6 +80,70 @@ export const nestedData = {
                     'deletable': true
                 }
             },
+            
+            {
+                'cells': [
+                    1
+                ],
+                'columns': [
+                    {
+                        'contents': [
+                            {
+                                'type': 'html',
+                                'values': {
+                                    'containerPadding': '18px',
+                                    '_meta': {
+                                        'htmlID': 'u_content_html_2',
+                                        'htmlClassNames': 'u_content_html'
+                                    },
+                                    'selectable': true,
+                                    'draggable': true,
+                                    'duplicatable': true,
+                                    'deletable': true,
+                                    'html': '<strong>Hello, world!</strong>',
+                                    'hideDesktop': false,
+                                    'hideMobile': false
+                                }
+                            }
+                        ],
+                        'values': {
+                            'backgroundColor': '',
+                            'padding': '0px',
+                            'border': {},
+                            '_meta': {
+                                'htmlID': 'u_column_17',
+                                'htmlClassNames': 'u_column'
+                            }
+                        }
+                    }
+                ],
+                'values': {
+                    'displayCondition': null,
+                    'columns': false,
+                    'backgroundColor': '',
+                    'columnsBackgroundColor': '',
+                    'backgroundImage': {
+                        'url': '',
+                        'fullWidth': true,
+                        'repeat': false,
+                        'center': true,
+                        'cover': false
+                    },
+                    'padding': '0px',
+                    'hideDesktop': false,
+                    'hideMobile': false,
+                    'noStackMobile': false,
+                    '_meta': {
+                        'htmlID': 'u_row_14',
+                        'htmlClassNames': 'u_row'
+                    },
+                    'selectable': true,
+                    'draggable': true,
+                    'duplicatable': true,
+                    'deletable': true
+                }
+            },
+
             {
                 'cells': [
                     1,
@@ -295,68 +359,6 @@ export const nestedData = {
                     'noStackMobile': false,
                     '_meta': {
                         'htmlID': 'u_row_1',
-                        'htmlClassNames': 'u_row'
-                    },
-                    'selectable': true,
-                    'draggable': true,
-                    'duplicatable': true,
-                    'deletable': true
-                }
-            },
-            {
-                'cells': [
-                    1
-                ],
-                'columns': [
-                    {
-                        'contents': [
-                            {
-                                'type': 'html',
-                                'values': {
-                                    'containerPadding': '18px',
-                                    '_meta': {
-                                        'htmlID': 'u_content_html_2',
-                                        'htmlClassNames': 'u_content_html'
-                                    },
-                                    'selectable': true,
-                                    'draggable': true,
-                                    'duplicatable': true,
-                                    'deletable': true,
-                                    'html': '<strong>Hello, world!</strong>',
-                                    'hideDesktop': false,
-                                    'hideMobile': false
-                                }
-                            }
-                        ],
-                        'values': {
-                            'backgroundColor': '',
-                            'padding': '0px',
-                            'border': {},
-                            '_meta': {
-                                'htmlID': 'u_column_17',
-                                'htmlClassNames': 'u_column'
-                            }
-                        }
-                    }
-                ],
-                'values': {
-                    'displayCondition': null,
-                    'columns': false,
-                    'backgroundColor': '',
-                    'columnsBackgroundColor': '',
-                    'backgroundImage': {
-                        'url': '',
-                        'fullWidth': true,
-                        'repeat': false,
-                        'center': true,
-                        'cover': false
-                    },
-                    'padding': '0px',
-                    'hideDesktop': false,
-                    'hideMobile': false,
-                    'noStackMobile': false,
-                    '_meta': {
-                        'htmlID': 'u_row_14',
                         'htmlClassNames': 'u_row'
                     },
                     'selectable': true,

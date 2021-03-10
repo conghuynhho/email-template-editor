@@ -5,6 +5,7 @@ import {
     defaultStyleContent
 } from 'Components/design-template/components/ContextStore/defaultProps';
 import {CONSTANTS} from 'Components/design-template/constants';
+import {designData} from 'Components/design-template/components/Workspace/constants';
 
 export const initialState = {
     pages: {
@@ -67,6 +68,7 @@ export const initialState = {
         u_content_html: 0,
         u_content_social: 0
     },
+    ...designData.design,
     schemaVersion: 5,
     viewMode: CONSTANTS.VIEW_MODE.DESKTOP,
     sidePanelMode: CONSTANTS.SIDE_PANEL_MODE.RIGHT,

@@ -29,19 +29,23 @@ const reducer = (state, action) => {
             return {...newState};
         }
         case actionType.UPDATE_BODY: {
-            if (!getObjectPropSafely(() => Object.keys(payload.values).length && payload.id)) {
+
+            // if (!getObjectPropSafely(() => Object.keys(payload.values).length && payload.id)) {
+            //     return state;
+            // }
+            if (!getObjectPropSafely(() => Object(payload).hasOwnProperty('bodies'))) {
                 return state;
             }
-
-            const bodies = produce(state.rows, draft => {
-                if (draft[payload.id]) {
-                    draft[payload.id] = {...draft[payload.id], ...payload.values};
-                }
-            });
+            
+            // const bodies = produce(state.rows, draft => {
+            //     if (draft[payload.id]) {
+            //         draft[payload.id] = {...draft[payload.id], ...payload.values};
+            //     }
+            // });
 
             const newState = {
                 ...state,
-                bodies: bodies
+                bodies: payload.bodies
             };
 
             return {...newState};
@@ -69,15 +73,15 @@ const reducer = (state, action) => {
                 return state;
             }
 
-            const columns = produce(state.rows, draft => {
-                if (draft[payload.id]) {
-                    draft[payload.id] = {...draft[payload.id], ...payload.values};
-                }
-            });
+            // const columns = produce(state.rows, draft => {
+            //     if (draft[payload.id]) {
+            //         draft[payload.id] = {...draft[payload.id], ...payload.values};
+            //     }
+            // });
 
             const newState = {
                 ...state,
-                columns: columns
+                columns: payload.values
             };
 
             return {...newState};
@@ -127,6 +131,21 @@ const reducer = (state, action) => {
                 ...state,
                 activeElement: payload.activeElement,
                 isEditing: payload.isEditing
+            };
+
+            return {...newState};
+        }
+        case actionType.DRAGGING_COLUMN_ID: {
+            const checkValid = Object(payload).hasOwnProperty('columnId');
+
+            if (!checkValid) {
+                return state;
+            }
+
+            const newState = {
+                ...state,
+                draggingColumnId: payload.columnId,
+                draggingContentIndex: payload.contentIndex
             };
 
             return {...newState};
