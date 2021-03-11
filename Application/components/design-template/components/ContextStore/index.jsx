@@ -150,6 +150,50 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
+        case actionType.ADD_ROWS: {
+            const checkValid = 
+                Object(payload).hasOwnProperty('newBodies') 
+                && Object(payload).hasOwnProperty('newRows')
+                && Object(payload).hasOwnProperty('newColumns')
+                && Object(payload).hasOwnProperty('newUsageCounters');
+
+            if (!checkValid) {
+                return state;
+            }
+
+            const newState = {
+                ...state,
+                bodies: payload.newBodies,
+                rows: payload.newRows,
+                columns: payload.newColumns,
+                usageCounters: payload.newUsageCounters
+            };
+
+            return {...newState};
+        }
+        case actionType.DELETE_ROWS: {
+            const checkValid = 
+                Object(payload).hasOwnProperty('newBodies') 
+                && Object(payload).hasOwnProperty('newRows')
+                && Object(payload).hasOwnProperty('newColumns')
+                && Object(payload).hasOwnProperty('newContents')
+                && Object(payload).hasOwnProperty('newUsageCounters');
+            
+            if (!checkValid) {
+                return state;
+            }
+
+            const newState = {
+                ...state,
+                bodies: payload.newBodies,
+                rows: payload.newRows,
+                columns: payload.newColumns,
+                contents: payload.newContents,
+                usageCounters: payload.newUsageCounters
+            };
+
+            return {...newState};
+        }
     }
 };
 

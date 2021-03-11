@@ -16,7 +16,7 @@ const Workspace = () => {
     const nestedData = hierarchyDesignData(store);
 
     console.log('store', store);
-    console.log('nestedData', nestedData);
+    // console.log('nestedData', nestedData);
 
     const id = getObjectPropSafely(() => nestedData.body.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => nestedData.body.values._meta.htmlClassNames);

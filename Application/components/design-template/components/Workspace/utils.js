@@ -92,3 +92,22 @@ export const getColumnId = (designData, rowId, columnIndex) => {
 
     return columnId;
 };
+
+export const getRowsFromBodies = (bodies) => {
+    const valueList = Object.values(bodies);
+
+    return valueList[0].rows;
+};
+
+export const getLastUsingId = (data) => {
+    const contentIdList = Object.keys(data.contents);
+    const lastContentID = contentIdList[contentIdList.length - 1];
+    
+    const columnIdList = Object.keys(data.columns);
+    const lastColumnID = columnIdList[columnIdList.length - 1];
+
+    const rowIdList = Object.keys(data.rows);
+    const lastRowID = rowIdList[rowIdList.length - 1];
+
+    return (lastRowID > lastColumnID ? lastRowID : lastColumnID) > lastContentID ? (lastRowID > lastColumnID ? lastRowID : lastColumnID) : lastContentID;
+};
