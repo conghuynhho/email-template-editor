@@ -254,3 +254,16 @@
         }
     }
 }
+
+.react-beatiful-dnd-copy ~ div {
+    transform: none !important;
+}
+
+.react-beatiful-dnd-copy {
+background: lightblue;
+}
+
+.react-beatiful-dnd-copy ~ [data-rbd-placeholder-context-id] {
+display: none !important;
+}
+  

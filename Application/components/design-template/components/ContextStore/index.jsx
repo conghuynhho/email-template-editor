@@ -30,18 +30,9 @@ const reducer = (state, action) => {
         }
         case actionType.UPDATE_BODY: {
 
-            // if (!getObjectPropSafely(() => Object.keys(payload.values).length && payload.id)) {
-            //     return state;
-            // }
             if (!getObjectPropSafely(() => Object(payload).hasOwnProperty('bodies'))) {
                 return state;
             }
-            
-            // const bodies = produce(state.rows, draft => {
-            //     if (draft[payload.id]) {
-            //         draft[payload.id] = {...draft[payload.id], ...payload.values};
-            //     }
-            // });
 
             const newState = {
                 ...state,
@@ -72,12 +63,6 @@ const reducer = (state, action) => {
             if (!getObjectPropSafely(() => Object.keys(payload.values).length && payload.id)) {
                 return state;
             }
-
-            // const columns = produce(state.rows, draft => {
-            //     if (draft[payload.id]) {
-            //         draft[payload.id] = {...draft[payload.id], ...payload.values};
-            //     }
-            // });
 
             const newState = {
                 ...state,
@@ -150,12 +135,8 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
-        case actionType.ADD_ROWS: {
-            const checkValid = 
-                Object(payload).hasOwnProperty('newBodies') 
-                && Object(payload).hasOwnProperty('newRows')
-                && Object(payload).hasOwnProperty('newColumns')
-                && Object(payload).hasOwnProperty('newUsageCounters');
+        case actionType.HANDLE_ROW: {
+            const checkValid = Object.keys(payload).length;
 
             if (!checkValid) {
                 return state;
@@ -163,33 +144,7 @@ const reducer = (state, action) => {
 
             const newState = {
                 ...state,
-                bodies: payload.newBodies,
-                rows: payload.newRows,
-                columns: payload.newColumns,
-                usageCounters: payload.newUsageCounters
-            };
-
-            return {...newState};
-        }
-        case actionType.DELETE_ROWS: {
-            const checkValid = 
-                Object(payload).hasOwnProperty('newBodies') 
-                && Object(payload).hasOwnProperty('newRows')
-                && Object(payload).hasOwnProperty('newColumns')
-                && Object(payload).hasOwnProperty('newContents')
-                && Object(payload).hasOwnProperty('newUsageCounters');
-            
-            if (!checkValid) {
-                return state;
-            }
-
-            const newState = {
-                ...state,
-                bodies: payload.newBodies,
-                rows: payload.newRows,
-                columns: payload.newColumns,
-                contents: payload.newContents,
-                usageCounters: payload.newUsageCounters
+                ...payload
             };
 
             return {...newState};
