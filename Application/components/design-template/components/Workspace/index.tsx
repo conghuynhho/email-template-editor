@@ -1,4 +1,4 @@
-import React, {Fragment, useContext, useEffect} from 'react';
+import React, {Fragment, useContext, useState} from 'react';
 import classnames from 'classnames';
 import styles from 'Components/design-template/components/Workspace/styles.module.scss';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
@@ -12,7 +12,7 @@ import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 
 const Workspace = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
-    const {viewMode, bodies = {}, columns = {}, draggingColumnId = -1} = store;
+    const {viewMode, bodies = {}, columns = {}, draggingColumnId = -1, coordinate} = store;
     const nestedData = hierarchyDesignData(store);
 
     console.log('store', store);
@@ -62,7 +62,21 @@ const Workspace = () => {
         });
     };
 
+    const onMouseOverRow = (e) => {
+    };
+
+    const onDragStart = (provided) => {
+        // document.addEventListener('mousemove', onMouseOverRow);
+
+    };
+
+    // const onDragUpdate = (result) => {
+    //     console.log(result, 'update');
+    //     const element = getObjectPropSafely(() => document.getElementById(result.draggableId))
+    // };
+
     const onDragEnd = (result) => {
+        // document.removeEventListener('mousemove', onMouseOverRow);
         if (!result.destination) {
             return;
         }
@@ -85,7 +99,7 @@ const Workspace = () => {
                     bodies: bodies
                 }
             });
-            
+
         } else {
             
             if (destination.droppableId === source.droppableId) {
@@ -134,6 +148,7 @@ const Workspace = () => {
                 
             }
         }
+
     };
 
     const getItemStyle = (isDragging, draggableStyle) => {
@@ -144,7 +159,7 @@ const Workspace = () => {
     };
 
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
+        <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
             <div 
                 className={classnames(styles['outer-content'])}
                 onClick={onClickWorkspace}

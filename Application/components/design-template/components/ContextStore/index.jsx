@@ -149,6 +149,48 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
+        case actionType.DRAGGING_ITEM: {
+            const checkValid = Object(payload).hasOwnProperty('draggingItem');
+
+            if (!checkValid) {
+                return;
+            }
+
+            const newState = {
+                ...state,
+                draggingItem: payload.draggingItem
+            };
+
+            return {...newState};
+        }
+        case actionType.SEND_COORDINATE: {
+            const checkValid = Object(payload).hasOwnProperty('coordinate');
+
+            if (!checkValid) {
+                return;
+            }
+
+            const newState = {
+                ...state,
+                coordinate: payload.coordinate
+            };
+
+            return {...newState};
+        }
+        case actionType.CLONE_ID: {
+            const checkValid = Object(payload).hasOwnProperty('cloneID');
+
+            if (!checkValid) {
+                return;
+            }
+
+            const newState = {
+                ...state,
+                cloneID: payload.cloneID
+            };
+
+            return {...newState};
+        }
     }
 };
 
