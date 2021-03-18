@@ -1,25 +1,28 @@
+import {getObjectPropSafely} from 'Utils';
+
 export const hierarchyDesignData = (data) => {
+    const body = getObjectPropSafely(() => data.bodies);
     let bodyValues = {};
     const rows = [];
     let rowPositions = [];
 
-    for (const key in data.bodies) {
-        bodyValues = data.bodies[key].values;
-        rowPositions = data.bodies[key].rows;
+    for (const key in body) {
+        bodyValues = getObjectPropSafely(() => data.bodies[key].values);
+        rowPositions = getObjectPropSafely(() => data.bodies[key].rows);
 
     }
 
     // for (const key in data.rows) { // 1
     rowPositions.forEach(row => {
 
-        const columnKeys = data.rows[row].columns; // 2
+        const columnKeys = getObjectPropSafely(() => data.rows[row].columns); // 2
     
         const columns = columnKeys.map(columnKey => {
             
             for (const key in data.columns) {
                 if (key === columnKey) {
 
-                    const contentKeys = data.columns[key].contents;
+                    const contentKeys = getObjectPropSafely(() => data.columns[key].contents);
     
                     const contents = contentKeys.map(contentKey => {
     
@@ -27,9 +30,9 @@ export const hierarchyDesignData = (data) => {
                             if (key === contentKey) {
     
                                 return {
-                                    type: data.contents[key].type,
+                                    type: getObjectPropSafely(() => data.contents[key].type),
                                     slug: undefined,
-                                    values: data.contents[key].values
+                                    values: getObjectPropSafely(() => data.contents[key].values)
                                 };
                             }
                         }
@@ -37,15 +40,15 @@ export const hierarchyDesignData = (data) => {
     
                     return {
                         contents: contents,
-                        values: data.columns[key].values
+                        values: getObjectPropSafely(() => data.columns[key].values)
                     };
                 }
             }
         });
     
         rows.push({
-            cells: data.rows[row].cells, // 3
-            values: data.rows[row].values, // 4
+            cells: getObjectPropSafely(() => data.rows[row].cells), // 3
+            values: getObjectPropSafely(() => data.rows[row].values), // 4
             columns: columns 
         });
     });
@@ -57,8 +60,8 @@ export const hierarchyDesignData = (data) => {
             rows: rows,
             values: bodyValues
         },
-        counters: data.idCounters,
-        schemaVersion: data.schemaVersion
+        counters: getObjectPropSafely(() => data.idCounters),
+        schemaVersion: getObjectPropSafely(() => data.schemaVersion)
     };
 
     return saveDesignData;
@@ -70,7 +73,7 @@ export const reorder = (list, startIndex, endIndex) => {
 
     result.splice(endIndex, 0, removed);
 
-    return result;
+    return [...result];
 };
 
 export const getRowId = (designData, rowIndex) => {
@@ -80,14 +83,14 @@ export const getRowId = (designData, rowIndex) => {
         bodyKeyList.push(key);
     }
 
-    const rows = designData.bodies[bodyKeyList[0]].rows;
+    const rows = getObjectPropSafely(() => designData.bodies[bodyKeyList[0]].rows);
     const rowId = rows[rowIndex];
 
     return rowId;
 };
 
 export const getColumnId = (designData, rowId, columnIndex) => {
-    const columns = designData.rows[rowId].columns;
+    const columns = getObjectPropSafely(() => designData.rows[rowId].columns);
     const columnId = columns[columnIndex];
 
     return columnId;
@@ -96,18 +99,44 @@ export const getColumnId = (designData, rowId, columnIndex) => {
 export const getRowsFromBodies = (bodies) => {
     const valueList = Object.values(bodies);
 
-    return valueList[0].rows;
+    return [...valueList[0].rows];
 };
 
 export const getLastUsingId = (data) => {
-    const contentIdList = Object.keys(data.contents);
+    const contentIdList = Object.keys(getObjectPropSafely(() => data.contents));
     const lastContentID = contentIdList[contentIdList.length - 1];
     
-    const columnIdList = Object.keys(data.columns);
+    const columnIdList = Object.keys(getObjectPropSafely(() => data.columns));
     const lastColumnID = columnIdList[columnIdList.length - 1];
 
-    const rowIdList = Object.keys(data.rows);
+    const rowIdList = Object.keys(getObjectPropSafely(() => data.rows));
     const lastRowID = rowIdList[rowIdList.length - 1];
 
     return (lastRowID > lastColumnID ? lastRowID : lastColumnID) > lastContentID ? (lastRowID > lastColumnID ? lastRowID : lastColumnID) : lastContentID;
+};
+
+export const getRowIDFromHtmlID = (data, htmlID) => {
+    
+    for (const key in data.rows) {
+        if (htmlID === getObjectPropSafely(() => data.rows[key].values._meta.htmlID)) {
+            return key;
+        }
+    }
+    return '';
+};
+
+export const getRowIndexFromId = (data, rowId) => {
+
+    const rows = getRowsFromBodies(getObjectPropSafely(() => data.bodies));
+    let result = '';
+
+    if (Array.isArray(rows) && rows.length) {
+        rows.forEach((row, index) => {
+            if (row === rowId) {
+                result = index;
+            }
+        });    
+    }
+
+    return result;
 };

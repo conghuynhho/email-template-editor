@@ -9,10 +9,11 @@ import {CONSTANTS} from 'Components/design-template/constants';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import {hierarchyDesignData, reorder} from 'Components/design-template/components/Workspace/utils';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
+import {Icon} from '@antscorp/components';
 
 const Workspace = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
-    const {viewMode, bodies = {}, columns = {}, draggingColumnId = -1, coordinate} = store;
+    const {viewMode, bodies = {}, columns = {}, draggingColumnId = -1, rowVisiblePosition = {}} = store;
     const nestedData = hierarchyDesignData(store);
 
     console.log('store', store);
@@ -25,33 +26,59 @@ const Workspace = () => {
         backgroundColor: getObjectPropSafely(() => nestedData.body.values.backgroundColor),
         fontFamily: getObjectPropSafely(() => nestedData.body.values.fontFamily.value)
     };
+    const [dragItHereIndex, setDragItHereIndex] = useState(-1);
+
+    const getVisibleDragItHereRow = (index) => {
+        setDragItHereIndex(index);
+    };
 
     const renderRow = () => {
         const rows = getObjectPropSafely(() => nestedData.body.rows);
         const generalStyle = getObjectPropSafely(() => nestedData.body.values);
 
-        return rows.map((row, index) => {        
+        return rows.map((row, index) => {
+
             return (
                 <Draggable key={index} draggableId={`draggable-row-${index}`} index={index}>
                     {(provided, snapshot) => {
-
+    
                         return (
-                            <div 
-                                ref={provided.innerRef} 
-                                {...provided.draggableProps} 
-                                style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                            >
-                                <Row 
-                                    data={row} 
-                                    generalStyle={generalStyle}
-                                    rowIndex={index}
-                                    provided={provided}
-                                />
-                            </div>
+                            <>
+                                <div 
+                                    ref={provided.innerRef} 
+                                    {...provided.draggableProps} 
+                                    style={{
+                                        ...getItemStyle(snapshot.isDragging, getObjectPropSafely(() => provided.draggableProps.style)),
+                                        ...(!snapshot.isDragging && {transform: 'none'})
+                                    }}
+                                >
+                                    {!snapshot.isDragging && (                                    
+                                        <Row 
+                                            data={row} 
+                                            generalStyle={generalStyle}
+                                            rowIndex={index}
+                                            provided={provided}
+                                        />
+                                    )}
+                                    {snapshot.isDragging && <Icon className={classnames('icon-ants-double-three-dots')} />}
+                                </div>
+                                {snapshot.isDragging && (
+                                    <div>
+                                        <Row 
+                                            data={row} 
+                                            generalStyle={generalStyle}
+                                            rowIndex={index}
+                                            provided={provided}
+                                            getVisibleDragItHereRow={getVisibleDragItHereRow}
+                                            visibleDragItHereIndex={dragItHereIndex}
+                                        />
+                                    </div>
+                                )}
+                            </>
                         );
                     }}
                 </Draggable>
-            );
+            );       
         }); 
     };
 
@@ -62,21 +89,8 @@ const Workspace = () => {
         });
     };
 
-    const onMouseOverRow = (e) => {
-    };
-
-    const onDragStart = (provided) => {
-        // document.addEventListener('mousemove', onMouseOverRow);
-
-    };
-
-    // const onDragUpdate = (result) => {
-    //     console.log(result, 'update');
-    //     const element = getObjectPropSafely(() => document.getElementById(result.draggableId))
-    // };
-
     const onDragEnd = (result) => {
-        // document.removeEventListener('mousemove', onMouseOverRow);
+
         if (!result.destination) {
             return;
         }
@@ -100,66 +114,71 @@ const Workspace = () => {
                 }
             });
 
-        } else {
+        } 
+        // else {
             
-            if (destination.droppableId === source.droppableId) {
+        //     if (destination.droppableId === source.droppableId) {
 
-                for (const key in columns) {
-                    if (columns[key].contents.length > 1 && key === draggingColumnId) {
+        //         for (const key in columns) {
+        //             if (columns[key].contents.length > 1 && key === draggingColumnId) {
                         
-                        const newContent = reorder(columns[key].contents, source.index, destination.index);
+        //                 const newContent = reorder(columns[key].contents, source.index, destination.index);
     
-                        columns[key].contents = newContent;
-                    }
-                }
+        //                 columns[key].contents = newContent;
+        //             }
+        //         }
                 
-                dispatchStore({
-                    type: actionType.UPDATE_COLUMN,
-                    payload: {
-                        id: id,
-                        values: columns
-                    }
-                });
+        //         dispatchStore({
+        //             type: actionType.UPDATE_COLUMN,
+        //             payload: {
+        //                 id: id,
+        //                 values: columns
+        //             }
+        //         });
 
-            } else {
-                const sourceCharacterArray = source.droppableId.split('-');
-                const sourceColumnId = sourceCharacterArray[sourceCharacterArray.length - 1];
+        //     } else {
+        //         const sourceCharacterArray = source.droppableId.split('-');
+        //         const sourceColumnId = sourceCharacterArray[sourceCharacterArray.length - 1];
 
-                const destinationCharacterArray = destination.droppableId.split('-');
-                const destinationColumnId = destinationCharacterArray[destinationCharacterArray.length - 1];
+        //         const destinationCharacterArray = destination.droppableId.split('-');
+        //         const destinationColumnId = destinationCharacterArray[destinationCharacterArray.length - 1];
 
-                const sourceContents = [...columns[sourceColumnId].contents];
-                const destinationContents = [...columns[destinationColumnId].contents];
+        //         const sourceContents = [...columns[sourceColumnId].contents];
+        //         const destinationContents = [...columns[destinationColumnId].contents];
 
-                const [removed] = sourceContents.splice(source.index, 1);
+        //         const [removed] = sourceContents.splice(source.index, 1);
 
-                destinationContents.splice(destination.index, 0, removed);
+        //         destinationContents.splice(destination.index, 0, removed);
 
-                columns[sourceColumnId].contents = [...sourceContents]; 
-                columns[destinationColumnId].contents = [...destinationContents];
+        //         columns[sourceColumnId].contents = [...sourceContents]; 
+        //         columns[destinationColumnId].contents = [...destinationContents];
 
-                dispatchStore({
-                    type: actionType.UPDATE_COLUMN,
-                    payload: {
-                        id: id,
-                        values: columns
-                    }
-                });
+        //         dispatchStore({
+        //             type: actionType.UPDATE_COLUMN,
+        //             payload: {
+        //                 id: id,
+        //                 values: columns
+        //             }
+        //         });
                 
-            }
-        }
+        //     }
+        // }
 
     };
 
     const getItemStyle = (isDragging, draggableStyle) => {
-        return {
-            background: isDragging ? '#D7AEB5' : styleBody.backgroundColor,       
-            ...draggableStyle
+        return {      
+            ...draggableStyle,
+            ...(isDragging && {
+                display: 'flex',
+                alignItems: 'center',
+                width: 18 
+            })
         };
     };
 
     return (
-        <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+        <DragDropContext >
             <div 
                 className={classnames(styles['outer-content'])}
                 onClick={onClickWorkspace}

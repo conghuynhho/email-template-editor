@@ -149,8 +149,8 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
-        case actionType.DRAGGING_ITEM: {
-            const checkValid = Object(payload).hasOwnProperty('draggingItem');
+        case actionType.HOVER_ROW: {
+            const checkValid = Object(payload).hasOwnProperty('hoverId');
 
             if (!checkValid) {
                 return;
@@ -158,13 +158,13 @@ const reducer = (state, action) => {
 
             const newState = {
                 ...state,
-                draggingItem: payload.draggingItem
+                hoverId: payload.hoverId
             };
 
             return {...newState};
         }
-        case actionType.SEND_COORDINATE: {
-            const checkValid = Object(payload).hasOwnProperty('coordinate');
+        case actionType.DRAG_IT_HERE_SPECS: {
+            const checkValid = Object(payload).hasOwnProperty('rowVisiblePosition');
 
             if (!checkValid) {
                 return;
@@ -172,13 +172,13 @@ const reducer = (state, action) => {
 
             const newState = {
                 ...state,
-                coordinate: payload.coordinate
+                rowVisiblePosition: {...payload.rowVisiblePosition}
             };
 
             return {...newState};
         }
-        case actionType.CLONE_ID: {
-            const checkValid = Object(payload).hasOwnProperty('cloneID');
+        case actionType.RENDER_DRAG_POSITION: {
+            const checkValid = Object(payload).hasOwnProperty('rowDraggingIndex');
 
             if (!checkValid) {
                 return;
@@ -186,7 +186,21 @@ const reducer = (state, action) => {
 
             const newState = {
                 ...state,
-                cloneID: payload.cloneID
+                rowDraggingIndex: payload.rowDraggingIndex
+            };
+
+            return {...newState};
+        }
+        case actionType.UPDATE_DRAGGING_STATUS: {
+            const checkValid = Object(payload).hasOwnProperty('isDragging');
+
+            if (!checkValid) {
+                return;
+            }
+
+            const newState = {
+                ...state,
+                isDragging: payload.isDragging
             };
 
             return {...newState};
