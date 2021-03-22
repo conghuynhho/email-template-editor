@@ -11,7 +11,7 @@ const Image = (props) => {
         padding: getObjectPropSafely(() => data.values.containerPadding)
     };
     const styleExtra = {
-        position: 'relative',
+        position: 'relative', 
         textAlign: getObjectPropSafely(() => data.values.textAlign),
         lineHeight: '0px'
 

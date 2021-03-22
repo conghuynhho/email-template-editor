@@ -12,6 +12,7 @@ import {Icon} from '@antscorp/components';
 import {CONSTANTS} from 'Components/design-template/constants';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
+import {style} from 'd3-selection';
 
 const Row = (props) => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
@@ -193,13 +194,14 @@ const Row = (props) => {
         isShowAddBottom = true, 
         isRow = true, 
         isSelected = false
-    } = {}) => {
+    } = {}, dragHandleProps) => {
         return (
-            <div className={classnames(
-                styles['layer-selector-row'],
-                {[styles['active']]: isSelected},
-                {[styles['layout-mobile-row']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE && isRow}
-            )}>
+            <div 
+                className={classnames(
+                    styles['layer-selector-row'],
+                    {[styles['active']]: isSelected},
+                    {[styles['layout-mobile-row']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE && isRow}
+                )}>
                 {isShowAddTop && (
                     <div className={classnames(
                         styles['layer-add-row'],
@@ -214,7 +216,7 @@ const Row = (props) => {
                         styles['layer-add-row'],
                         styles['layer-add-row-bottom']
                     )}>
-                        <Icon className={classnames('icon-ants-add')} />
+                        <Icon  className={classnames('icon-ants-add')} />
                     </div>
                 )}
                 
@@ -228,8 +230,9 @@ const Row = (props) => {
                         <Icon className={classnames('icon-ants-delete')} />
                     </div>
                 </div>
-                <div className={classnames(styles['layer-drag-row'])} >
-                    <Icon className={classnames('icon-ants-double-three-dots', styles['drag-row'])} />
+                <div
+                    className={classnames(styles['layer-drag-row'])} >
+                    <Icon {...dragHandleProps} className={classnames('icon-ants-double-three-dots', styles['drag-row'])} />
                 </div>
             </div>
         );
@@ -264,7 +267,7 @@ const Row = (props) => {
     };
 
     return (
-        <>
+        <div className={classnames(styles['layer-row-no-transform'])}>
             <div   
                 className={classnames(
                     'layer-selectable', 
@@ -273,28 +276,30 @@ const Row = (props) => {
                 )}
                 onClick={onClickSelectRow}
             >
-                {renderSelector({isSelected: activeElement === id})}
-                <div
-                    id={id}
-                    className={classnames('u_row', classTitle)}
-                    style={styleRow}
-                >
-                    <div 
-                        className={classnames(styles['container'])}
-                        style={styleContainer}
+                <div>
+                    {renderSelector({isSelected: activeElement === id}, {...props.dragHandleProps}) }
+                    <div
+                        id={id}
+                        className={classnames('u_row', classTitle)}
+                        style={styleRow}
                     >
-                        <div className={classnames(
-                            styles[classTitle],
-                            styles['u_row'],
-                            {[styles['layout-mobile']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE}
-                        )}>
-                            {renderColumns()}
+                        <div
+                            className={classnames(styles['container'])}
+                            style={styleContainer}
+                        >
+                            <div className={classnames(
+                                styles[classTitle],
+                                styles['u_row'],
+                                {[styles['layout-mobile']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE}
+                            )}>
+                                {renderColumns()}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             {renderDragItHere()}
-        </>
+        </div>
     );
 };
 

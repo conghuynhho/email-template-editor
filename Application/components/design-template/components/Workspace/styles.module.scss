@@ -12,5 +12,43 @@
         p {
             margin: 0;
         }
+        
     }
 }
+.layer-drag-row {
+    position: absolute;
+    align-items: center;
+    background-color: #89c5df;
+    min-height: 40px;
+    max-height: 45px;
+    max-width: 16px;
+    color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    z-index: 101;
+    overflow: hidden;
+    position: relative;
+    top: calc(50% - 20px);
+    
+    .drag-row {
+        cursor: grabbing;
+        cursor: -moz-grabbing;
+        cursor: -webkit-grabbing;   
+    }
+}
+
+// .wrapper-transform-none div{
+//     background-color: red;
+//     transform: none !important;
+// }
+
+.transform-none ~ div{
+    transform: none  !important;
+}
+.transform-none ~ [data-rbd-placeholder-context-id]{
+    display: none !important;
+}
+.child-transform-none div{
+    transform: none !important;
+}
+

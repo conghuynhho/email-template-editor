@@ -1,7 +1,9 @@
+.layer-row-no-transform{
+    transform: none !important;
+}
 .layer-content,
 .layer-row {
     position: relative;
-
     .layer-selector-row {
         position: absolute;
         top: 0;

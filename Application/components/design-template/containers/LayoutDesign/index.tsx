@@ -10,7 +10,7 @@ import {CONSTANTS} from 'Components/design-template/constants';
 
 const LayoutDesign = () => {
     const {state: store = {}} = useContext(StoreContext);
-    const {sidePanelMode} = store;
+    const sidePanelMode = store;
 
     return (
         <div className={classnames(
