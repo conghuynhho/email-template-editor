@@ -11,7 +11,7 @@ import General from 'Components/design-template/components/SidePanel/containers/
 import {typeElement} from 'Components/design-template/constants';
 import sidePanelConfig from 'Components/design-template/components/SidePanel/configs';
 
-const SidePanel = props => {
+const SidePanel = () => {
     const renderHtml = () => {
         try {
             const type = 'COLUMNS';

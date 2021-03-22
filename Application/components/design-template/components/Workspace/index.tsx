@@ -16,7 +16,7 @@ const Workspace = () => {
     const viewMode = store;
     const nestedData = hierarchyDesignData(designData);
 
-    // console.log(nestedData, 'nestedData');
+    console.log(nestedData, 'nestedData');
     // console.log(hierarchyDesignData(designData), 'hierarchyDesignData');
     // console.log(designData, 'designData');
     // console.log(store, 'store');
@@ -77,6 +77,10 @@ const Workspace = () => {
         console.log('destination', destination);
         console.log(provided);
     };
+
+    // useEffect(()=>{
+
+    // },[])
 
     return (
         <div
