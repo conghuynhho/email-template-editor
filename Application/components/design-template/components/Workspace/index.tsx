@@ -3,7 +3,7 @@ import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import classnames from 'classnames';
 import styles from 'Components/design-template/components/Workspace/styles.module.scss';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
-import {nestedData, designData} from 'Components/design-template/components/Workspace/constants';
+import {designData} from 'Components/design-template/components/Workspace/constants';
 import {getObjectPropSafely} from 'Utils';
 import Row from 'Components/design-template/components/Workspace/components/Row';
 import {CONSTANTS} from 'Components/design-template/constants';
@@ -14,9 +14,11 @@ import {Icon} from '@antscorp/components';
 const Workspace = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
     const viewMode = store;
+    const nestedData = hierarchyDesignData(designData);
 
-    console.log(nestedData, 'nestedData');
-    console.log(hierarchyDesignData(designData), 'hierarchyDesignData');
+    // console.log(nestedData, 'nestedData');
+    // console.log(hierarchyDesignData(designData), 'hierarchyDesignData');
+    // console.log(designData, 'designData');
     // console.log(store, 'store');
 
     const id = getObjectPropSafely(() => nestedData.body.values._meta.htmlID);
