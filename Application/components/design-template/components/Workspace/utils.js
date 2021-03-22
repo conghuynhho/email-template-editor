@@ -140,3 +140,13 @@ export const getRowIndexFromId = (data, rowId) => {
 
     return result;
 };
+
+export const getContentIDFromHTMLID = (data, htmlID ) => {
+    for (const key in data.contents) {
+        if (htmlID === getObjectPropSafely(() => data.contents[key].values._meta.htmlID)) {
+            return key;
+        }
+    }
+    return '';
+};
+

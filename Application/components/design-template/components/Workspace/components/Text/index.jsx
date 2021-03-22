@@ -24,6 +24,7 @@ const Text = (props) => {
 
     const handleEditorChange = (content, editor) => {
         //
+        console.log(content);
     };
     
     return (<>

@@ -1,22 +1,22 @@
-import React, {Fragment, useContext, useState} from 'react';
+import {Icon} from '@antscorp/components';
 import classnames from 'classnames';
-import styles from 'Components/design-template/components/Workspace/styles.module.scss';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
+import {actionType} from 'Components/design-template/components/ContextStore/constants';
+import Row from 'Components/design-template/components/Workspace/components/Row';
+import styles from 'Components/design-template/components/Workspace/styles.module.scss';
+import {hierarchyDesignData, reorder} from 'Components/design-template/components/Workspace/utils';
+import {CONSTANTS} from 'Components/design-template/constants';
+import React, {useContext, useState} from 'react';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 // import {nestedData as NSData, designData} from 'Components/design-template/components/Workspace/constants';
 import {getObjectPropSafely} from 'Utils';
-import Row from 'Components/design-template/components/Workspace/components/Row';
-import {CONSTANTS} from 'Components/design-template/constants';
-import {actionType} from 'Components/design-template/components/ContextStore/constants';
-import {hierarchyDesignData, reorder} from 'Components/design-template/components/Workspace/utils';
-import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
-import {Icon} from '@antscorp/components';
 
 const Workspace = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
     const {viewMode, bodies = {}, columns = {}, draggingColumnId = -1, rowVisiblePosition = {}} = store;
     const nestedData = hierarchyDesignData(store);
 
-    console.log('store', store);
+    // console.log('store', store);
     // console.log('nestedData', nestedData);
 
     const id = getObjectPropSafely(() => nestedData.body.values._meta.htmlID);

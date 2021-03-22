@@ -1,13 +1,15 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {getObjectPropSafely} from 'Utils';
+import React, {useContext} from 'react';
 import styles from 'Components/design-template/components/Workspace/components/Button/styles.module.scss';
 import {Editor} from '@tinymce/tinymce-react';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
+import {actionType} from 'Components/design-template/components/ContextStore/constants';
+import {getObjectPropSafely} from 'Utils';
+import {getContentIDFromHTMLID} from 'Components/design-template/components/Workspace/utils';
 
 const Button = (props) => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
     const {isEditing = false, activeElement} = store;
-    const {data} = props; 
+    const {data} = props;
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => data.values._meta.htmlClassNames);
     const style = {
@@ -30,11 +32,26 @@ const Button = (props) => {
         wordWrap: 'break-word'
     };
     const text = getObjectPropSafely(() => data.values.text);
-    const href = getObjectPropSafely(() => data.values.href.values.href);
     const target = getObjectPropSafely(() => data.values.href.values.target);
 
     const handleEditorChange = (content) => {
-        //
+        const code = getContentIDFromHTMLID(store, id);
+
+        if (code) {
+            dispatchStore({
+                type: actionType.UPDATE_CONTENT,
+                payload: {
+                    id: code,
+                    values: {
+                        values: {
+                            ...store.contents[code].values,
+                            text: content
+                        }
+                    } 
+                }
+            });
+        }
+
     };
 
     return (
