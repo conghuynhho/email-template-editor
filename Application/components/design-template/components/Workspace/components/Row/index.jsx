@@ -13,9 +13,19 @@ import {CONSTANTS} from 'Components/design-template/constants';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import {Droppable, Draggable} from 'react-beautiful-dnd'; 
+import produce from 'immer';
 // import {designData} from 'Components/design-template/components/Workspace/constants';
-import {getRowId, getColumnId, getLastUsingId, getRowsFromBodies, getRowIDFromHtmlID, getRowIndexFromId, reorder} from 'Components/design-template/components/Workspace/utils';
-import * as _ from 'lodash';
+import {
+    getRowId, 
+    getColumnId, 
+    getLastUsingId, 
+    getRowsFromBodies, 
+    getRowIDFromHtmlID, 
+    getRowIndexFromId, 
+    getContentIDFromHtmlID,
+    getContentIndexFromID,
+    getColumnIndexFromID
+} from 'Components/design-template/components/Workspace/utils';
 
 const Row = (props) => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
@@ -28,11 +38,20 @@ const Row = (props) => {
         rows, 
         usageCounters, 
         contents, 
-        rowVisiblePosition = {}, 
-        rowDraggingIndex = -1,
-        isDragging = false
+        confirmDelete = {type: '', willBeDelete: false, id: ''}
     } = store;
-    const {data, generalStyle, rowIndex, getVisibleDragItHereRow} = props;
+    const {
+        data, 
+        generalStyle, 
+        rowIndex, 
+        getDragItHereIndex, 
+        rowDragItHereIndex, 
+        rowContentDragItHereIndex, 
+        columnContentDragItHereIndex, 
+        contentDragItHereIndex, 
+        contentDragItHereArea,
+        typeOfIsDragging = ''
+    } = props;
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => data.values._meta.htmlClassNames);
     const styleBackgroundImage = {
@@ -60,6 +79,7 @@ const Row = (props) => {
     };
 
     const [currentRowIndex, setCurrentRowIndex] = useState(-1);
+    const [isShowAddContent, setIsShowAddContent] = useState(false);
 
     let tempSpecs = {};
     
@@ -69,9 +89,134 @@ const Row = (props) => {
         }
     });
 
-    const getRndInteger = (min, max) => {
-        return Math.floor(Math.random() * (max - min + 1) ) + min;
-    };
+    useEffect(() => {
+        switch (confirmDelete.type) {
+            case 'content':
+                if (confirmDelete.rowID === id) {                   
+                    // update at usageCounters
+                    const newUsageCounters = {...usageCounters};
+    
+                    // delete at columns
+                    const columns = getObjectPropSafely(() => store.columns);
+                    const contentID = getContentIDFromHtmlID(store, confirmDelete.id);
+                    const {columnID, contentIndex} = getContentIndexFromID(store, contentID);
+                    const contents = getObjectPropSafely(() => columns[columnID].contents);
+                    let currentContentIndex = -1;
+
+                    contents.length && contents.forEach((ID, index) => {
+                        if (ID === contentID) {
+                            currentContentIndex = index;
+                        }
+                    });
+
+                    const newContents = [...contents];
+
+                    if (currentContentIndex !== -1) {
+                        newContents.splice(currentContentIndex, 1);
+                    }
+
+                    // const newColumns = _.cloneDeep(columns);
+                    const newColumns = produce(columns, draft => {
+                        draft[columnID].contents = newContents;
+                    });
+                    
+                }
+                break;
+            default:
+                if (confirmDelete.willBeDelete && activeElement === id) {
+                 
+                    // update at usageCounters
+                    const newUsageCounters = {...usageCounters};
+                
+                    // delete at bodies 
+                    const rowPositions = [...getRowsFromBodies(bodies)];
+                    const deleteRowId = rowPositions.splice(currentRowIndex, 1);
+        
+                    const newBodyId = Object.keys(bodies)[0];
+
+                    const newBodies = produce(bodies, draft => {
+                        draft[newBodyId].rows = [...rowPositions];
+                    });
+         
+                    // delete at rows
+                    const newRows = {...rows};
+                    const deleteColumnIdList = [...newRows[deleteRowId].columns];
+        
+                    newUsageCounters.u_row--;
+        
+                    delete newRows[deleteRowId];
+        
+                    // delete at columns
+                    const newColumns = {...columns};
+                    let deleteContentIdList = [];
+        
+                    deleteColumnIdList.length && deleteColumnIdList.forEach(id => {
+                        deleteContentIdList = deleteContentIdList.concat(newColumns[id].contents);
+                    
+                        newUsageCounters.u_column--;
+                        delete newColumns[id];
+                    });
+        
+                    // delete at contents
+                    const newContents = {...contents};
+        
+                    deleteContentIdList.length && deleteContentIdList.forEach(id => {
+                    
+                        switch (newContents[id].type) {
+                            case 'button': newUsageCounters.u_content_button--;
+                                break;
+                            case 'divider': newUsageCounters.u_content_divider--;
+                                break;
+                            case 'image': newUsageCounters.u_content_image--;
+                                break;
+                            case 'menu': newUsageCounters.u_content_menu--;
+                                break;
+                            case 'social': newUsageCounters.u_content_social--;
+                                break;
+                            default: newUsageCounters.u_content_text--;
+                                break;
+                        }
+        
+                        delete newContents[id];
+                    }); 
+        
+                    dispatchStore({
+                        type: actionType.HANDLE_ROW,
+                        payload: {
+                            bodies: newBodies,
+                            rows: newRows,
+                            columns: newColumns,
+                            contents: newContents,
+                            usageCounters: newUsageCounters
+                        }
+                    });
+        
+                    dispatchStore({
+                        type: actionType.TOGGLE_DELETE_FORM,
+                        payload: {
+                            toggleDeleteForm: {
+                                isDeleteFormOpening: false,
+                                type: '',
+                                id: '',
+                                rowID: ''
+                            }
+                        }
+                    });
+        
+                    dispatchStore({
+                        type: actionType.CONFIRM_DELETE,
+                        payload: {
+                            confirmDelete: {
+                                type: '',
+                                willBeDelete: false,
+                                id: ''
+                            }
+                        }
+                    });
+                }
+                break;
+        }
+    },[confirmDelete]);
 
     const getItemStyle = (isDragging, draggableStyle) => {
 
@@ -83,143 +228,13 @@ const Row = (props) => {
         };
     };
 
-    const onMouseDownDragIcon = (isRow) => {
-        const onMouseMoveDraggingItem = (e) => {
-            handleMouseMoveDraggingItem(e, isRow);
+    const getItemStyleClone = (isDragging, draggableStyle) => {
+        return {
+            ...draggableStyle,
+            width: 20,
+            display: 'flex',
+            alignItems: 'center'
         };
-
-        // dispatchStore({
-        //     type: actionType.UPDATE_DRAGGING_STATUS,
-        //     payload: {
-        //         isDragging: true
-        //     }
-        // });
-
-        const onMouseUpWhenDragging = () => {
-            
-            // dispatchStore({
-            //     type: actionType.UPDATE_DRAGGING_STATUS,
-            //     payload: {
-            //         isDragging: false
-            //     }
-            // });
-            dispatchStore({
-                type: actionType.RENDER_DRAG_POSITION,
-                payload: {
-                    rowDraggingIndex: -1
-                }
-            });
-            
-            if (isRow) {
-                const destinationRowIndex = getRowIndexFromId(store, getRowIDFromHtmlID(store, tempSpecs.id));
-    
-                setNewRowList(store, destinationRowIndex, rowIndex, tempSpecs.areaPosition);
-
-            }
-
-            // dispatchStore({
-            //     type: actionType.DRAG_IT_HERE_SPECS,
-            //     payload: {
-            //         rowVisiblePosition: tempSpecs
-            //     }
-            // });
-            window.removeEventListener('mousemove', onMouseMoveDraggingItem);
-            window.removeEventListener('mouseup', onMouseUpWhenDragging);
-        };
-
-        window.addEventListener('mousemove', onMouseMoveDraggingItem);
-        window.addEventListener('mouseup',onMouseUpWhenDragging);
-    };
-
-    const setNewRowList = (data, destinationRowIdx, currentRowIdx, areaPosition) => {
-        const bodies = {...data.bodies};
-        const rows = getRowsFromBodies(bodies);
-
-        let endIndex = -1;
-
-        if (currentRowIdx > destinationRowIdx) {
-            switch (areaPosition) {
-                case 'above': endIndex = destinationRowIdx; break;
-                case 'below': endIndex = destinationRowIdx + 1; break;
-                default: break;
-            }
-        } else if (currentRowIdx === destinationRowIdx) {
-            switch (areaPosition) {
-                case 'above': endIndex = destinationRowIdx; break;
-                case 'below': endIndex = destinationRowIdx; break;
-                default: break;
-            }
-        } else {
-            switch (areaPosition) {
-                case 'above': endIndex = destinationRowIdx - 1; break;
-                case 'below': endIndex = destinationRowIdx; break;
-                default: break;
-            } 
-        }
-
-        const newRows = reorder(rows, currentRowIdx, endIndex);
-        const bodyId = Object.keys(bodies)[0];
-
-        bodies[bodyId].rows = [...newRows];
-
-        dispatchStore({
-            type: actionType.UPDATE_BODY,
-            payload: {
-                bodies: bodies
-            }
-        });
-    };
-
-    const handleMouseMoveDraggingItem = (e, isRow) => {
-        if (isRow) {
-            const currentPosition = e.pageY;
-            
-            const targetElement = e.target.className.split(' ')[0];
-    
-            if (targetElement.includes('u_row')) {
-    
-                const elm = document.querySelector(`#${targetElement}`);
-                
-                const height = targetElement && document.getElementById(targetElement).offsetHeight;
-                const top = getOffset(elm).top;
-                const bottom = top + height;
-                
-                const middlePoint = top + (height / 2);
-    
-                const visiblePosition = {
-                    type: 'row',
-                    id: '',
-                    areaPosition: ''
-                };
-    
-                switch (true) {
-                    case currentPosition > top && currentPosition < middlePoint:
-                        visiblePosition.id = targetElement;
-                        visiblePosition.areaPosition = 'above';
-                        break;
-                    case currentPosition >= middlePoint && currentPosition < bottom:
-                        visiblePosition.id = targetElement;
-                        visiblePosition.areaPosition = 'below'; 
-                        break;  
-                    default: break;
-                }
-    
-                tempSpecs = visiblePosition;
-    
-                const rowNumberId = getRowIDFromHtmlID(store, visiblePosition.id);
-                const rowDragItHereIndex = tempSpecs.areaPosition === 'below' ? getRowIndexFromId(store, rowNumberId) : getRowIndexFromId(store, rowNumberId) - 1;
-                
-                dispatchStore({
-                    type: actionType.RENDER_DRAG_POSITION,
-                    payload: {
-                        rowDraggingIndex: rowDragItHereIndex
-                    }
-                });
-
-                // typeof props.getVisibleDragItHereRow === 'function' && props.getVisibleDragItHereRow(rowDragItHereIndex);
-            }
-        }
-        
     };
 
     const renderContents = (contents, columnIndex) => {
@@ -264,80 +279,117 @@ const Row = (props) => {
             }
         };
 
-        const randomId = getRndInteger(1,100000);
-
         return (
-            <Droppable isDropDisabled={false} droppableId={`droppable-content-${randomId}-${columnId}`} type='contents' /* renderClone={getRenderItem(contents, 'abc')} */>
+            <Droppable
+                droppableId={`droppable-content-${id}-${columnId}`} 
+                type='contents' 
+                renderClone={(provided, snapshot) => {
+                    return (
+                        <span
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                            style={getItemStyleClone(snapshot.isDragging, provided.draggableProps.style)}
+                        >
+                            <span style={{backgroundColor: '#13ABD7', padding: '0 6px 4px', borderRadius: '50%'}}>
+                                <Icon type='icon-ants-add' style={{color: '#fff'}} /> 
+                            </span>
+                        </span>
+                    );
+                }}
+            >
                 {(provided, snapshot) => {
 
                     return (
                         <div className={'layer-group-content'} ref={provided.innerRef} {...provided.droppableProps}>
                             {contents.length ? contents.map((content, index) => {
-                                const id = getObjectPropSafely(() => content.values._meta.htmlID);
-                                
-                                return (
-                                    <Fragment key={`draggable-${id}`}>
-                                        <Draggable draggableId={`draggable-${id}`} index={index}>
-                                            {(provided, snapshot) => {
-                                                let isInsideRow = false;
-    
-                                                if (currentRowIndex === rowIndex) {
-                                                    isInsideRow = true;
-                                                } else {
-                                                    isInsideRow = false;
-                                                }
+                                const contentID = getObjectPropSafely(() => content.values._meta.htmlID);
+                                const shouldRenderClone = `draggable-${contentID}` === snapshot.draggingFromThisWith;
 
-                                                return (
-                                                    <div style={{position: 'relative'}}>
-                                                        <div
-                                                            id={id}
-                                                            className={classnames(
-                                                                'layer-selectable', 
-                                                                styles['layer-content'],
-                                                                {[styles['layer-selected']]: activeElement === id}
-                                                                
-                                                            )}
-                                                            onClick={(e) => onClickSelectContent(e, id)}
-                                                            onMouseDown={(e) => onMouseDownContent(e, rowIndex, columnIndex, index)}
-                                                            ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                            style={{
-                                                                ...getItemStyle(snapshot.isDragging, provided.draggableProps.style),
-                                                                ...(!snapshot.isDragging && {transform: 'none'})
-                                                            }}
-                                                        >
-                                                            {renderSelector({
-                                                                isShowAddTop: false, 
-                                                                isShowAddBottom: false, 
-                                                                isRow: false, 
-                                                                isSelected: activeElement === id,
-                                                                isInsideRow,
-                                                                dragHandleProps: {...provided.dragHandleProps},
-                                                                id
-                                                            })}
-                                                            {snapshot.isDragging && <Icon className={classnames('icon-ants-double-three-dots')} />}
-                                                            {!snapshot.isDragging && getContent(content)}
-                                                        </div>
-                                                        {renderDragItHere('content')}
-                                                        {snapshot.isDragging && (
-                                                            <div className={classnames(styles['react-beautiful-dnd-copy'])}>
-                                                                <div
-                                                                    id={id}
-                                                                    className={''}                                                     
-                                                                >
-                                                                    {getContent(content)}
-                                                                </div>
+                                return (
+                                    <Fragment key={`draggable-${contentID}`}>
+                                        {shouldRenderClone ? (
+                                            <>
+                                                {index === 0 && renderDragItHere('content', {rowIndex, columnIndex, index}, true)}
+                                                <div className={classnames(styles['react-beautiful-dnd-copy'])}>
+                                                    
+                                                    <div
+                                                        id={contentID}                                                    
+                                                    >
+                                                        {renderSelector({
+                                                            isShowAddTop: false, 
+                                                            isShowAddBottom: false, 
+                                                            isRow: false, 
+                                                            isSelected: activeElement === contentID,
+                                                            dragHandleProps: {...provided.dragHandleProps},
+                                                            currentID: contentID,
+                                                            columnIndex: columnIndex,
+                                                            contentIndex: index
+                                                        })}
+                                                        {getContent(content)}
+                                                    </div>                                               
+                                                </div>
+                                                {renderDragItHere('content', {rowIndex, columnIndex, index}, false)}
+                                            </>
+                                        ) : (
+                                            <Draggable draggableId={`draggable-${contentID}`} index={index}>
+                                                {(provided, snapshot) => {
+                                                    let isInsideRow = false;
+        
+                                                    if (currentRowIndex === rowIndex) {
+                                                        isInsideRow = true;
+                                                    } else {
+                                                        isInsideRow = false;
+                                                    }
+
+                                                    // console.log('snapshot', snapshot, provided);
+                                                    // console.log('provided', provided);
+    
+                                                    return (
+                                                        <>
+                                                            {index === 0 && renderDragItHere('content', {rowIndex, columnIndex, index}, true)}
+                                                            <div
+                                                                id={contentID}
+                                                                className={classnames(
+                                                                    'layer-selectable', 
+                                                                    styles['layer-content'],
+                                                                    {[styles['layer-selected']]: activeElement === contentID}
+                                                                    
+                                                                )}
+                                                                onClick={(e) => onClickSelectContent(e, contentID)}
+                                                                onMouseMove={(e) => onMouseMoveRow(e, false)}
+                                                                ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                style={{
+                                                                    ...getItemStyle(false, provided.draggableProps.style),
+                                                                    ...(true && {transform: 'none'})
+                                                                }}
+                                                            >
+                                                                {renderSelector({
+                                                                    isShowAddTop: false, 
+                                                                    isShowAddBottom: false, 
+                                                                    isRow: false, 
+                                                                    isSelected: activeElement === contentID,
+                                                                    isInsideRow,
+                                                                    dragHandleProps: {...provided.dragHandleProps},
+                                                                    currentID: contentID,
+                                                                    columnIndex: columnIndex,
+                                                                    contentIndex: index
+                                                                })}
+                                                                {getContent(content)}
                                                             </div>
-                                                        )}                                                       
-                                                    </div>           
-                                                );
-                                            }}
-                                        </Draggable>
+                                                            {renderDragItHere('content', {rowIndex, columnIndex, index}, false)}
+                                                        </>           
+                                                    );
+                                                }}
+                                            </Draggable>
+
+                                        )}
                                     </Fragment>
                                 );
                             }) : (
                                 <div className="blockbuilder-placeholder" data-name="Drag it here">
-                                    <div className={styles['empty-column']}>
+                                    <div className={styles['empty-column']} onClick={onClickEmptyColumn}>
                                         <div 
                                             style={{
                                                 zIndex: 112
@@ -347,9 +399,9 @@ const Row = (props) => {
                                                     No content here. Drag content from right.
                                             </div>
                                             {
-                                                false && (
+                                                isShowAddContent && (
                                                     <div>
-                                                        <button className={classnames('btn', styles['add-content'])}>
+                                                        <button className={classnames('btn', styles['add-content'])} onClick={onClickAddContent}>
                                                         Add Content
                                                         </button>
                                                     </div>
@@ -359,13 +411,21 @@ const Row = (props) => {
                                     </div>
                                 </div>
                             )}
-                            {/* {provided.placeholder} */}
                         </div>
                     );
                 }}
             </Droppable>
         );
     }; 
+
+    const onClickEmptyColumn = (e) => {
+        setIsShowAddContent(true);
+    };
+
+    const onClickAddContent = (e) => {
+        e.stopPropagation();
+        setIsShowAddContent(false);
+    };
 
     const renderColumns = () => {
         const columns = getObjectPropSafely(() => data.columns);
@@ -488,12 +548,11 @@ const Row = (props) => {
         };
 
         // update body
-        const newBodies = _.cloneDeep(bodies);
-
-        const newBodyId = Object.keys(newBodies)[0];
-
-        newBodies[newBodyId].rows = [...rowPositions];
-        
+        const newBodyId = Object.keys(bodies)[0];
+        const newBodies = produce(bodies, draft => {
+            draft[newBodyId].rows = [...rowPositions];
+        });
+     
         // update usage counters
         const newUsageCounters = {...usageCounters};
 
@@ -511,75 +570,21 @@ const Row = (props) => {
         });
     };
 
-    const onClickDeleteRow = (e) => {
+    const onClickDeleteRow = (e, isRow, id, rowID) => {
         e.stopPropagation();
 
-        // update at usageCounters
-        const newUsageCounters = {...usageCounters};
-        
-        // delete at bodies 
-        const rowPositions = [...getRowsFromBodies(bodies)];
-        const deleteRowId = rowPositions.splice(currentRowIndex, 1);
-
-        const newBodies = _.cloneDeep(bodies);
-
-        const newBodyId = Object.keys(newBodies)[0];
-
-        newBodies[newBodyId].rows = [...rowPositions];
-
-        // delete at rows
-        const newRows = {...rows};
-        const deleteColumnIdList = [...newRows[deleteRowId].columns];
-
-        newUsageCounters.u_row--;
-
-        delete newRows[deleteRowId];
-
-        // delete at columns
-        const newColumns = {...columns};
-        let deleteContentIdList = [];
-
-        deleteColumnIdList.length && deleteColumnIdList.forEach(id => {
-            deleteContentIdList = deleteContentIdList.concat(newColumns[id].contents);
-            
-            newUsageCounters.u_column--;
-            delete newColumns[id];
-        });
-
-        // delete at contents
-        const newContents = {...contents};
-
-        deleteContentIdList.length && deleteContentIdList.forEach(id => {
-            
-            switch (newContents[id].type) {
-                case 'button': newUsageCounters.u_content_button--;
-                    break;
-                case 'divider': newUsageCounters.u_content_divider--;
-                    break;
-                case 'image': newUsageCounters.u_content_image--;
-                    break;
-                case 'menu': newUsageCounters.u_content_menu--;
-                    break;
-                case 'social': newUsageCounters.u_content_social--;
-                    break;
-                default: newUsageCounters.u_content_text--;
-                    break;
-            }
-
-            delete newContents[id];
-        }); 
-
         dispatchStore({
-            type: actionType.HANDLE_ROW,
+            type: actionType.TOGGLE_DELETE_FORM,
             payload: {
-                bodies: newBodies,
-                rows: newRows,
-                columns: newColumns,
-                contents: newContents,
-                usageCounters: newUsageCounters
+                toggleDeleteForm : {
+                    isDeleteFormOpening: true,
+                    type: isRow ? 'row' : 'content',
+                    id,
+                    rowID
+                }
+                
             }
         });
-    
     };
 
     const onClickDuplicateRow = (e) => {
@@ -599,11 +604,11 @@ const Row = (props) => {
         const newUsageCounters = {...usageCounters};
 
         // update bodies
-        const newBodies = _.cloneDeep(bodies);
+        const newBodyId = Object.keys(bodies)[0];
 
-        const newBodyId = Object.keys(newBodies)[0];
-
-        newBodies[newBodyId].rows = [...rowPositions];
+        const newBodies = produce(bodies, draft => {
+            draft[newBodyId].rows = [...rowPositions];
+        });
 
         // update row
         const newRows = {...rows};
@@ -706,6 +711,19 @@ const Row = (props) => {
         });
     };
 
+    const onMouseDownSelector = (e, columnIndex, contentIndex) => {
+        e.stopPropagation();
+        typeof props.getDraggingRowIndex === 'function' && props.getDraggingRowIndex(rowIndex);
+        typeof props.getSourceDraggingColumn === 'function' && props.getSourceDraggingColumn(columnIndex);
+        typeof props.getSourceDraggingContent === 'function' && props.getSourceDraggingContent(contentIndex);
+
+        typeof props.getSourceIndexes === 'function' && props.getSourceIndexes({
+            rowIdx: rowIndex, 
+            columnIdx: columnIndex,
+            contentIdx: contentIndex
+        });
+    };
+
     const renderSelector = ({
         isShowAddTop = true, 
         isShowAddBottom = true, 
@@ -713,7 +731,9 @@ const Row = (props) => {
         isSelected = false,
         isInsideRow = false,
         dragHandleProps = {}, 
-        id = ''
+        currentID = '',
+        columnIndex = -1,
+        contentIndex = -1
     } = {}) => {
 
         const selectorIndex = () => {
@@ -746,13 +766,14 @@ const Row = (props) => {
 
         return (
             <div className={classnames(
-                `${id}`,
+                `${currentID}`,
                 styles['layer-selector-row'],
                 {[styles['active']]: isSelected},
                 {[styles['layout-mobile-row']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE && isRow}
             )}
-            id={`selector_${id}`}
-            style={selectorIndex()}>
+            id={`selector_${currentID}`}
+            style={isRow ? {zIndex: 50} : selectorIndex()}
+            >
                 {isShowAddTop && (
                     <div className={classnames(
                         styles['layer-add-row'],
@@ -781,12 +802,12 @@ const Row = (props) => {
                     <div className={classnames(styles['duplicate-row'])} onClick={onClickDuplicateRow}>
                         <Icon className={classnames('icon-ants-copy-report')} />
                     </div>
-                    <div className={classnames(styles['delete-row'])} onClick={onClickDeleteRow}>
+                    <div className={classnames(styles['delete-row'])} onClick={(e) => onClickDeleteRow(e, isRow, currentID, id)}>
                         <Icon className={classnames('icon-ants-delete')} />
                     </div>
                 </div>
                 <div className={classnames(styles['layer-drag-row'])} >
-                    <span {...dragHandleProps} onMouseDown={() => onMouseDownDragIcon(isRow)}>
+                    <span {...dragHandleProps} onMouseDown={(e) => onMouseDownSelector(e,columnIndex, contentIndex)}>
                         <Icon className={classnames('icon-ants-double-three-dots', styles['drag-row'])} />  
                     </span>
                 </div>
@@ -794,11 +815,35 @@ const Row = (props) => {
         );
     };
 
-    const renderDragItHere = (type) => {
-
+    const renderDragItHere = (type, dragIndexes = {}, isAddition = false) => {
         switch (type) {
             case 'content':
                 let isHover = false;
+
+                const contentVisibleIndex = contentDragItHereIndex - 1 !== 0 && contentDragItHereIndex - 1;
+
+                if (dragIndexes.rowIndex === rowContentDragItHereIndex && dragIndexes.columnIndex === columnContentDragItHereIndex) {
+
+                    if (contentDragItHereIndex === 0 && dragIndexes.index === 0) {
+                        if (contentDragItHereArea === 'above' && isAddition) {
+                            isHover = true;
+                        }
+                        if (contentDragItHereArea === 'below' && !isAddition ) {
+                            isHover = true;
+                        }
+
+                    } else {
+                        if (contentVisibleIndex === dragIndexes.index && contentDragItHereArea === 'above') {
+                            isHover = true;
+                        } 
+                        if (contentDragItHereIndex === dragIndexes.index && contentDragItHereArea === 'below') {
+                            isHover = true;
+                        } 
+                        if (contentDragItHereIndex === 1 && contentDragItHereArea === 'above' && dragIndexes.index === 0 && !isAddition) {
+                            isHover = true;
+                        }                       
+                    }
+                } 
 
                 return (
                     <div 
@@ -807,11 +852,11 @@ const Row = (props) => {
                             {[styles['active']] : isHover}
                         )} 
                         data-name="Drag it here" 
-                    />
+                    />                  
                 );
             default: 
-                let isHoverRow = rowDraggingIndex === rowIndex ? true : false;
-               
+                const isHoverRow = rowDragItHereIndex === rowIndex ? true : false;
+                
                 return (
                     <div 
                         className={classnames(
@@ -836,22 +881,6 @@ const Row = (props) => {
         });
     };
 
-    const onMouseDownContent = (e, rowIndex, columnIndex, contentIndex) => {
-        e.stopPropagation();
-        const rowId = getRowId(store, rowIndex);
-
-        const columnId = getColumnId(store, rowId, columnIndex);
-
-        dispatchStore({
-            type: actionType.DRAGGING_COLUMN_ID,
-            payload: {
-                columnId,
-                contentIndex
-            }
-        });
-        
-    };
-
     const onClickSelectRow = (e) => {
         e.stopPropagation();
         dispatchStore({
@@ -861,6 +890,66 @@ const Row = (props) => {
                 isEditing: false
             }
         });
+    };
+
+    const onMouseMoveRow = (e, isRow) => {
+        if (typeOfIsDragging) {
+            const currentPosition = e.pageY;
+
+            const targetElement = e.target.id.slice(9);
+
+            if (targetElement.includes('u_row') || targetElement.includes('u_content')) {
+    
+                const elm = document.querySelector(`#${targetElement}`);
+
+                const height = targetElement && document.getElementById(targetElement).offsetHeight;
+                const top = getOffset(elm).top;
+
+                const bottom = top + height;
+                
+                const middlePoint = top + (height / 2);
+
+                const visiblePosition = {
+                    type: typeOfIsDragging === 'rows' ? 'row' : 'content',
+                    id: '',
+                    areaPosition: ''
+                };
+
+                switch (true) {
+                    case currentPosition > top && currentPosition < middlePoint:
+                        visiblePosition.id = targetElement;
+                        visiblePosition.areaPosition = 'above';
+                        break;
+                    case currentPosition >= middlePoint && currentPosition < bottom:
+                        visiblePosition.id = targetElement;
+                        visiblePosition.areaPosition = 'below'; 
+                        break;  
+                    default: break;
+                }
+
+                tempSpecs = visiblePosition;
+                
+                if (typeOfIsDragging === 'rows') {
+                
+                    const rowNumberId = getRowIDFromHtmlID(store, visiblePosition.id);
+                    const rowDragItHereIndex = tempSpecs.areaPosition === 'below' ? getRowIndexFromId(store, rowNumberId) : getRowIndexFromId(store, rowNumberId) - 1;
+
+                    typeof getDragItHereIndex === 'function' && getDragItHereIndex('draggingRow', rowDragItHereIndex, -1, -1, '', getRowIndexFromId(store, rowNumberId), visiblePosition.areaPosition);
+
+                } 
+                else {
+                    const contentNumberID = getContentIDFromHtmlID(store, visiblePosition.id);
+
+                    const {columnID, contentIndex} = getContentIndexFromID(store, contentNumberID);
+
+                    const {rowID, columnIndex} = getColumnIndexFromID(store, columnID);
+
+                    const rowIndex = getRowIndexFromId(store, rowID);
+
+                    typeof getDragItHereIndex === 'function' && getDragItHereIndex('draggingContent', rowIndex, columnIndex, contentIndex, visiblePosition.areaPosition);
+                }
+            }    
+        }
     };
 
     return (
@@ -873,8 +962,9 @@ const Row = (props) => {
                     {[styles['layer-selected']]: activeElement === id}
                 )}
                 onClick={onClickSelectRow}
+                onMouseMove={(e) => onMouseMoveRow(e, true)}
             >
-                {renderSelector({isSelected: activeElement === id, dragHandleProps: getObjectPropSafely(() => props.provided.dragHandleProps), isRow: true, id: id})}
+                {renderSelector({isSelected: activeElement === id, dragHandleProps: getObjectPropSafely(() => props.provided.dragHandleProps), isRow: true, currentID: id})}
                 <div
                     id={id}
                     className={classnames('u_row', classTitle)}

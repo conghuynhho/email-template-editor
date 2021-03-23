@@ -96,6 +96,13 @@ export const getColumnId = (designData, rowId, columnIndex) => {
     return columnId;
 };
 
+export const getContentId = (designData, columnId, contentIndex) => {
+    const contents = getObjectPropSafely(() => designData.columns[columnId].contents);
+    const contentId = contents[contentIndex];
+
+    return contentId;
+};
+
 export const getRowsFromBodies = (bodies) => {
     const valueList = Object.values(bodies);
 
@@ -139,4 +146,71 @@ export const getRowIndexFromId = (data, rowId) => {
     }
 
     return result;
+};
+
+export const getContentIDFromHtmlID = (data, htmlID) => {
+    const contents = getObjectPropSafely(() => data.contents);
+
+    for (const key in contents) {
+        if (getObjectPropSafely(() => contents[key].values._meta.htmlID) === htmlID) {
+            return key;
+        }
+    }
+    return '';
+};
+
+export const getContentIndexFromID = (data, contentID) => {
+    const columns = getObjectPropSafely(() => data.columns);
+    let contentIdx = -1;
+
+    for (const key in columns) {
+        const contents = getObjectPropSafely(() =>columns[key].contents);
+
+        contents.length && contents.forEach((ID, index) => {
+            
+            if (contentID + '' === ID + '') {
+                contentIdx = index;
+            }
+        });
+
+        if (contentIdx !== -1) {
+
+            return {
+                columnID: key,
+                contentIndex: contentIdx
+            };
+        }
+    }
+
+    return {
+        columnID: '',
+        contentIndex: -1
+    };
+};
+
+export const getColumnIndexFromID = (data, columnID) => {
+    const rows = getObjectPropSafely(() => data.rows);
+    let columnIdx = -1;
+
+    for (const key in rows) {
+        const columns = getObjectPropSafely(() => rows[key].columns);
+        
+        columns.length && columns.forEach((ID, index) => {
+            if (columnID === ID) {
+                columnIdx = index;
+            }
+        });
+
+        if (columnIdx !== -1) {
+            return {
+                rowID: key,
+                columnIndex: columnIdx
+            };
+        }
+    }
+
+    return {
+        rowID: '',
+        columnIndex: -1
+    };
 };

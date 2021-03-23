@@ -120,21 +120,21 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
-        case actionType.DRAGGING_COLUMN_ID: {
-            const checkValid = Object(payload).hasOwnProperty('columnId');
+        // case actionType.DRAGGING_COLUMN_ID: {
+        //     const checkValid = Object(payload).hasOwnProperty('columnId');
 
-            if (!checkValid) {
-                return state;
-            }
+        //     if (!checkValid) {
+        //         return state;
+        //     }
 
-            const newState = {
-                ...state,
-                draggingColumnId: payload.columnId,
-                draggingContentIndex: payload.contentIndex
-            };
+        //     const newState = {
+        //         ...state,
+        //         draggingColumnId: payload.columnId,
+        //         draggingContentIndex: payload.contentIndex
+        //     };
 
-            return {...newState};
-        }
+        //     return {...newState};
+        // }
         case actionType.HANDLE_ROW: {
             const checkValid = Object.keys(payload).length;
 
@@ -177,8 +177,8 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
-        case actionType.RENDER_DRAG_POSITION: {
-            const checkValid = Object(payload).hasOwnProperty('rowDraggingIndex');
+        case actionType.TOGGLE_DELETE_FORM: {
+            const checkValid = Object(payload).hasOwnProperty('toggleDeleteForm');
 
             if (!checkValid) {
                 return;
@@ -186,13 +186,13 @@ const reducer = (state, action) => {
 
             const newState = {
                 ...state,
-                rowDraggingIndex: payload.rowDraggingIndex
+                toggleDeleteForm: {...payload.toggleDeleteForm}
             };
 
             return {...newState};
         }
-        case actionType.UPDATE_DRAGGING_STATUS: {
-            const checkValid = Object(payload).hasOwnProperty('isDragging');
+        case actionType.CONFIRM_DELETE: {
+            const checkValid = Object(payload).hasOwnProperty('confirmDelete');
 
             if (!checkValid) {
                 return;
@@ -200,7 +200,7 @@ const reducer = (state, action) => {
 
             const newState = {
                 ...state,
-                isDragging: payload.isDragging
+                confirmDelete: {...payload.confirmDelete}
             };
 
             return {...newState};

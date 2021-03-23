@@ -136,6 +136,27 @@
         }
     }
 
+    .isOver {
+        &::after {
+            opacity: 1;
+            outline: #13ABD7 solid 2px;
+        }
+
+        .layer-add-row {
+            display: inline-block;
+            background-color: #13ABD7;
+        }
+
+        .layer-action-row {
+            display: inline-block;
+        }
+
+        .layer-drag-row {
+            display: flex;
+            background-color: #13ABD7;
+        }
+    }
+
     &.layer-selected {
         .layer-selector-row {
             &.active {
@@ -199,6 +220,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        z-index: 112;
 
         .add-content {
             display: inline-block;
