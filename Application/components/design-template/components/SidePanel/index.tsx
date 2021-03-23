@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {StoreContext} from 'Components/design-template/components/ContextStore';
 
 // Component
 import Button from 'Components/design-template/components/SidePanel/containers/Button';
@@ -10,11 +11,17 @@ import General from 'Components/design-template/components/SidePanel/containers/
 // Utils
 import {typeElement} from 'Components/design-template/constants';
 import sidePanelConfig from 'Components/design-template/components/SidePanel/configs';
+import {getActiveElement} from 'Components/design-template/components/Workspace/utils.js';
+import {getObjectPropSafely} from 'Utils';
 
 const SidePanel = props => {
+    const {state: store = {}} = useContext(StoreContext);
     const renderHtml = () => {
         try {
-            const type = 'COLUMNS';
+            const activeElement = getActiveElement(store);
+            let type = getObjectPropSafely(() => activeElement.type);
+
+            if (type) {type = type.toUpperCase()}
             const config = sidePanelConfig.find(item => item.type === type);
 
             switch (type) {
@@ -32,6 +39,9 @@ const SidePanel = props => {
                 }
                 case typeElement.BUTTON: {
                     return <Button config={config} />;
+                }
+                default: {
+                    return <General config={config} />;
                 }
             }
         } catch (error) {

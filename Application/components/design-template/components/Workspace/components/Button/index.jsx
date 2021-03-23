@@ -36,19 +36,23 @@ const Button = (props) => {
 
     const handleEditorChange = (content) => {
         const code = getContentIDFromHTMLID(store, id);
+        const storeContentsValues = getObjectPropSafely(() => store.contents[code].values);
+        
+        const payload = {
+            id: code,
+            values: {
+                values: {
+                    ...storeContentsValues,
+                    text: content
+                }
+            }
+        }
+;
 
         if (code) {
             dispatchStore({
                 type: actionType.UPDATE_CONTENT,
-                payload: {
-                    id: code,
-                    values: {
-                        values: {
-                            ...store.contents[code].values,
-                            text: content
-                        }
-                    } 
-                }
+                payload: {...payload}
             });
         }
 

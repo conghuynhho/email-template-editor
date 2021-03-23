@@ -1,4 +1,5 @@
 import {getObjectPropSafely} from 'Utils';
+import {typeElement} from 'Components/design-template/constants';
 
 export const hierarchyDesignData = (data) => {
     const body = getObjectPropSafely(() => data.bodies);
@@ -150,3 +151,40 @@ export const getContentIDFromHTMLID = (data, htmlID ) => {
     return '';
 };
 
+export const getActiveElement = (store) => {
+    const getSearchGroup = (searchString, typeElement) => {
+        const searchStringUpperCase = searchString.toUpperCase();
+        let result = '';
+
+        for ( const key in typeElement) {
+            const type = typeElement[key];
+
+            if (searchStringUpperCase.includes(type)) {result = type}
+        }
+        return result;
+    };
+    const activeElementHTMLID = getObjectPropSafely(() => store.activeElement);
+    const groupKey = getSearchGroup(activeElementHTMLID, typeElement);
+
+    switch (groupKey) {
+        case typeElement.TEXT : {
+            const textID = getContentIDFromHTMLID(store, activeElementHTMLID);
+            const textElement = getObjectPropSafely(() => store.contents[textID]);
+
+            return textElement;
+        }
+        case typeElement.BUTTON: {
+            const buttonID = getContentIDFromHTMLID(store, activeElementHTMLID);
+            const buttonElement = getObjectPropSafely(() => store.contents[buttonID]);
+
+            return buttonElement;
+        }
+        case typeElement.COLUMNS:
+            return groupKey;
+        case typeElement.LINE:
+            return groupKey;
+        default:
+            return groupKey;
+    }
+
+};
