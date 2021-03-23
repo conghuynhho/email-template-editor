@@ -24,13 +24,13 @@ const Text = (props) => {
     const text = getObjectPropSafely(() => data.values.text);
 
     const handleEditorChange = (content, editor) => {
-        const newContent = {};
+        const dispatch = {};
 
-        newContent.id = store.columns[store.draggingColumnId].contents[store.draggingContentIndex];
-        newContent.values = content;
+        dispatch.id = getObjectPropSafely(() => store.columns[store.draggingColumnId].contents[store.draggingContentIndex]);
+        dispatch.values = content;
         dispatchStore({
             type: actionType.UPDATE_CONTENT,
-            payload: newContent
+            payload: dispatch
 
         });
     };
