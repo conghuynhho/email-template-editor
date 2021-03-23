@@ -145,20 +145,44 @@ export const getRowIndexFromId = (data, rowId) => {
 };
 
 export const getActiveElement = (data, activeElement) => {
-    let typeElement = '';
+    const typeElement = activeElement.slice(10, 14);
+    let type = '';
 
-    if (activeElement.includes('text')) {typeElement = 'text'} else {typeElement = 'general'}
+    switch (typeElement) {
+        case 'butt':
+            type = 'button';
+            break;
+        case 'divi':
+            type = 'line';
+            break;
+        case 'colu':
+            type = 'columns';
+            break;
+        case 'row_':
+            type = 'general';
+            break;
+        case 'text':
+            type = 'text';
+            break;
+        default:
+            type = 'general';
+    }
+
+    // if (activeElement.includes('text')) {typeElement = 'text'} else {typeElement = 'general'}
 
     const contents = Object.values(getObjectPropSafely(() => data.contents));
 
     contents.forEach((content) => {
-        if (content.type == typeElement) {
+        if (content.type == type) {
             if (
                 getObjectPropSafely(() => content.values._meta.htmlID) === activeElement
             ) {
-                console.log('result', getObjectPropSafely(() => content.values.text));
+                console.log(
+                    'result',
+                    getObjectPropSafely(() => content.values.text)
+                );
             }
         }
     });
-    return typeElement.toUpperCase();
+    return type.toUpperCase();
 };
