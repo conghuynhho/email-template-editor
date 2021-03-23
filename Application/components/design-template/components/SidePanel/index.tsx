@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 // Component
 import Button from 'Components/design-template/components/SidePanel/containers/Button';
@@ -6,15 +6,20 @@ import Text from 'Components/design-template/components/SidePanel/containers/Tex
 import Line from 'Components/design-template/components/SidePanel/containers/Line';
 import Columns from 'Components/design-template/components/SidePanel/containers/Columns';
 import General from 'Components/design-template/components/SidePanel/containers/General';
+import {StoreContext} from 'Components/design-template/components/ContextStore';
 
 // Utils
 import {typeElement} from 'Components/design-template/constants';
 import sidePanelConfig from 'Components/design-template/components/SidePanel/configs';
+import {getObjectPropSafely} from 'Utils';
+import {getActiveElement} from 'Components/design-template/components/Workspace/utils';
 
 const SidePanel = props => {
+    const {state: store = {}} = useContext(StoreContext);
     const renderHtml = () => {
         try {
-            const type = 'TEXT';
+            const activeElement = getObjectPropSafely(() => store.activeElement);
+            const type = getActiveElement(store, activeElement);
             const config = sidePanelConfig.find(item => item.type === type);
 
             switch (type) {
