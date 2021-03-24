@@ -14,7 +14,7 @@ import produce from 'immer';
 
 const Workspace = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
-    const {viewMode, bodies = {}, columns = {}, draggingColumnId = -1, rowVisiblePosition = {}} = store;
+    const {viewMode} = store;
     const nestedData = hierarchyDesignData(store);
 
     console.log('store', store);
@@ -35,10 +35,6 @@ const Workspace = () => {
     const [columnContentDragItHereIndex, setColumnContentDragItHereIndex] = useState(-1);
     const [contentDragItHereIndex, setContentDragItHereIndex] = useState(-1);
     const [contentDragItHereArea, setContentDragItHereArea] = useState('');
-
-    // const [sourceRowIndex, setSourceRowIndex] = useState(-1);
-    // const [sourceColumnIndex, setSourceColumnIndex] = useState(-1); 
-    // const [sourceContentIndex, setSourceContentIndex] = useState(-1);
 
     const [sourceIndexes, setSourceIndexes] = useState({
         rowIdx: -1,
@@ -66,22 +62,6 @@ const Workspace = () => {
         }
         
     };
-
-    // const getDraggingRowIndex = (index) => {
-    //     setSourceRowIndex(index);
-    // };
-
-    // const getSourceDraggingColumn = (index) => {
-    //     if (index !== -1) {
-    //         setSourceColumnIndex(index);
-    //     }
-    // };
-
-    // const getSourceDraggingContent = (index) => {
-    //     if (index !== -1) {
-    //         setSourceContentIndex(index);
-    //     }
-    // };
 
     const getSourceIndexes = ({rowIdx, columnIdx, contentIdx}) => {
         if (rowIdx !== -1) {
@@ -115,9 +95,6 @@ const Workspace = () => {
                                 contentDragItHereIndex={contentDragItHereIndex}
                                 contentDragItHereArea={contentDragItHereArea}
                                 typeOfIsDragging={typeOfIsDragging}
-                                // getDraggingRowIndex={getDraggingRowIndex}
-                                // getSourceDraggingColumn={getSourceDraggingColumn}
-                                // getSourceDraggingContent={getSourceDraggingContent}
                                 getSourceIndexes={getSourceIndexes}
                             />
                         </div>
@@ -127,7 +104,7 @@ const Workspace = () => {
                             
                             draggableId={`draggable-row-${index}`} 
                             index={index}>
-                            {(provided, snapshot) => {
+                            {(provided) => {
                                 
                                 return (
                                     <>
@@ -136,8 +113,7 @@ const Workspace = () => {
                                             {...provided.draggableProps} 
                                             style={{
                                                 ...getItemStyle(false, getObjectPropSafely(() => provided.draggableProps.style)),
-                                                ...(true && {transform: 'none'}),
-                                                ...(snapshot.isDropAnimating && {transitionDuration: '0.001s'})
+                                                ...(true && {transform: 'none'})
                                             }}
                                         >
                                             <Row 
@@ -152,9 +128,6 @@ const Workspace = () => {
                                                 contentDragItHereIndex={contentDragItHereIndex}
                                                 contentDragItHereArea={contentDragItHereArea}
                                                 typeOfIsDragging={typeOfIsDragging}
-                                                // getDraggingRowIndex={getDraggingRowIndex}
-                                                // getSourceDraggingColumn={getSourceDraggingColumn}
-                                                // getSourceDraggingContent={getSourceDraggingContent}
                                                 getSourceIndexes={getSourceIndexes}
                                             />
                                             
@@ -177,32 +150,37 @@ const Workspace = () => {
         });
     };
 
+    const findEndIndex = (sourceIndex, destinationIndex, area) => {
+        let endIndex = -1;
+
+        if (sourceIndex > destinationIndex) {
+            switch (area) {
+                case 'above': endIndex = destinationIndex; break;
+                case 'below': endIndex = destinationIndex + 1; break;
+                default: break;
+            }
+        } else if (sourceIndex === destinationIndex) {
+            switch (area) {
+                case 'above': endIndex = destinationIndex; break;
+                case 'below': endIndex = destinationIndex; break;
+                default: break;
+            }
+        } else {
+            switch (area) {
+                case 'above': endIndex = destinationIndex - 1; break;
+                case 'below': endIndex = destinationIndex; break;
+                default: break;
+            } 
+        }
+        return endIndex;
+    };
+
     const setNewRowList = (data, destinationRowIdx, currentRowIdx, areaPosition) => {
         const bodies = {...data.bodies};
         const rows = getRowsFromBodies(bodies);
 
         if (destinationRowIdx) {
-            let endIndex = -1;
-    
-            if (currentRowIdx > destinationRowIdx) {
-                switch (areaPosition) {
-                    case 'above': endIndex = destinationRowIdx; break;
-                    case 'below': endIndex = destinationRowIdx + 1; break;
-                    default: break;
-                }
-            } else if (currentRowIdx === destinationRowIdx) {
-                switch (areaPosition) {
-                    case 'above': endIndex = destinationRowIdx; break;
-                    case 'below': endIndex = destinationRowIdx; break;
-                    default: break;
-                }
-            } else {
-                switch (areaPosition) {
-                    case 'above': endIndex = destinationRowIdx - 1; break;
-                    case 'below': endIndex = destinationRowIdx; break;
-                    default: break;
-                } 
-            }
+            const endIndex = findEndIndex(currentRowIdx, destinationRowIdx, areaPosition);
     
             const newRows = reorder(rows, currentRowIdx, endIndex);
             const bodyId = Object.keys(bodies)[0];
@@ -220,31 +198,12 @@ const Workspace = () => {
         }
     };
 
-    const setNewContentList = (data, sourceIndexes, destinationContentIndex, area) => {
+    const setNewContentListInColumn = (data, sourceIndexes, destinationContentIndex, area) => {
         const {rowIdx, columnIdx, contentIdx} = sourceIndexes;
         const sourceRowID = getRowId(data, rowIdx);
         const sourceColumnId = getColumnId(store, sourceRowID, columnIdx);
-        let endIndex = -1;
-    
-        if (contentIdx > destinationContentIndex) {
-            switch (area) {
-                case 'above': endIndex = destinationContentIndex; break;
-                case 'below': endIndex = destinationContentIndex + 1; break;
-                default: break;
-            }
-        } else if (contentIdx === destinationContentIndex) {
-            switch (area) {
-                case 'above': endIndex = destinationContentIndex; break;
-                case 'below': endIndex = destinationContentIndex; break;
-                default: break;
-            }
-        } else {
-            switch (area) {
-                case 'above': endIndex = destinationContentIndex - 1; break;
-                case 'below': endIndex = destinationContentIndex; break;
-                default: break;
-            }
-        }
+        
+        const endIndex = findEndIndex(contentIdx, destinationContentIndex, area);
 
         const contents = getObjectPropSafely(() => data.columns[sourceColumnId].contents); 
         const newContents = reorder(contents, contentIdx, endIndex);
@@ -263,8 +222,7 @@ const Workspace = () => {
         });
     };
 
-    const setNewContentListCaseDiff = (data, source, destination) => {
-        // const {sourceRowIndex, sourceColumnIndex, sourceContentIndex} = source;
+    const setNewContentListInBody = (data, source, destination) => {
         const {rowIdx, columnIdx, contentIdx} = source;
         const {destinationRowIndex, destinationColumnIndex, destinationContentIndex, destinationContentArea} = destination;
         
@@ -312,31 +270,28 @@ const Workspace = () => {
 
     };
 
-    const onDragEnd = (result) => {
+    const onDragEnd = () => {
 
-        if (typeOfIsDragging === 'rows') {
-            setNewRowList(store, destinationRowIdx, sourceIndexes.rowIdx, rowAreaPosition);
-        } 
-        if (typeOfIsDragging === 'contents') {
-            const {rowIdx, columnIdx} = sourceIndexes;
+        switch (typeOfIsDragging) {
+            case 'rows': setNewRowList(store, destinationRowIdx, sourceIndexes.rowIdx, rowAreaPosition);
+                break;
+            case 'contents': 
+                const {rowIdx, columnIdx} = sourceIndexes;
 
-            if (columnIdx === columnContentDragItHereIndex && rowIdx === rowContentDragItHereIndex) {               
-                setNewContentList(store, sourceIndexes, contentDragItHereIndex, contentDragItHereArea);
-            } else {
-                if (rowContentDragItHereIndex !== -1) {
-                    setNewContentListCaseDiff(
-                        store, 
-                        sourceIndexes, 
-                        {
+                if (columnIdx === columnContentDragItHereIndex && rowIdx === rowContentDragItHereIndex) {               
+                    setNewContentListInColumn(store, sourceIndexes, contentDragItHereIndex, contentDragItHereArea);
+                } else {
+                    if (rowContentDragItHereIndex !== -1) {
+                        setNewContentListInBody(store, sourceIndexes, {
                             destinationRowIndex: rowContentDragItHereIndex, 
                             destinationColumnIndex: columnContentDragItHereIndex, 
                             destinationContentIndex: contentDragItHereIndex,
                             destinationContentArea: contentDragItHereArea
-                        }
-                    );
+                        });
+                    }
                 }
-            }
-            
+                break;
+            default: break;
         }
 
         setTypeOfIsDragging('');
@@ -370,13 +325,16 @@ const Workspace = () => {
         };
     };
 
-    const getItemStyleClone = (isDragging, draggableStyle) => {
+    const getItemStyleClone = (snapshot, draggableStyle) => {
+        
         return {
             ...draggableStyle,
             width: 20,
             display: 'flex',
             alignItems: 'center',
-            animation: 'none'
+            ...(snapshot.isDropAnimating && {
+                transitionDuration: '0.001s'
+            })
         };
     };
 
@@ -396,7 +354,7 @@ const Workspace = () => {
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                                 ref={provided.innerRef}
-                                style={getItemStyleClone(snapshot.isDragging, provided.draggableProps.style)}
+                                style={getItemStyleClone(snapshot, provided.draggableProps.style)}
                             >   
                                 <span style={{backgroundColor: '#13ABD7', padding: '0 6px 4px', borderRadius: '50%'}}>
                                     <Icon type='icon-ants-add' style={{color: '#fff'}} /> 

@@ -24,7 +24,9 @@ import {
     getRowIndexFromId, 
     getContentIDFromHtmlID,
     getContentIndexFromID,
-    getColumnIndexFromID
+    getColumnIndexFromID,
+    getContentId,
+    updateUsageCounters
 } from 'Components/design-template/components/Workspace/utils';
 
 const Row = (props) => {
@@ -92,10 +94,7 @@ const Row = (props) => {
     useEffect(() => {
         switch (confirmDelete.type) {
             case 'content':
-                if (confirmDelete.rowID === id) {                   
-                    // update at usageCounters
-                    const newUsageCounters = {...usageCounters};
-    
+                if (confirmDelete.rowID === id) {                                      
                     // delete at columns
                     const columns = getObjectPropSafely(() => store.columns);
                     const contentID = getContentIDFromHtmlID(store, confirmDelete.id);
@@ -110,23 +109,64 @@ const Row = (props) => {
                     });
 
                     const newContents = [...contents];
+                    let deletedContentID = '';
 
                     if (currentContentIndex !== -1) {
-                        newContents.splice(currentContentIndex, 1);
+                        [deletedContentID] = newContents.splice(currentContentIndex, 1);
                     }
 
-                    // const newColumns = _.cloneDeep(columns);
                     const newColumns = produce(columns, draft => {
                         draft[columnID].contents = newContents;
                     });
+
+                    const contentStore = getObjectPropSafely(() => store.contents);
+
+                    // update at usageCounters
+                    const deletedContentType = getObjectPropSafely(() => contentStore[deletedContentID].type);
+                    const newUsageCounters = updateUsageCounters(usageCounters, deletedContentType, 'subtract');
+
+                    const newContentStore = produce(contentStore, draft => {
+                        delete draft[deletedContentID];
+                    });
                     
+                    dispatchStore({
+                        type: actionType.TOGGLE_DELETE_FORM,
+                        payload: {
+                            toggleDeleteForm: {
+                                isDeleteFormOpening: false,
+                                type: '',
+                                id: '',
+                                rowID: ''
+                            }
+                        }
+                    });
+
+                    dispatchStore({
+                        type: actionType.HANDLE_ROW,
+                        payload: {
+                            columns: newColumns,
+                            contents: newContentStore,
+                            usageCounters: newUsageCounters                
+                        }
+                    });
+
+                    dispatchStore({
+                        type: actionType.CONFIRM_DELETE,
+                        payload: {
+                            confirmDelete: {
+                                type: '',
+                                willBeDelete: false,
+                                id: ''
+                            }
+                        }
+                    });
                 }
                 break;
             default:
                 if (confirmDelete.willBeDelete && activeElement === id) {
                  
                     // update at usageCounters
-                    const newUsageCounters = {...usageCounters};
+                    // let newUsageCounters = {...usageCounters};
                 
                     // delete at bodies 
                     const rowPositions = [...getRowsFromBodies(bodies)];
@@ -142,7 +182,7 @@ const Row = (props) => {
                     const newRows = {...rows};
                     const deleteColumnIdList = [...newRows[deleteRowId].columns];
         
-                    newUsageCounters.u_row--;
+                    let newUsageCounters = updateUsageCounters(usageCounters, 'row', 'subtract');
         
                     delete newRows[deleteRowId];
         
@@ -153,7 +193,7 @@ const Row = (props) => {
                     deleteColumnIdList.length && deleteColumnIdList.forEach(id => {
                         deleteContentIdList = deleteContentIdList.concat(newColumns[id].contents);
                     
-                        newUsageCounters.u_column--;
+                        newUsageCounters = updateUsageCounters(newUsageCounters, 'column', 'subtract');
                         delete newColumns[id];
                     });
         
@@ -162,20 +202,7 @@ const Row = (props) => {
         
                     deleteContentIdList.length && deleteContentIdList.forEach(id => {
                     
-                        switch (newContents[id].type) {
-                            case 'button': newUsageCounters.u_content_button--;
-                                break;
-                            case 'divider': newUsageCounters.u_content_divider--;
-                                break;
-                            case 'image': newUsageCounters.u_content_image--;
-                                break;
-                            case 'menu': newUsageCounters.u_content_menu--;
-                                break;
-                            case 'social': newUsageCounters.u_content_social--;
-                                break;
-                            default: newUsageCounters.u_content_text--;
-                                break;
-                        }
+                        newUsageCounters = updateUsageCounters(newUsageCounters, newContents[id].type, 'subtract');
         
                         delete newContents[id];
                     }); 
@@ -554,10 +581,9 @@ const Row = (props) => {
         });
      
         // update usage counters
-        const newUsageCounters = {...usageCounters};
+        let newUsageCounters = updateUsageCounters(usageCounters, 'row', 'add');
 
-        newUsageCounters.u_column++;
-        newUsageCounters.u_row++;
+        newUsageCounters = updateUsageCounters(newUsageCounters, 'column', 'add');
 
         dispatchStore({
             type: actionType.HANDLE_ROW,
@@ -570,7 +596,7 @@ const Row = (props) => {
         });
     };
 
-    const onClickDeleteRow = (e, isRow, id, rowID) => {
+    const onClickDelete = (e, isRow, id, rowID) => {
         e.stopPropagation();
 
         dispatchStore({
@@ -587,135 +613,176 @@ const Row = (props) => {
         });
     };
 
-    const onClickDuplicateRow = (e) => {
+    const onClickDuplicate = (e, isRow, columnIndex = -1, contentIndex = -1) => {
         e.stopPropagation();
-        const data = {...store};
-        const newRowId = (parseInt(getLastUsingId(data), 0) + 1) + '';
-        const currentRowId = getRowId(store,rowIndex);
-        const columnIdList = [...rows[currentRowId].columns];
-        let newColumnId = (parseInt(newRowId, 0) + 1) + '';
-        let newContentId = 0;
-
-        const rowPositions = [...getRowsFromBodies(bodies)];
-
-        rowPositions.splice(currentRowIndex + 1, 0, newRowId);
-
-        // update usageCounters
-        const newUsageCounters = {...usageCounters};
-
-        // update bodies
-        const newBodyId = Object.keys(bodies)[0];
-
-        const newBodies = produce(bodies, draft => {
-            draft[newBodyId].rows = [...rowPositions];
-        });
-
-        // update row
-        const newRows = {...rows};
-
-        newRows[newRowId] = {
-            cells: [...newRows[currentRowId].cells],
-            columns: [],
-            location: {
-                colection: 'rows',
-                id: newRowId
-            },
-            values: {
-                ...newRows[currentRowId].values,
-                _meta: {
-                    ...newRows[currentRowId].values._meta,
-                    htmlID: `${newRows[currentRowId].values._meta.htmlClassNames}_${newRowId}`
-                }
-            }
-        };
-        newUsageCounters.u_row++;
-
-        // update columns
-        const newColumns = {...columns};
-        const newContents = {...contents};
-
-        columnIdList.length && columnIdList.forEach(id => {
-            newRows[newRowId].columns.push(newColumnId);
-            
-            newColumns[newColumnId] = {
-                contents: [],
+        if (isRow) {
+            const newRowId = (parseInt(getLastUsingId(store), 0) + 1) + '';
+            const currentRowId = getRowId(store,rowIndex);
+            const columnIdList = [...rows[currentRowId].columns];
+            let newColumnId = (parseInt(newRowId, 0) + 1) + '';
+            let newContentId = 0;
+    
+            const rowPositions = [...getRowsFromBodies(bodies)];
+    
+            rowPositions.splice(currentRowIndex + 1, 0, newRowId);
+    
+            // update bodies
+            const newBodyId = Object.keys(bodies)[0];
+    
+            const newBodies = produce(bodies, draft => {
+                draft[newBodyId].rows = [...rowPositions];
+            });
+    
+            // update row
+            const newRows = {...rows};
+    
+            newRows[newRowId] = {
+                cells: [...newRows[currentRowId].cells],
+                columns: [],
                 location: {
-                    collection: 'columns',
-                    id: newColumnId
+                    colection: 'rows',
+                    id: newRowId
                 },
                 values: {
-                    ...newColumns[id].values,
+                    ...newRows[currentRowId].values,
                     _meta: {
-                        ...newColumns[id].values._meta,
-                        htmlID: `${newColumns[id].values._meta.htmlClassNames}_${newColumnId}`
+                        ...newRows[currentRowId].values._meta,
+                        htmlID: `${newRows[currentRowId].values._meta.htmlClassNames}_${newRowId}`
                     }
                 }
             };
-            newUsageCounters.u_column++;
 
-            newColumns[id].contents.length && newColumns[id].contents.forEach((contentId, index) => {
+            // update usageCounters
+            let newUsageCounters = updateUsageCounters(usageCounters, 'row', 'add');
+    
+            // update columns
+            const newColumns = {...columns};
+            const newContents = {...contents};
+    
+            columnIdList.length && columnIdList.forEach(id => {
+                newRows[newRowId].columns.push(newColumnId);
+                
+                newColumns[newColumnId] = {
+                    contents: [],
+                    location: {
+                        collection: 'columns',
+                        id: newColumnId
+                    },
+                    values: {
+                        ...newColumns[id].values,
+                        _meta: {
+                            ...newColumns[id].values._meta,
+                            htmlID: `${newColumns[id].values._meta.htmlClassNames}_${newColumnId}`
+                        }
+                    }
+                };
 
-                // update content
-                if (index === 0) {
-                    newContentId = (parseInt(newColumnId, 0) + 1) + '';
-                } else {
-                    newContentId = (parseInt(newContentId, 0) + 1) + '';
+                newUsageCounters = updateUsageCounters(newUsageCounters, 'column', 'add');
+    
+                newColumns[id].contents.length && newColumns[id].contents.forEach((contentId, index) => {
+    
+                    // update content
+                    if (index === 0) {
+                        newContentId = (parseInt(newColumnId, 0) + 1) + '';
+                    } else {
+                        newContentId = (parseInt(newContentId, 0) + 1) + '';
+                    }
+    
+                    newColumns[newColumnId].contents.push(newContentId);
+    
+                    newContents[newContentId] = {
+                        type: newContents[contentId].type,
+                        location: {
+                            collection: 'contents',
+                            id: newContentId
+                        },
+                        values: {
+                            ...newContents[contentId].values, 
+                            _meta: {
+                                ...newContents[contentId].values._meta, 
+                                htmlID: `${newContents[contentId].values._meta.htmlClassNames}_${newContentId}`
+                            }
+                        }
+                    };
+
+                    newUsageCounters = updateUsageCounters(newUsageCounters, newContents[newContentId].type, 'add');
+    
+                });
+    
+                newColumnId = (parseInt(newContentId, 0) + 1) + '';
+               
+            });
+    
+            dispatchStore({
+                type: actionType.HANDLE_ROW,
+                payload: {
+                    bodies: newBodies,
+                    rows: newRows,
+                    columns: newColumns,
+                    contents: newContents,
+                    usageCounters: newUsageCounters
                 }
+            });
 
-                newColumns[newColumnId].contents.push(newContentId);
+        } else {
+            const rowId = getRowId(store, rowIndex);
+            const columnId = getColumnId(store, rowId, columnIndex);
+            const contentID = getContentId(store, columnId, contentIndex);
+            const newContentId = (parseInt(getLastUsingId(store), 0) + 1) + '';
+            let contentType = '';
 
-                newContents[newContentId] = {
-                    type: newContents[contentId].type,
+            const columns = getObjectPropSafely(() => store.columns);
+            const contents = getObjectPropSafely(() => store.contents);
+
+            const contentsOfColumn = getObjectPropSafely(() => columns[columnId].contents);
+
+            const newContentsOfColumn = [...contentsOfColumn];
+            
+            if (contentIndex !== -1) {
+                newContentsOfColumn.splice(contentIndex + 1, 0, newContentId);
+            }
+
+            // update columns
+            const newColumns = produce(columns, draft => {
+                draft[columnId].contents = newContentsOfColumn;
+            });
+
+            // update contents
+            const newContents = produce(contents, draft => {
+                draft[newContentId] = {
+                    ...draft[contentID],
                     location: {
                         collection: 'contents',
                         id: newContentId
                     },
                     values: {
-                        ...newContents[contentId].values, 
+                        ...draft[contentID].values,
                         _meta: {
-                            ...newContents[contentId].values._meta, 
-                            htmlID: `${newContents[contentId].values._meta.htmlClassNames}_${newContentId}`
+                            ...draft[contentID].values._meta,
+                            htmlID: getObjectPropSafely(() => draft[contentID].values._meta.htmlClassNames) + '_' + newContentId
                         }
                     }
-                };
-                switch (newContents[newContentId].type) {
-                    case 'button': newUsageCounters.u_content_button++;
-                        break;
-                    case 'divider': newUsageCounters.u_content_divider++;
-                        break;
-                    case 'image': newUsageCounters.u_content_image++;
-                        break;
-                    case 'menu': newUsageCounters.u_content_menu++;
-                        break;
-                    case 'social': newUsageCounters.u_content_social++;
-                        break;
-                    default: newUsageCounters.u_content_text++;
-                        break;
-                }
-
+                }; 
+                contentType = draft[contentID].type;
             });
 
-            newColumnId = (parseInt(newContentId, 0) + 1) + '';
-           
-        });
+            // update usagecounters
+            const newUsageCounters = updateUsageCounters(usageCounters, contentType, 'add');
 
-        dispatchStore({
-            type: actionType.HANDLE_ROW,
-            payload: {
-                bodies: newBodies,
-                rows: newRows,
-                columns: newColumns,
-                contents: newContents,
-                usageCounters: newUsageCounters
-            }
-        });
+            dispatchStore({
+                type: actionType.HANDLE_ROW,
+                payload: {
+                    columns: newColumns,
+                    contents: newContents,
+                    usageCounters: newUsageCounters                
+                }
+            });
+
+        }
     };
 
     const onMouseDownSelector = (e, columnIndex, contentIndex) => {
         e.stopPropagation();
-        typeof props.getDraggingRowIndex === 'function' && props.getDraggingRowIndex(rowIndex);
-        typeof props.getSourceDraggingColumn === 'function' && props.getSourceDraggingColumn(columnIndex);
-        typeof props.getSourceDraggingContent === 'function' && props.getSourceDraggingContent(contentIndex);
 
         typeof props.getSourceIndexes === 'function' && props.getSourceIndexes({
             rowIdx: rowIndex, 
@@ -799,10 +866,10 @@ const Row = (props) => {
                 <div className={classnames(
                     styles['layer-action-row']
                 )}>
-                    <div className={classnames(styles['duplicate-row'])} onClick={onClickDuplicateRow}>
+                    <div className={classnames(styles['duplicate-row'])} onClick={(e) => onClickDuplicate(e, isRow, columnIndex, contentIndex)}>
                         <Icon className={classnames('icon-ants-copy-report')} />
                     </div>
-                    <div className={classnames(styles['delete-row'])} onClick={(e) => onClickDeleteRow(e, isRow, currentID, id)}>
+                    <div className={classnames(styles['delete-row'])} onClick={(e) => onClickDelete(e, isRow, currentID, id)}>
                         <Icon className={classnames('icon-ants-delete')} />
                     </div>
                 </div>

@@ -12,10 +12,9 @@ export const hierarchyDesignData = (data) => {
 
     }
 
-    // for (const key in data.rows) { // 1
     rowPositions.forEach(row => {
 
-        const columnKeys = getObjectPropSafely(() => data.rows[row].columns); // 2
+        const columnKeys = getObjectPropSafely(() => data.rows[row].columns);
     
         const columns = columnKeys.map(columnKey => {
             
@@ -47,13 +46,11 @@ export const hierarchyDesignData = (data) => {
         });
     
         rows.push({
-            cells: getObjectPropSafely(() => data.rows[row].cells), // 3
-            values: getObjectPropSafely(() => data.rows[row].values), // 4
+            cells: getObjectPropSafely(() => data.rows[row].cells), 
+            values: getObjectPropSafely(() => data.rows[row].values), 
             columns: columns 
         });
     });
-
-    // }
 
     const saveDesignData = {
         body: {
@@ -213,4 +210,60 @@ export const getColumnIndexFromID = (data, columnID) => {
         rowID: '',
         columnIndex: -1
     };
+};
+
+export const updateUsageCounters = (usageCounters, htmlType, operator = 'add') => {
+    const newUsageCounters = {...usageCounters};
+
+    if (operator === 'subtract') {
+        switch (htmlType) {
+            case 'page': newUsageCounters.u_page--;
+                break;
+            case 'body': newUsageCounters.u_body--;
+                break;
+            case 'row': newUsageCounters.u_row--;
+                break;
+            case 'column': newUsageCounters.u_column--;
+                break;
+            case 'button': newUsageCounters.u_content_button--;
+                break;
+            case 'divider': newUsageCounters.u_content_divider--;
+                break;
+            case 'image': newUsageCounters.u_content_image--;
+                break;
+            case 'menu': newUsageCounters.u_content_menu--;
+                break;
+            case 'social': newUsageCounters.u_content_social--;
+                break;
+            case 'text': newUsageCounters.u_content_text--;
+                break;
+            default: break;
+        }
+    }
+    if (operator === 'add') {
+        switch (htmlType) {
+            case 'page': newUsageCounters.u_page++;
+                break;
+            case 'body': newUsageCounters.u_body++;
+                break;
+            case 'row': newUsageCounters.u_row++;
+                break;
+            case 'column': newUsageCounters.u_column++;
+                break;
+            case 'button': newUsageCounters.u_content_button++;
+                break;
+            case 'divider': newUsageCounters.u_content_divider++;
+                break;
+            case 'image': newUsageCounters.u_content_image++;
+                break;
+            case 'menu': newUsageCounters.u_content_menu++;
+                break;
+            case 'social': newUsageCounters.u_content_social++;
+                break;
+            case 'text': newUsageCounters.u_content_text++;
+                break;
+            default: break;
+        }
+    }
+    return newUsageCounters;
 };
