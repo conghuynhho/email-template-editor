@@ -42,6 +42,10 @@ const Workspace = () => {
         contentIdx: -1
     });
 
+    const [noContentRowIndex, setNoContentRowIndex] = useState(-1);
+    const [noContentColumnIndex, setNoContentColumnIndex] = useState(-1);
+    const [noContentClassName, setNoContentClassName] = useState('');
+
     const [typeOfIsDragging, setTypeOfIsDragging] = useState('');
 
     const getDragItHereIndex = (type, rowIndex, columnIndex, contentIndex, area, destinationRowIdx, rowAreaPosition) => {
@@ -58,7 +62,9 @@ const Workspace = () => {
                 setContentDragItHereIndex(contentIndex);
                 setContentDragItHereArea(area);
                 break;
-            default: break; 
+            default: 
+                setContentDragItHereIndex(-1);
+                break; 
         }
         
     };
@@ -72,6 +78,14 @@ const Workspace = () => {
             });
         }
     };
+
+    const getNoContentIndexes = (rowIdx, columnIdx, classNameCompare) => {
+        if (rowIdx && columnIdx) {
+            setNoContentRowIndex(rowIdx);
+            setNoContentColumnIndex(columnIdx);
+            setNoContentClassName(classNameCompare);
+        } 
+    }; 
 
     const renderRow = (snapshot) => {
         const rows = getObjectPropSafely(() => nestedData.body.rows);
@@ -96,6 +110,8 @@ const Workspace = () => {
                                 contentDragItHereArea={contentDragItHereArea}
                                 typeOfIsDragging={typeOfIsDragging}
                                 getSourceIndexes={getSourceIndexes}
+                                getNoContentIndexes={getNoContentIndexes}
+                                noContentClassName={noContentClassName}
                             />
                         </div>
                     ) : (
@@ -129,6 +145,8 @@ const Workspace = () => {
                                                 contentDragItHereArea={contentDragItHereArea}
                                                 typeOfIsDragging={typeOfIsDragging}
                                                 getSourceIndexes={getSourceIndexes}
+                                                getNoContentIndexes={getNoContentIndexes}
+                                                noContentClassName={noContentClassName}
                                             />
                                             
                                         </div>
@@ -278,16 +296,20 @@ const Workspace = () => {
             case 'contents': 
                 const {rowIdx, columnIdx} = sourceIndexes;
 
-                if (columnIdx === columnContentDragItHereIndex && rowIdx === rowContentDragItHereIndex) {               
-                    setNewContentListInColumn(store, sourceIndexes, contentDragItHereIndex, contentDragItHereArea);
+                if (noContentClassName) {
+                    console.log('check');
                 } else {
-                    if (rowContentDragItHereIndex !== -1) {
-                        setNewContentListInBody(store, sourceIndexes, {
-                            destinationRowIndex: rowContentDragItHereIndex, 
-                            destinationColumnIndex: columnContentDragItHereIndex, 
-                            destinationContentIndex: contentDragItHereIndex,
-                            destinationContentArea: contentDragItHereArea
-                        });
+                    if (columnIdx === columnContentDragItHereIndex && rowIdx === rowContentDragItHereIndex) {               
+                        setNewContentListInColumn(store, sourceIndexes, contentDragItHereIndex, contentDragItHereArea);
+                    } else {
+                        if (rowContentDragItHereIndex !== -1) {
+                            setNewContentListInBody(store, sourceIndexes, {
+                                destinationRowIndex: rowContentDragItHereIndex, 
+                                destinationColumnIndex: columnContentDragItHereIndex, 
+                                destinationContentIndex: contentDragItHereIndex,
+                                destinationContentArea: contentDragItHereArea
+                            });
+                        }
                     }
                 }
                 break;
@@ -300,7 +322,7 @@ const Workspace = () => {
         setColumnContentDragItHereIndex(-1);
         setContentDragItHereIndex(-1);
         setContentDragItHereArea('');
-
+        setNoContentClassName('');
     };
 
     const onDragStart = (provided) => {

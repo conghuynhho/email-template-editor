@@ -52,7 +52,8 @@ const Row = (props) => {
         columnContentDragItHereIndex, 
         contentDragItHereIndex, 
         contentDragItHereArea,
-        typeOfIsDragging = ''
+        typeOfIsDragging = '',
+        noContentClassName = ''
     } = props;
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => data.values._meta.htmlClassNames);
@@ -82,6 +83,7 @@ const Row = (props) => {
 
     const [currentRowIndex, setCurrentRowIndex] = useState(-1);
     const [isShowAddContent, setIsShowAddContent] = useState(false);
+    const [isOverSelectorHtmlID, setIsOverSelectorHtmlID] = useState('');
 
     let tempSpecs = {};
     
@@ -164,10 +166,7 @@ const Row = (props) => {
                 break;
             default:
                 if (confirmDelete.willBeDelete && activeElement === id) {
-                 
-                    // update at usageCounters
-                    // let newUsageCounters = {...usageCounters};
-                
+                            
                     // delete at bodies 
                     const rowPositions = [...getRowsFromBodies(bodies)];
                     const deleteRowId = rowPositions.splice(currentRowIndex, 1);
@@ -182,6 +181,7 @@ const Row = (props) => {
                     const newRows = {...rows};
                     const deleteColumnIdList = [...newRows[deleteRowId].columns];
         
+                    // update at usageCounters
                     let newUsageCounters = updateUsageCounters(usageCounters, 'row', 'subtract');
         
                     delete newRows[deleteRowId];
@@ -217,7 +217,7 @@ const Row = (props) => {
                             usageCounters: newUsageCounters
                         }
                     });
-        
+
                     dispatchStore({
                         type: actionType.TOGGLE_DELETE_FORM,
                         payload: {
@@ -229,7 +229,7 @@ const Row = (props) => {
                             }
                         }
                     });
-        
+
                     dispatchStore({
                         type: actionType.CONFIRM_DELETE,
                         payload: {
@@ -255,254 +255,33 @@ const Row = (props) => {
         };
     };
 
-    const getItemStyleClone = (isDragging, draggableStyle) => {
+    const getItemStyleClone = (snapshot, draggableStyle) => {
         return {
             ...draggableStyle,
             width: 20,
             display: 'flex',
-            alignItems: 'center'
+            alignItems: 'center',
+            ...(snapshot.isDropAnimating && {
+                transitionDuration: '0.001s'
+            })
         };
     };
 
-    const renderContents = (contents, columnIndex) => {
-        const rowId = getRowId(store, rowIndex);
-
-        const columnId = getColumnId(store, rowId, columnIndex);
-
-        const getContent = (content) => {
-            const type = getObjectPropSafely(() => content.type);
-
-            switch (type) {
-                case 'divider': {
-                    return (
-                        <Divider data={content} />
-                    );
-                }
-                case 'image': {
-                    return (
-                        <Image data={content} />
-                    );
-                }
-                case 'text': {
-                    return (
-                        <Text data={content} />
-                    );
-                }
-                case 'button': {
-                    return (
-                        <Button data={content} />
-                    );
-                }
-                case 'menu': {
-                    return (
-                        <Menu data={content} />
-                    );
-                }
-                case 'html': {
-                    return (
-                        <RenderCode data={content} />
-                    );
-                }
-            }
-        };
-
-        return (
-            <Droppable
-                droppableId={`droppable-content-${id}-${columnId}`} 
-                type='contents' 
-                renderClone={(provided, snapshot) => {
-                    return (
-                        <span
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            ref={provided.innerRef}
-                            style={getItemStyleClone(snapshot.isDragging, provided.draggableProps.style)}
-                        >
-                            <span style={{backgroundColor: '#13ABD7', padding: '0 6px 4px', borderRadius: '50%'}}>
-                                <Icon type='icon-ants-add' style={{color: '#fff'}} /> 
-                            </span>
-                        </span>
-                    );
-                }}
-            >
-                {(provided, snapshot) => {
-
-                    return (
-                        <div className={'layer-group-content'} ref={provided.innerRef} {...provided.droppableProps}>
-                            {contents.length ? contents.map((content, index) => {
-                                const contentID = getObjectPropSafely(() => content.values._meta.htmlID);
-                                const shouldRenderClone = `draggable-${contentID}` === snapshot.draggingFromThisWith;
-
-                                return (
-                                    <Fragment key={`draggable-${contentID}`}>
-                                        {shouldRenderClone ? (
-                                            <>
-                                                {index === 0 && renderDragItHere('content', {rowIndex, columnIndex, index}, true)}
-                                                <div className={classnames(styles['react-beautiful-dnd-copy'])}>
-                                                    
-                                                    <div
-                                                        id={contentID}                                                    
-                                                    >
-                                                        {renderSelector({
-                                                            isShowAddTop: false, 
-                                                            isShowAddBottom: false, 
-                                                            isRow: false, 
-                                                            isSelected: activeElement === contentID,
-                                                            dragHandleProps: {...provided.dragHandleProps},
-                                                            currentID: contentID,
-                                                            columnIndex: columnIndex,
-                                                            contentIndex: index
-                                                        })}
-                                                        {getContent(content)}
-                                                    </div>                                               
-                                                </div>
-                                                {renderDragItHere('content', {rowIndex, columnIndex, index}, false)}
-                                            </>
-                                        ) : (
-                                            <Draggable draggableId={`draggable-${contentID}`} index={index}>
-                                                {(provided, snapshot) => {
-                                                    let isInsideRow = false;
-        
-                                                    if (currentRowIndex === rowIndex) {
-                                                        isInsideRow = true;
-                                                    } else {
-                                                        isInsideRow = false;
-                                                    }
-
-                                                    // console.log('snapshot', snapshot, provided);
-                                                    // console.log('provided', provided);
-    
-                                                    return (
-                                                        <>
-                                                            {index === 0 && renderDragItHere('content', {rowIndex, columnIndex, index}, true)}
-                                                            <div
-                                                                id={contentID}
-                                                                className={classnames(
-                                                                    'layer-selectable', 
-                                                                    styles['layer-content'],
-                                                                    {[styles['layer-selected']]: activeElement === contentID}
-                                                                    
-                                                                )}
-                                                                onClick={(e) => onClickSelectContent(e, contentID)}
-                                                                onMouseMove={(e) => onMouseMoveRow(e, false)}
-                                                                ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                style={{
-                                                                    ...getItemStyle(false, provided.draggableProps.style),
-                                                                    ...(true && {transform: 'none'})
-                                                                }}
-                                                            >
-                                                                {renderSelector({
-                                                                    isShowAddTop: false, 
-                                                                    isShowAddBottom: false, 
-                                                                    isRow: false, 
-                                                                    isSelected: activeElement === contentID,
-                                                                    isInsideRow,
-                                                                    dragHandleProps: {...provided.dragHandleProps},
-                                                                    currentID: contentID,
-                                                                    columnIndex: columnIndex,
-                                                                    contentIndex: index
-                                                                })}
-                                                                {getContent(content)}
-                                                            </div>
-                                                            {renderDragItHere('content', {rowIndex, columnIndex, index}, false)}
-                                                        </>           
-                                                    );
-                                                }}
-                                            </Draggable>
-
-                                        )}
-                                    </Fragment>
-                                );
-                            }) : (
-                                <div className="blockbuilder-placeholder" data-name="Drag it here">
-                                    <div className={styles['empty-column']} onClick={onClickEmptyColumn}>
-                                        <div 
-                                            style={{
-                                                zIndex: 112
-                                            }}
-                                        >
-                                            <div>
-                                                    No content here. Drag content from right.
-                                            </div>
-                                            {
-                                                isShowAddContent && (
-                                                    <div>
-                                                        <button className={classnames('btn', styles['add-content'])} onClick={onClickAddContent}>
-                                                        Add Content
-                                                        </button>
-                                                    </div>
-                                                )
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    );
-                }}
-            </Droppable>
-        );
-    }; 
-
     const onClickEmptyColumn = (e) => {
+        e.stopPropagation();
         setIsShowAddContent(true);
+        dispatchStore({
+            type: actionType.ACTIVE_ELEMENT,
+            payload: {
+                activeElement: id,
+                isEditing: false
+            }
+        });
     };
 
     const onClickAddContent = (e) => {
         e.stopPropagation();
         setIsShowAddContent(false);
-    };
-
-    const renderColumns = () => {
-        const columns = getObjectPropSafely(() => data.columns);
-
-        return columns.map((column, index) => {
-            const contents = getObjectPropSafely(() => column.contents);
-            const id = getObjectPropSafely(() => column.values._meta.htmlID);
-            const classTitle = getObjectPropSafely(() => column.values._meta.htmlClassNames);
-            const styleColumn = {
-                width: `${(1 / columns.length) * 100}%`
-            };
-            const styleExtraColumn = {
-                padding: getObjectPropSafely(() => column.values.padding),
-                backgroundColor: getObjectPropSafely(() => column.values.backgroundColor),
-                borderWidth: `
-                    ${getObjectPropSafely(() => column.values.border.borderTopWidth)} 
-                    ${getObjectPropSafely(() => column.values.border.borderRightWidth)} 
-                    ${getObjectPropSafely(() => column.values.border.borderBottomWidth)}
-                    ${getObjectPropSafely(() => column.values.border.borderLeftWidth)}
-                `,
-                borderStyle: `
-                    ${getObjectPropSafely(() => column.values.border.borderTopStyle)} 
-                    ${getObjectPropSafely(() => column.values.border.borderRightStyle)} 
-                    ${getObjectPropSafely(() => column.values.border.borderBottomStyle)}
-                    ${getObjectPropSafely(() => column.values.border.borderLeftStyle)}
-                `,
-                borderColor: `
-                    ${getObjectPropSafely(() => column.values.border.borderTopColor)} 
-                    ${getObjectPropSafely(() => column.values.border.borderRightColor)} 
-                    ${getObjectPropSafely(() => column.values.border.borderBottomColor)}
-                    ${getObjectPropSafely(() => column.values.border.borderLeftColor)}
-                `
-                
-            };
-        
-            return (
-                <div 
-                    key={index}
-                    id={id}
-                    className={styles[classTitle]}
-                    style={styleColumn}
-                >
-                    <div
-                        style={styleExtraColumn}
-                    >
-                        {renderContents(contents, index)}
-                    </div>
-                </div>
-            );
-        });
     };
 
     const onClickAddRow = (e, position, currentRowIdx) => {
@@ -774,7 +553,7 @@ const Row = (props) => {
                 payload: {
                     columns: newColumns,
                     contents: newContents,
-                    usageCounters: newUsageCounters                
+                    usageCounters: newUsageCounters              
                 }
             });
 
@@ -791,6 +570,349 @@ const Row = (props) => {
         });
     };
 
+    const onClickSelectContent = (e, id) => {
+        e.stopPropagation();
+        dispatchStore({
+            type: actionType.ACTIVE_ELEMENT,
+            payload: {
+                activeElement: id,
+                isEditing: true
+            }
+        });
+    };
+
+    const onClickSelectRow = (e) => {
+        e.stopPropagation();
+        dispatchStore({
+            type: actionType.ACTIVE_ELEMENT,
+            payload: {
+                activeElement: id,
+                isEditing: false
+            }
+        });
+    };
+
+    const onMouseMoveDragIcon = (e, isRow) => {
+        if (typeOfIsDragging) {
+            const currentPosition = e.pageY;
+
+            const targetElement = e.target.id.slice(9);
+
+            if (e.target.className.includes('no_content')) {
+                const classNameCompare = e.target.className.split(' ')[0];
+
+                const noContentRowIndex = classNameCompare.split('_')[2];
+                const noContentColumnIndex = classNameCompare.split('_')[3];
+
+                typeof props.getNoContentIndexes === 'function' && props.getNoContentIndexes(noContentRowIndex, noContentColumnIndex, classNameCompare);
+            } else {
+
+                typeof props.getNoContentIndexes === 'function' && props.getNoContentIndexes(-1, -1, '');
+            }
+
+            if (targetElement.includes('u_row') || targetElement.includes('u_content')) {
+    
+                const elm = document.querySelector(`#${targetElement}`);
+
+                const height = targetElement && document.getElementById(targetElement).offsetHeight;
+                const top = getOffset(elm).top;
+
+                const bottom = top + height;
+                
+                const middlePoint = top + (height / 2);
+
+                const visiblePosition = {
+                    type: typeOfIsDragging === 'rows' ? 'row' : 'content',
+                    id: '',
+                    areaPosition: ''
+                };
+
+                switch (true) {
+                    case currentPosition > top && currentPosition < middlePoint:
+                        visiblePosition.id = targetElement;
+                        visiblePosition.areaPosition = 'above';
+                        break;
+                    case currentPosition >= middlePoint && currentPosition < bottom:
+                        visiblePosition.id = targetElement;
+                        visiblePosition.areaPosition = 'below'; 
+                        break;  
+                    default: break;
+                }
+
+                tempSpecs = visiblePosition;
+                
+                if (typeOfIsDragging === 'rows') {
+                
+                    const rowNumberId = getRowIDFromHtmlID(store, visiblePosition.id);
+                    const rowDragItHereIndex = tempSpecs.areaPosition === 'below' ? getRowIndexFromId(store, rowNumberId) : getRowIndexFromId(store, rowNumberId) - 1;
+                    
+                    if (targetElement.includes('u_row')) {
+                        typeof getDragItHereIndex === 'function' && getDragItHereIndex('draggingRow', rowDragItHereIndex, -1, -1, '', getRowIndexFromId(store, rowNumberId), visiblePosition.areaPosition);
+                    }
+
+                } 
+                else {
+                    const contentNumberID = getContentIDFromHtmlID(store, visiblePosition.id);
+
+                    const {columnID, contentIndex} = getContentIndexFromID(store, contentNumberID);
+
+                    const {rowID, columnIndex} = getColumnIndexFromID(store, columnID);
+
+                    const rowIndex = getRowIndexFromId(store, rowID);
+
+                    if (targetElement.includes('u_content')) {
+                        typeof getDragItHereIndex === 'function' && getDragItHereIndex('draggingContent', rowIndex, columnIndex, contentIndex, visiblePosition.areaPosition);
+                    }
+                }
+            }    
+        }
+    };
+
+    const onMouseOverSelector = (e) => {
+        e.stopPropagation();
+        const targetElement = e.target.id.slice(9);
+
+        setIsOverSelectorHtmlID(targetElement);
+    };
+
+    const onMouseOutSelector = (e) => {
+        e.stopPropagation();
+        setIsOverSelectorHtmlID('');
+    };
+
+    const renderContents = (contents, columnIndex) => {
+        const rowId = getRowId(store, rowIndex);
+
+        const columnId = getColumnId(store, rowId, columnIndex);
+
+        const getContent = (content) => {
+            const type = getObjectPropSafely(() => content.type);
+
+            switch (type) {
+                case 'divider': {
+                    return (
+                        <Divider data={content} />
+                    );
+                }
+                case 'image': {
+                    return (
+                        <Image data={content} />
+                    );
+                }
+                case 'text': {
+                    return (
+                        <Text data={content} />
+                    );
+                }
+                case 'button': {
+                    return (
+                        <Button data={content} />
+                    );
+                }
+                case 'menu': {
+                    return (
+                        <Menu data={content} />
+                    );
+                }
+                case 'html': {
+                    return (
+                        <RenderCode data={content} />
+                    );
+                }
+            }
+        };
+
+        return (
+            <Droppable
+                droppableId={`droppable-content-${id}-${columnId}`} 
+                type='contents' 
+                renderClone={(provided, snapshot) => {
+                    return (
+                        <span
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                            style={getItemStyleClone(snapshot, provided.draggableProps.style)}
+                        >
+                            <span style={{backgroundColor: '#13ABD7', padding: '0 6px 4px', borderRadius: '50%'}}>
+                                <Icon type='icon-ants-add' style={{color: '#fff'}} /> 
+                            </span>
+                        </span>
+                    );
+                }}
+            >
+                {(provided, snapshot) => {
+                    const isVisibleNoContent = noContentClassName === `no_content_${rowIndex}_${columnIndex}`;
+
+                    return (
+                        <div className={'layer-group-content'} ref={provided.innerRef} {...provided.droppableProps}>
+                            {contents.length ? contents.map((content, index) => {
+                                const contentID = getObjectPropSafely(() => content.values._meta.htmlID);
+                                const shouldRenderClone = `draggable-${contentID}` === snapshot.draggingFromThisWith;
+
+                                return (
+                                    <Fragment key={`draggable-${contentID}`}>
+                                        {shouldRenderClone ? (
+                                            <>
+                                                {index === 0 && renderDragItHere('content', {rowIndex, columnIndex, index}, true)}
+                                                <div className={classnames(styles['react-beautiful-dnd-copy'])}>
+                                                    
+                                                    <div
+                                                        id={contentID}                                                    
+                                                    >
+                                                        {renderSelector({
+                                                            isShowAddTop: false, 
+                                                            isShowAddBottom: false, 
+                                                            isRow: false, 
+                                                            isSelected: activeElement === contentID,
+                                                            dragHandleProps: {...provided.dragHandleProps},
+                                                            currentID: contentID,
+                                                            columnIndex: columnIndex,
+                                                            contentIndex: index
+                                                        })}
+                                                        {getContent(content)}
+                                                    </div>                                               
+                                                </div>
+                                                {renderDragItHere('content', {rowIndex, columnIndex, index}, false)}
+                                            </>
+                                        ) : (
+                                            <Draggable draggableId={`draggable-${contentID}`} index={index}>
+                                                {(provided, snapshot) => {
+                                                    let isInsideRow = false;
+        
+                                                    if (currentRowIndex === rowIndex) {
+                                                        isInsideRow = true;
+                                                    } else {
+                                                        isInsideRow = false;
+                                                    }
+    
+                                                    return (
+                                                        <>
+                                                            {index === 0 && renderDragItHere('content', {rowIndex, columnIndex, index}, true)}
+                                                            <div
+                                                                id={contentID}
+                                                                className={classnames(
+                                                                    'layer-selectable', 
+                                                                    styles['layer-content'],
+                                                                    {[styles['layer-selected']]: activeElement === contentID}
+                                                                    
+                                                                )}
+                                                                onClick={(e) => onClickSelectContent(e, contentID)}
+                                                                onMouseMove={(e) => onMouseMoveDragIcon(e, false)}
+                                                                ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                style={{
+                                                                    ...getItemStyle(false, provided.draggableProps.style),
+                                                                    ...(true && {transform: 'none'})
+                                                                }}
+                                                            >
+                                                                {renderSelector({
+                                                                    isShowAddTop: false, 
+                                                                    isShowAddBottom: false, 
+                                                                    isRow: false, 
+                                                                    isSelected: activeElement === contentID,
+                                                                    isInsideRow,
+                                                                    dragHandleProps: {...provided.dragHandleProps},
+                                                                    currentID: contentID,
+                                                                    columnIndex: columnIndex,
+                                                                    contentIndex: index
+                                                                })}
+                                                                {getContent(content)}
+                                                            </div>
+                                                            {renderDragItHere('content', {rowIndex, columnIndex, index}, false)}
+                                                        </>           
+                                                    );
+                                                }}
+                                            </Draggable>
+
+                                        )}
+                                    </Fragment>
+                                );
+                            }) : (
+                                <div 
+                                    className={classnames(styles['blockbuilder-placeholder'], {[styles['active']] : isVisibleNoContent})} 
+                                    data-name="Drag it here"
+                                >
+                                    <div className={classnames(`no_content_${rowIndex}_${columnIndex}`, styles['empty-column'])} onClick={onClickEmptyColumn}>
+                                        <div 
+                                            style={{
+                                                zIndex: 112
+                                            }}
+                                        >
+                                            <div className={`no_content_${rowIndex}_${columnIndex}`}>
+                                                    No content here. Drag content from right.
+                                            </div>
+                                            {
+                                                isShowAddContent && (
+                                                    <div>
+                                                        <button className={classnames(`no_content_${rowIndex}_${columnIndex}`, 'btn', styles['add-content'])} onClick={onClickAddContent}>
+                                                        Add Content
+                                                        </button>
+                                                    </div>
+                                                )
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    );
+                }}
+            </Droppable>
+        );
+    }; 
+
+    const renderColumns = () => {
+        const columns = getObjectPropSafely(() => data.columns);
+
+        return columns.map((column, index) => {
+            const contents = getObjectPropSafely(() => column.contents);
+            const id = getObjectPropSafely(() => column.values._meta.htmlID);
+            const classTitle = getObjectPropSafely(() => column.values._meta.htmlClassNames);
+            const styleColumn = {
+                width: `${(1 / columns.length) * 100}%`
+            };
+            const styleExtraColumn = {
+                padding: getObjectPropSafely(() => column.values.padding),
+                backgroundColor: getObjectPropSafely(() => column.values.backgroundColor),
+                borderWidth: `
+                    ${getObjectPropSafely(() => column.values.border.borderTopWidth)} 
+                    ${getObjectPropSafely(() => column.values.border.borderRightWidth)} 
+                    ${getObjectPropSafely(() => column.values.border.borderBottomWidth)}
+                    ${getObjectPropSafely(() => column.values.border.borderLeftWidth)}
+                `,
+                borderStyle: `
+                    ${getObjectPropSafely(() => column.values.border.borderTopStyle)} 
+                    ${getObjectPropSafely(() => column.values.border.borderRightStyle)} 
+                    ${getObjectPropSafely(() => column.values.border.borderBottomStyle)}
+                    ${getObjectPropSafely(() => column.values.border.borderLeftStyle)}
+                `,
+                borderColor: `
+                    ${getObjectPropSafely(() => column.values.border.borderTopColor)} 
+                    ${getObjectPropSafely(() => column.values.border.borderRightColor)} 
+                    ${getObjectPropSafely(() => column.values.border.borderBottomColor)}
+                    ${getObjectPropSafely(() => column.values.border.borderLeftColor)}
+                `
+                
+            };
+        
+            return (
+                <div 
+                    key={index}
+                    id={id}
+                    className={styles[classTitle]}
+                    style={styleColumn}
+                >
+                    <div
+                        style={styleExtraColumn}
+                    >
+                        {renderContents(contents, index)}
+                    </div>
+                </div>
+            );
+        });
+    };
+
     const renderSelector = ({
         isShowAddTop = true, 
         isShowAddBottom = true, 
@@ -803,33 +925,57 @@ const Row = (props) => {
         contentIndex = -1
     } = {}) => {
 
-        const selectorIndex = () => {
+        // const selectorIndex = () => {
 
-            if (isRow === true && isSelected === true) {
-                return {
-                    zIndex: 100
-                };
-            }
-            if (isRow === true && isSelected === false) {
-                return {
-                    zIndex: 0
-                };
-            }
+        //     if (isRow === true && isSelected === true) {
+        //         return {
+        //             zIndex: 100
+        //         };
+        //     }
+        //     if (isRow === true && isSelected === false) {
+        //         return {
+        //             zIndex: 0
+        //         };
+        //     }
 
-            if (isRow === false && isInsideRow === true) {
-                return {
-                    zIndex: 101
-                };
-            }
+        //     if (isRow === false && isInsideRow === true) {
+        //         return {
+        //             zIndex: 101
+        //         };
+        //     }
 
-            if (isEditing === false) {
-                return {
-                    zIndex: 99
-                };
-            }
+        //     if (isEditing === false) {
+        //         return {
+        //             zIndex: 99
+        //         };
+        //     }
 
-            return {};
-        };
+        //     return {};
+        // };
+
+        let styleSelector = {zIndex: 100};
+
+        switch (typeOfIsDragging) {
+            case 'rows': 
+                if (currentID.includes('u_content')) {
+                    styleSelector['zIndex'] = 0;
+                }
+                break;
+            case 'contents':
+                if (currentID.includes('u_row')) {
+                    styleSelector = {
+                        zIndex: 0,
+                        opacity: 0
+                    };
+                }
+                break;
+            default: break;
+        }
+        // if (typeOfIsDragging === 'rows') {
+        //     if (currentID.includes('u_content')) {
+        //         styleSelector['zIndex'] = 0;
+        //     }
+        // }
 
         return (
             <div className={classnames(
@@ -839,7 +985,9 @@ const Row = (props) => {
                 {[styles['layout-mobile-row']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE && isRow}
             )}
             id={`selector_${currentID}`}
-            style={isRow ? {zIndex: 50} : selectorIndex()}
+            style={{...styleSelector}}
+            // onMouseOver={onMouseOverSelector}
+            // onMouseOut={onMouseOutSelector}
             >
                 {isShowAddTop && (
                     <div className={classnames(
@@ -847,6 +995,7 @@ const Row = (props) => {
                         styles['layer-add-row-top']
                     )}
                     onClick={(e) => onClickAddRow(e, 'top', currentRowIndex)}
+                    // style={isOverSelectorHtmlID === currentID ? {opacity: 1, display: 'inline-block'} : {}}
                     >
                         <Icon className={classnames('icon-ants-add')} />
                     </div>
@@ -858,6 +1007,7 @@ const Row = (props) => {
                         styles['layer-add-row-bottom']
                     )}
                     onClick={(e) => onClickAddRow(e, 'bottom', currentRowIndex)}
+                    // style={isOverSelectorHtmlID === currentID ? {opacity: 1, display: 'inline-block'} : {}}
                     >
                         <Icon className={classnames('icon-ants-add')} />
                     </div>
@@ -873,8 +1023,14 @@ const Row = (props) => {
                         <Icon className={classnames('icon-ants-delete')} />
                     </div>
                 </div>
-                <div className={classnames(styles['layer-drag-row'])} >
-                    <span {...dragHandleProps} onMouseDown={(e) => onMouseDownSelector(e,columnIndex, contentIndex)}>
+                <div 
+                    className={classnames(styles['layer-drag-row'])} 
+                    // style={isOverSelectorHtmlID === currentID ? {display: 'flex'} : {}}
+                >
+                    <span 
+                        {...dragHandleProps} 
+                        onMouseDown={(e) => onMouseDownSelector(e,columnIndex, contentIndex)}                     
+                    >
                         <Icon className={classnames('icon-ants-double-three-dots', styles['drag-row'])} />  
                     </span>
                 </div>
@@ -937,88 +1093,6 @@ const Row = (props) => {
         
     };
 
-    const onClickSelectContent = (e, id) => {
-        e.stopPropagation();
-        dispatchStore({
-            type: actionType.ACTIVE_ELEMENT,
-            payload: {
-                activeElement: id,
-                isEditing: true
-            }
-        });
-    };
-
-    const onClickSelectRow = (e) => {
-        e.stopPropagation();
-        dispatchStore({
-            type: actionType.ACTIVE_ELEMENT,
-            payload: {
-                activeElement: id,
-                isEditing: false
-            }
-        });
-    };
-
-    const onMouseMoveRow = (e, isRow) => {
-        if (typeOfIsDragging) {
-            const currentPosition = e.pageY;
-
-            const targetElement = e.target.id.slice(9);
-
-            if (targetElement.includes('u_row') || targetElement.includes('u_content')) {
-    
-                const elm = document.querySelector(`#${targetElement}`);
-
-                const height = targetElement && document.getElementById(targetElement).offsetHeight;
-                const top = getOffset(elm).top;
-
-                const bottom = top + height;
-                
-                const middlePoint = top + (height / 2);
-
-                const visiblePosition = {
-                    type: typeOfIsDragging === 'rows' ? 'row' : 'content',
-                    id: '',
-                    areaPosition: ''
-                };
-
-                switch (true) {
-                    case currentPosition > top && currentPosition < middlePoint:
-                        visiblePosition.id = targetElement;
-                        visiblePosition.areaPosition = 'above';
-                        break;
-                    case currentPosition >= middlePoint && currentPosition < bottom:
-                        visiblePosition.id = targetElement;
-                        visiblePosition.areaPosition = 'below'; 
-                        break;  
-                    default: break;
-                }
-
-                tempSpecs = visiblePosition;
-                
-                if (typeOfIsDragging === 'rows') {
-                
-                    const rowNumberId = getRowIDFromHtmlID(store, visiblePosition.id);
-                    const rowDragItHereIndex = tempSpecs.areaPosition === 'below' ? getRowIndexFromId(store, rowNumberId) : getRowIndexFromId(store, rowNumberId) - 1;
-
-                    typeof getDragItHereIndex === 'function' && getDragItHereIndex('draggingRow', rowDragItHereIndex, -1, -1, '', getRowIndexFromId(store, rowNumberId), visiblePosition.areaPosition);
-
-                } 
-                else {
-                    const contentNumberID = getContentIDFromHtmlID(store, visiblePosition.id);
-
-                    const {columnID, contentIndex} = getContentIndexFromID(store, contentNumberID);
-
-                    const {rowID, columnIndex} = getColumnIndexFromID(store, columnID);
-
-                    const rowIndex = getRowIndexFromId(store, rowID);
-
-                    typeof getDragItHereIndex === 'function' && getDragItHereIndex('draggingContent', rowIndex, columnIndex, contentIndex, visiblePosition.areaPosition);
-                }
-            }    
-        }
-    };
-
     return (
         <>
             <div
@@ -1029,7 +1103,7 @@ const Row = (props) => {
                     {[styles['layer-selected']]: activeElement === id}
                 )}
                 onClick={onClickSelectRow}
-                onMouseMove={(e) => onMouseMoveRow(e, true)}
+                onMouseMove={(e) => onMouseMoveDragIcon(e, true)}
             >
                 {renderSelector({isSelected: activeElement === id, dragHandleProps: getObjectPropSafely(() => props.provided.dragHandleProps), isRow: true, currentID: id})}
                 <div
