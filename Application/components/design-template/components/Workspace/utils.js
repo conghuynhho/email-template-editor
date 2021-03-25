@@ -1,3 +1,4 @@
+import {result} from 'lodash';
 import {string} from 'prop-types';
 import {getObjectPropSafely} from 'Utils';
 
@@ -145,28 +146,24 @@ export const getRowIndexFromId = (data, rowId) => {
 };
 
 export const getActiveElement = (data, activeElement) => {
-    const typeElement = activeElement.slice(10, 14);
+    const result = {};
     let type = '';
 
-    switch (typeElement) {
-        case 'butt':
+    switch (true) {
+        case activeElement.indexOf('button') > -1: 
             type = 'button';
             break;
-        case 'divi':
-            type = 'line';
-            break;
-        case 'colu':
-            type = 'columns';
-            break;
-        case 'row_':
-            type = 'general';
-            break;
-        case 'text':
+        case activeElement.indexOf('text') > -1: 
             type = 'text';
+            break;
+        case activeElement.indexOf('divider') > -1: 
+            type = 'line';
             break;
         default:
             type = 'general';
+        
     }
+    result.type = type.toUpperCase();
 
     // if (activeElement.includes('text')) {typeElement = 'text'} else {typeElement = 'general'}
 
@@ -177,12 +174,10 @@ export const getActiveElement = (data, activeElement) => {
             if (
                 getObjectPropSafely(() => content.values._meta.htmlID) === activeElement
             ) {
-                console.log(
-                    'result',
-                    getObjectPropSafely(() => content.values.text)
-                );
+                result.values = getObjectPropSafely(() => content.values);
+                return result;
             }
         }
     });
-    return type.toUpperCase();
+    return result;
 };
