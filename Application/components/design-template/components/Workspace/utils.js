@@ -1,3 +1,5 @@
+import {result} from 'lodash';
+import {string} from 'prop-types';
 import {getObjectPropSafely} from 'Utils';
 
 export const hierarchyDesignData = (data) => {
@@ -9,7 +11,6 @@ export const hierarchyDesignData = (data) => {
     for (const key in body) {
         bodyValues = getObjectPropSafely(() => data.bodies[key].values);
         rowPositions = getObjectPropSafely(() => data.bodies[key].rows);
-
     }
 
     rowPositions.forEach(row => {
@@ -20,14 +21,13 @@ export const hierarchyDesignData = (data) => {
             
             for (const key in data.columns) {
                 if (key === columnKey) {
+                    const contentKeys = getObjectPropSafely(
+                        () => data.columns[key].contents
+                    );
 
-                    const contentKeys = getObjectPropSafely(() => data.columns[key].contents);
-    
-                    const contents = contentKeys.map(contentKey => {
-    
+                    const contents = contentKeys.map((contentKey) => {
                         for (const key in data.contents) {
                             if (key === contentKey) {
-    
                                 return {
                                     type: getObjectPropSafely(() => data.contents[key].type),
                                     slug: undefined,
@@ -36,7 +36,7 @@ export const hierarchyDesignData = (data) => {
                             }
                         }
                     });
-    
+
                     return {
                         contents: contents,
                         values: getObjectPropSafely(() => data.columns[key].values)
@@ -44,7 +44,7 @@ export const hierarchyDesignData = (data) => {
                 }
             }
         });
-    
+
         rows.push({
             cells: getObjectPropSafely(() => data.rows[row].cells), 
             values: getObjectPropSafely(() => data.rows[row].values), 
@@ -80,7 +80,9 @@ export const getRowId = (designData, rowIndex) => {
         bodyKeyList.push(key);
     }
 
-    const rows = getObjectPropSafely(() => designData.bodies[bodyKeyList[0]].rows);
+    const rows = getObjectPropSafely(
+        () => designData.bodies[bodyKeyList[0]].rows
+    );
     const rowId = rows[rowIndex];
 
     return rowId;
@@ -109,20 +111,25 @@ export const getRowsFromBodies = (bodies) => {
 export const getLastUsingId = (data) => {
     const contentIdList = Object.keys(getObjectPropSafely(() => data.contents));
     const lastContentID = contentIdList[contentIdList.length - 1];
-    
+
     const columnIdList = Object.keys(getObjectPropSafely(() => data.columns));
     const lastColumnID = columnIdList[columnIdList.length - 1];
 
     const rowIdList = Object.keys(getObjectPropSafely(() => data.rows));
     const lastRowID = rowIdList[rowIdList.length - 1];
 
-    return (lastRowID > lastColumnID ? lastRowID : lastColumnID) > lastContentID ? (lastRowID > lastColumnID ? lastRowID : lastColumnID) : lastContentID;
+    return (lastRowID > lastColumnID ? lastRowID : lastColumnID) > lastContentID
+        ? lastRowID > lastColumnID
+            ? lastRowID
+            : lastColumnID
+        : lastContentID;
 };
 
 export const getRowIDFromHtmlID = (data, htmlID) => {
-    
     for (const key in data.rows) {
-        if (htmlID === getObjectPropSafely(() => data.rows[key].values._meta.htmlID)) {
+        if (
+            htmlID === getObjectPropSafely(() => data.rows[key].values._meta.htmlID)
+        ) {
             return key;
         }
     }
@@ -130,7 +137,6 @@ export const getRowIDFromHtmlID = (data, htmlID) => {
 };
 
 export const getRowIndexFromId = (data, rowId) => {
-
     const rows = getRowsFromBodies(getObjectPropSafely(() => data.bodies));
     let result = '';
 
@@ -139,7 +145,7 @@ export const getRowIndexFromId = (data, rowId) => {
             if (row === rowId) {
                 result = index;
             }
-        });    
+        });
     }
 
     return result;
@@ -266,4 +272,41 @@ export const updateUsageCounters = (usageCounters, htmlType, operator = 'add') =
         }
     }
     return newUsageCounters;
+};
+
+export const getActiveElement = (data, activeElement) => {
+    const result = {};
+    let type = '';
+
+    switch (true) {
+        case activeElement.indexOf('button') > -1: 
+            type = 'button';
+            break;
+        case activeElement.indexOf('text') > -1: 
+            type = 'text';
+            break;
+        case activeElement.indexOf('divider') > -1: 
+            type = 'line';
+            break;
+        default:
+            type = 'general';
+        
+    }
+    result.type = type.toUpperCase();
+
+    // if (activeElement.includes('text')) {typeElement = 'text'} else {typeElement = 'general'}
+
+    const contents = Object.values(getObjectPropSafely(() => data.contents));
+
+    contents.forEach((content) => {
+        if (content.type == type) {
+            if (
+                getObjectPropSafely(() => content.values._meta.htmlID) === activeElement
+            ) {
+                result.values = getObjectPropSafely(() => content.values);
+                return result;
+            }
+        }
+    });
+    return result;
 };

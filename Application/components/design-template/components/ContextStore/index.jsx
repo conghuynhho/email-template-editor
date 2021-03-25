@@ -75,13 +75,12 @@ const reducer = (state, action) => {
             if (!getObjectPropSafely(() => Object.keys(payload.values).length && payload.id)) {
                 return state;
             }
-
-            const contents = produce(state.rows, draft => {
+            const contents = produce(state.contents, draft => {
                 if (draft[payload.id]) {
-                    draft[payload.id] = {...draft[payload.id], ...payload.values};
+                    draft[payload.id].values.text = payload.values;
                 }
             });
-
+            
             const newState = {
                 ...state,
                 contents: contents

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 // Component
 import Button from 'Components/design-template/components/SidePanel/containers/Button';
@@ -7,20 +7,25 @@ import Line from 'Components/design-template/components/SidePanel/containers/Lin
 import Columns from 'Components/design-template/components/SidePanel/containers/Columns';
 import General from 'Components/design-template/components/SidePanel/containers/General';
 import Menu from 'Components/design-template/components/SidePanel/containers/Menu';
+import {StoreContext} from 'Components/design-template/components/ContextStore';
 
 // Utils
 import {typeElement} from 'Components/design-template/constants';
 import sidePanelConfig from 'Components/design-template/components/SidePanel/configs';
+import {getObjectPropSafely} from 'Utils';
+import {getActiveElement} from 'Components/design-template/components/Workspace/utils';
 
 const SidePanel = props => {
+    const {state: store = {}} = useContext(StoreContext);
     const renderHtml = () => {
         try {
-            const type = 'MENU';
-            const config = sidePanelConfig.find(item => item.type === type);
+            const activeElement = getObjectPropSafely(() => store.activeElement);
+            const element = getActiveElement(store, activeElement);
+            const config = sidePanelConfig.find(item => item.type === element.type);
 
-            switch (type) {
+            switch (element.type) {
                 case typeElement.TEXT: {
-                    return <Text config={config} />;
+                    return <Text config={config} element={element.values} />;
                 }
                 case typeElement.LINE: {
                     return <Line config={config} />;
