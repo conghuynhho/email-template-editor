@@ -464,7 +464,6 @@ const Style = props => {
 
     const renderComponent = (elements, id) => {
         try {
-            console.log('elements', elements);
             if (elements && elements.length) {
                 return elements.map(item => {
                     return (

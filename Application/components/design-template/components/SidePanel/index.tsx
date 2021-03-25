@@ -8,6 +8,8 @@ import Columns from 'Components/design-template/components/SidePanel/containers/
 import General from 'Components/design-template/components/SidePanel/containers/General';
 import Menu from 'Components/design-template/components/SidePanel/containers/Menu';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
+import Image from 'Components/design-template/components/SidePanel/containers/Image';
+import Html from 'Components/design-template/components/SidePanel/containers/Html';
 
 // Utils
 import {typeElement} from 'Components/design-template/constants';
@@ -41,6 +43,12 @@ const SidePanel = props => {
                 }
                 case typeElement.MENU: {
                     return <Menu config={config} />;
+                }
+                case typeElement.IMAGE: {
+                    return <Image config={config} />;
+                }
+                case typeElement.HTML: {
+                    return <Html config={config} />;
                 }
             }
         } catch (error) {

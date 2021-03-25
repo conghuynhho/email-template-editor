@@ -28,7 +28,9 @@ export const typeElement = {
     COLUMNS: 'COLUMNS',
     LINE: 'LINE',
     GENERAL: 'GENERAL',
-    MENU: 'MENU'
+    MENU: 'MENU',
+    IMAGE: 'IMAGE',
+    HTML: 'HTML'
 };
 
 export const CONSTANTS = {
