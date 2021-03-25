@@ -28,16 +28,15 @@ const Text = props => {
                 break;
             case 'containerPadding': 
                 value.defaultValue = getObjectPropSafely(() => element[style]).replace(/px/g,'');
-                if (value.defaultValue.length() = 2)
-                {break}
-            case 'moreOptionsPaddingText':
+                // if (value.defaultValue.length === 2)
+                //     break;
+                // case 'moreOptionsPaddingText':
                 break;
             default:
                 value.defaultValue = getObjectPropSafely(() => element[style]);
             
         }
     });
-    console.log('value', elements);
 
     config.resource.style[0].elements[0].defaultValue = getObjectPropSafely(() => element.color);
     config.resource.style[1].elements[0].defaultValue = getObjectPropSafely(() => element.hideDesktop);

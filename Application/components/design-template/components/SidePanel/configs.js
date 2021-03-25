@@ -313,18 +313,12 @@ const sidePanelConfig = [
                             }
                         },
                         {
-                            type: 'TEXT_INPUT',
-                            id: 'paddingRow',
+                            type: 'LABEL',
+                            id: 'paddingRowLabel',
                             label: 'Padding',
-                            defaultValue: '10',
-                            unit: 'px',
-                            isShowUnit: true,
                             style: {
                                 styleParent: {
                                     width: '50%'
-                                },
-                                styleChild: {
-                                    width: 40
                                 }
                             }
                         },
@@ -333,10 +327,102 @@ const sidePanelConfig = [
                             id: 'moreOptionsPaddingRow',
                             isShowMessageLeft: true,
                             message: 'More options',
-                            defaultValue: false,
+                            defaultValue: true,
                             style: {
                                 styleParent: {
                                     width: '50%'
+                                }
+                            }
+                        },
+                        // {
+                        //     type: 'TEXT_INPUT',
+                        //     id: 'paddingRowText',
+                        //     label: '',
+                        //     defaultValue: '10',
+                        //     unit: 'px',
+                        //     isShowUnit: true,
+                        //     style: {
+                        //         styleParent: {
+                        //             width: '100%'
+                        //         },
+                        //         styleChild: {
+                        //             width: 40
+                        //         }
+                        //     }
+                        // },
+                        {
+                            type: 'COMPONENT_CHILD',
+                            id: 'childColumnPadding',
+                            // keyShow: 'moreOptionsButtonPadding',
+                            elementChild: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'top',
+                                    label: 'Top',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'right',
+                                    label: 'Right',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'bottom',
+                                    label: 'Bottom',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'left',
+                                    label: 'Left',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
                                 }
                             }
                         },
@@ -362,6 +448,53 @@ const sidePanelConfig = [
                                 }
                             }
                         },
+                        {
+                            type: 'FILL_COLOR',
+                            id: 'borderColorColumn',
+                            label: '',
+                            defaultValue: '#707070',
+                            style: {
+                                styleParent: {
+                                    width: '20%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'SELECT_SINGLE',
+                            id: 'borderSelectSingle',
+                            label: '',
+                            defaultValue: 1,
+                            options: [
+                                {
+                                    name: 1,
+                                    label: 'Solid'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '40%'
+                                },
+                                styleChild: {
+                                    width: 120
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'borderColumnText',
+                            label: '',
+                            defaultValue: '10',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '40%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        }, 
                         {
                             type: 'COMPONENT_CHILD',
                             id: 'childBorder',
@@ -983,6 +1116,22 @@ const sidePanelConfig = [
                                 }
                             }
                         },
+                        // {
+                        //     type: 'TEXT_INPUT',
+                        //     id: 'buttonPaddingText',
+                        //     label: '',
+                        //     unit: 'px',
+                        //     isShowUnit: true,
+                        //     defaultValue: '10',
+                        //     style: {
+                        //         styleParent: {
+                        //             width: '100%'
+                        //         },
+                        //         styleChild: {
+                        //             width: 40
+                        //         }
+                        //     }
+                        // },
                         {
                             type: 'COMPONENT_CHILD',
                             id: 'childButtonPadding',
@@ -1095,6 +1244,53 @@ const sidePanelConfig = [
                                 }
                             }
                         },
+                        // {
+                        //     type: 'FILL_COLOR',
+                        //     id: 'borderColorButton',
+                        //     label: '',
+                        //     defaultValue: '#707070',
+                        //     style: {
+                        //         styleParent: {
+                        //             width: '20%'
+                        //         }
+                        //     }
+                        // },
+                        // {
+                        //     type: 'SELECT_SINGLE',
+                        //     id: 'borderSelectSingle',
+                        //     label: '',
+                        //     defaultValue: 1,
+                        //     options: [
+                        //         {
+                        //             name: 1,
+                        //             label: 'Solid'
+                        //         }
+                        //     ],
+                        //     style: {
+                        //         styleParent: {
+                        //             width: '40%'
+                        //         },
+                        //         styleChild: {
+                        //             width: 120
+                        //         }
+                        //     }
+                        // },
+                        // {
+                        //     type: 'TEXT_INPUT',
+                        //     id: 'borderButtonText',
+                        //     label: '',
+                        //     defaultValue: '10',
+                        //     unit: 'px',
+                        //     isShowUnit: true,
+                        //     style: {
+                        //         styleParent: {
+                        //             width: '40%'
+                        //         },
+                        //         styleChild: {
+                        //             width: 40
+                        //         }
+                        //     }
+                        // },
                         {
                             type: 'COMPONENT_CHILD',
                             id: 'childBorder',
@@ -1585,18 +1781,12 @@ const sidePanelConfig = [
                             }
                         },
                         {
-                            type: 'TEXT_INPUT',
-                            id: 'containerPadding',
+                            type: 'LABEL',
+                            id: 'lineContainerPaddingLabel',
                             label: 'Container padding',
-                            defaultValue: '10',
-                            unit: 'px',
-                            isShowUnit: true,
                             style: {
                                 styleParent: {
                                     width: '60%'
-                                },
-                                styleChild: {
-                                    width: 40
                                 }
                             }
                         },
@@ -1611,7 +1801,99 @@ const sidePanelConfig = [
                                     width: '40%'
                                 }
                             }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'lineContainerPaddingText',
+                            label: '',
+                            defaultValue: '10',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
                         }
+                        // {
+                        //     type: 'COMPONENT_CHILD',
+                        //     id: 'childLinePadding',
+                        //     // keyShow: 'moreOptionsButtonPadding',
+                        //     elementChild: [
+                        //         {
+                        //             type: 'TEXT_INPUT',
+                        //             id: 'top',
+                        //             label: 'Top',
+                        //             defaultValue: '10',
+                        //             unit: 'px',
+                        //             isShowUnit: true,
+                        //             style: {
+                        //                 styleParent: {
+                        //                     width: '25%'
+                        //                 },
+                        //                 styleChild: {
+                        //                     width: 40
+                        //                 }
+                        //             }
+                        //         },
+                        //         {
+                        //             type: 'TEXT_INPUT',
+                        //             id: 'right',
+                        //             label: 'Right',
+                        //             defaultValue: '10',
+                        //             unit: 'px',
+                        //             isShowUnit: true,
+                        //             style: {
+                        //                 styleParent: {
+                        //                     width: '25%'
+                        //                 },
+                        //                 styleChild: {
+                        //                     width: 40
+                        //                 }
+                        //             }
+                        //         },
+                        //         {
+                        //             type: 'TEXT_INPUT',
+                        //             id: 'bottom',
+                        //             label: 'Bottom',
+                        //             defaultValue: '10',
+                        //             unit: 'px',
+                        //             isShowUnit: true,
+                        //             style: {
+                        //                 styleParent: {
+                        //                     width: '25%'
+                        //                 },
+                        //                 styleChild: {
+                        //                     width: 40
+                        //                 }
+                        //             }
+                        //         },
+                        //         {
+                        //             type: 'TEXT_INPUT',
+                        //             id: 'left',
+                        //             label: 'Left',
+                        //             defaultValue: '10',
+                        //             unit: 'px',
+                        //             isShowUnit: true,
+                        //             style: {
+                        //                 styleParent: {
+                        //                     width: '25%'
+                        //                 },
+                        //                 styleChild: {
+                        //                     width: 40
+                        //                 }
+                        //             }
+                        //         }
+                        //     ],
+                        //     style: {
+                        //         styleParent: {
+                        //             width: '100%'
+                        //         }
+                        //     }
+                        // }
                     ]
                 },
                 {
@@ -1696,18 +1978,12 @@ const sidePanelConfig = [
                             }
                         },
                         {
-                            type: 'TEXT_INPUT',
-                            id: 'containerPadding',
+                            type: 'LABEL',
+                            id: 'textContainerPaddingLabel',
                             label: 'Container padding',
-                            defaultValue: '10',
-                            unit: 'px',
-                            isShowUnit: true,
                             style: {
                                 styleParent: {
                                     width: '50%'
-                                },
-                                styleChild: {
-                                    width: 40
                                 }
                             }
                         },
@@ -1720,6 +1996,98 @@ const sidePanelConfig = [
                             style: {
                                 styleParent: {
                                     width: '50%'
+                                }
+                            }
+                        },
+                        // {
+                        //     type: 'TEXT_INPUT',
+                        //     id: 'textContainerPaddingText',
+                        //     label: '',
+                        //     defaultValue: '10',
+                        //     unit: 'px',
+                        //     isShowUnit: true,
+                        //     style: {
+                        //         styleParent: {
+                        //             width: '100%'
+                        //         },
+                        //         styleChild: {
+                        //             width: 40
+                        //         }
+                        //     }
+                        // }
+                        {
+                            type: 'COMPONENT_CHILD',
+                            id: 'childTextPadding',
+                            // keyShow: 'moreOptionsButtonPadding',
+                            elementChild: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'top',
+                                    label: 'Top',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'right',
+                                    label: 'Right',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'bottom',
+                                    label: 'Bottom',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'left',
+                                    label: 'Left',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
                                 }
                             }
                         }
@@ -2329,6 +2697,22 @@ const sidePanelConfig = [
                                 }
                             }
                         },
+                        // {
+                        //     type: 'TEXT_INPUT',
+                        //     id: 'menuContainerPaddingText',
+                        //     label: '',
+                        //     defaultValue: '10',
+                        //     unit: 'px',
+                        //     isShowUnit: true,
+                        //     style: {
+                        //         styleParent: {
+                        //             width: '100%'
+                        //         },
+                        //         styleChild: {
+                        //             width: 40
+                        //         }
+                        //     }
+                        // },
                         {
                             type: 'COMPONENT_CHILD',
                             id: 'childMenuPadding',
@@ -2616,18 +3000,12 @@ const sidePanelConfig = [
                             }
                         },
                         {
-                            type: 'TEXT_INPUT',
-                            id: 'containerPaddingImage',
+                            type: 'LABEL',
+                            id: 'containerPaddingImageLabel',
                             label: 'Container Padding',
-                            defaultValue: '10',
-                            unit: 'px',
-                            isShowUnit: true,
                             style: {
                                 styleParent: {
                                     width: '60%'
-                                },
-                                styleChild: {
-                                    width: 40
                                 }
                             }
                         },
@@ -2636,10 +3014,102 @@ const sidePanelConfig = [
                             id: 'imageMoreOptions',
                             isShowMessageLeft: true,
                             message: 'More Options',
-                            defaultValue: false,
+                            defaultValue: true,
                             style: {
                                 styleParent: {
                                     width: '40%'
+                                }
+                            }
+                        },
+                        // {
+                        //     type: 'TEXT_INPUT',
+                        //     id: 'imageContainerPaddingText',
+                        //     label: '',
+                        //     defaultValue: '10',
+                        //     unit: 'px',
+                        //     isShowUnit: true,
+                        //     style: {
+                        //         styleParent: {
+                        //             width: '100%'
+                        //         },
+                        //         styleChild: {
+                        //             width: 40
+                        //         }
+                        //     }
+                        // },
+                        {
+                            type: 'COMPONENT_CHILD',
+                            id: 'childImagePadding',
+                            // keyShow: 'moreOptionsButtonPadding',
+                            elementChild: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'top',
+                                    label: 'Top',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'right',
+                                    label: 'Right',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'bottom',
+                                    label: 'Bottom',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'left',
+                                    label: 'Left',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
                                 }
                             }
                         }
@@ -2691,18 +3161,12 @@ const sidePanelConfig = [
                             }
                         },
                         {
-                            type: 'TEXT_INPUT',
-                            id: 'htmlContainerPadding',
-                            label: 'container padding',
-                            defaultValue: '10',
-                            unit: 'px',
-                            isShowUnit: true,
+                            type: 'LABEL',
+                            id: 'htmlContainerPaddingLabel',
+                            label: 'Container Padding',
                             style: {
                                 styleParent: {
                                     width: '60%'
-                                },
-                                styleChild: {
-                                    width: 40
                                 }
                             }
                         },
@@ -2711,10 +3175,102 @@ const sidePanelConfig = [
                             id: 'htmlMoreOptions',
                             isShowMessageRight: true,
                             message: 'More Options',
-                            defaultValue: false,
+                            defaultValue: true,
                             style: {
                                 styleParent: {
                                     width: '40%'
+                                }
+                            }
+                        },
+                        // {
+                        //     type: 'TEXT_INPUT',
+                        //     id: 'htmlContainerPaddingText',
+                        //     label: '',
+                        //     defaultValue: '10',
+                        //     unit: 'px',
+                        //     isShowUnit: true,
+                        //     style: {
+                        //         styleParent: {
+                        //             width: '100%'
+                        //         },
+                        //         styleChild: {
+                        //             width: 40
+                        //         }
+                        //     }
+                        // },
+                        {
+                            type: 'COMPONENT_CHILD',
+                            id: 'childHtmlPadding',
+                            // keyShow: 'moreOptionsButtonPadding',
+                            elementChild: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'top',
+                                    label: 'Top',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'right',
+                                    label: 'Right',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'bottom',
+                                    label: 'Bottom',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'left',
+                                    label: 'Left',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '90%'
                                 }
                             }
                         }

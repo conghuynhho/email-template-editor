@@ -288,6 +288,15 @@ export const getActiveElement = (data, activeElement) => {
         case activeElement.indexOf('divider') > -1: 
             type = 'line';
             break;
+        case activeElement.indexOf('menu') > -1:
+            type = 'menu';
+            break;
+        case activeElement.indexOf('image') > -1:
+            type = 'image';
+            break;
+        case activeElement.indexOf('row') > -1:
+            type = 'columns';
+            break;
         default:
             type = 'general';
         
