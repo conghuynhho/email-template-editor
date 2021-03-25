@@ -16,6 +16,7 @@ import {
     FontFamily,
     FontSize,
     TextInput,
+    TextArea,
     Switch
 } from '@antscorp/components';
 import Alignment from 'Components/design-template/components/SidePanel/Style/components/Alignment';
@@ -285,6 +286,33 @@ const Style = props => {
                                 }
                             </>
                         );
+                    }
+                    case typeComponent.TEXT_AREA: {
+                        let isShow = true;
+
+                        return isShow ? (
+                            <>
+                                <TextArea
+                                    label={label || null}
+                                    styleLabel={{height: 30}}
+                                    style={getObjectPropSafely(() => style.styleChild) || {width: 100}}
+                                    value={valueStyle || defaultValue}
+                                // onChange={handleOnChange}
+                                />
+                                {
+                                    isShowUnit ? (
+                                        <span style={{fontSize: 12, marginLeft: 5}}>{unit}</span>
+                                    ) : null
+                                }
+                                {
+                                    isShowMessage ? (
+                                        <div className="section-label font-weight-normal" style={{marginBottom: 5, height: 30}}>
+                                            <span style={{fontSize: 11, color: '#999999'}}>{translate(message, message)}</span>
+                                        </div>
+                                    ) : null
+                                }
+                            </>
+                        ) : null;
                     }
                     case typeComponent.SWITCH: {
                         return (
