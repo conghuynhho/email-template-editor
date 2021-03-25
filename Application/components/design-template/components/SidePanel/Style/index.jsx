@@ -102,8 +102,8 @@ const Style = props => {
                     isShowMessageRight = false
                 } = element;
                 const valueStyle = '';
-                // const valueStyle = getObjectPropSafely(() => props.style[idParent][idChild]) || '';
 
+                // const valueStyle = getObjectPropSafely(() => props.style[idParent][idChild]) || '';
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
                         return (
@@ -313,9 +313,7 @@ const Style = props => {
                         ) : null;
                     }
                     case typeComponent.TEXT_AREA: {
-                        let isShow = true;
-
-                        return isShow ? (
+                        return (
                             <>
                                 <TextArea
                                     label={label || null}
@@ -337,7 +335,7 @@ const Style = props => {
                                     ) : null
                                 }
                             </>
-                        ) : null;
+                        );
                     }
                     case typeComponent.SWITCH: {
                         return (
@@ -466,6 +464,7 @@ const Style = props => {
 
     const renderComponent = (elements, id) => {
         try {
+            console.log('elements', elements);
             if (elements && elements.length) {
                 return elements.map(item => {
                     return (

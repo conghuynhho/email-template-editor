@@ -6,6 +6,7 @@ import Text from 'Components/design-template/components/SidePanel/containers/Tex
 import Line from 'Components/design-template/components/SidePanel/containers/Line';
 import Columns from 'Components/design-template/components/SidePanel/containers/Columns';
 import General from 'Components/design-template/components/SidePanel/containers/General';
+import Menu from 'Components/design-template/components/SidePanel/containers/Menu';
 
 // Utils
 import {typeElement} from 'Components/design-template/constants';
@@ -14,7 +15,7 @@ import sidePanelConfig from 'Components/design-template/components/SidePanel/con
 const SidePanel = props => {
     const renderHtml = () => {
         try {
-            const type = 'COLUMNS';
+            const type = 'MENU';
             const config = sidePanelConfig.find(item => item.type === type);
 
             switch (type) {
@@ -32,6 +33,9 @@ const SidePanel = props => {
                 }
                 case typeElement.BUTTON: {
                     return <Button config={config} />;
+                }
+                case typeElement.MENU: {
+                    return <Menu config={config} />;
                 }
             }
         } catch (error) {

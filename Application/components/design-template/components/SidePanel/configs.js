@@ -1742,6 +1742,716 @@ const sidePanelConfig = [
                 }
             ]
         }
+    },
+    {
+        id: 'Menu',
+        name: 'Menu',
+        type: 'MENU',
+        resource: {
+            general: [
+                {
+                    id: 'menuOne',
+                    elements: [
+                        {
+                            type: 'TEXT_INPUT',
+                            id: `text${random(3)}`,
+                            label: 'Text',
+                            defaultValue: 'Menu 1',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }                          
+                        },
+                        {
+                            type: 'SELECT_SINGLE',
+                            id: `actionType${random(3)}`,
+                            label: 'Action type',
+                            defaultValue: 1,
+                            options: [
+                                {
+                                    name: 1,
+                                    label: 'Open website'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 150
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: `url${random(3)}`,
+                            label: 'URL',
+                            defaultValue: '',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            } 
+                        },
+                        {
+                            type: 'SELECT_SINGLE',
+                            id: 'target',
+                            label: 'Target',
+                            defaultValue: 1,
+                            options: [
+                                {
+                                    name: 1,
+                                    label: 'New Tab'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 150
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'menuTwo',
+                    elements: [
+                        {
+                            type: 'TEXT_INPUT',
+                            id: `text${random(3)}`,
+                            label: 'Text',
+                            defaultValue: 'Menu 1',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'SELECT_SINGLE',
+                            id: `actionType${random(3)}`,
+                            label: 'Action type',
+                            defaultValue: 1,
+                            options: [
+                                {
+                                    name: 1,
+                                    label: 'Send Email'
+                                }
+                            ],
+                            style: {
+                                styleChild: {
+                                    width: 150
+                                }
+                            }
+                        },
+                        {  
+                            type: 'TEXT_INPUT',
+                            id: 'mailTo',
+                            label: 'Mail to',
+                            defaultValue: '',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'subject',
+                            label: 'Subject',
+                            defaultValue: '',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_AREA',
+                            id: 'body',
+                            label: 'Body',
+                            defaultValue: '',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'menuThree',
+                    elements: [
+                        {
+                            type: 'TEXT_INPUT',
+                            id: `text${random(3)}`,
+                            label: 'Text',
+                            defaultValue: 'Menu 1',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'SELECT_SINGLE',
+                            id: `actionType${random(3)}`,
+                            label: 'Action type',
+                            defaultValue: 1,
+                            options: [
+                                {
+                                    name: 1,
+                                    label: 'Call Phone Number'
+                                }
+                            ],
+                            style: {
+                                styleChild: {
+                                    width: 150
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: `phone${random(3)}`,
+                            label: 'Phone',
+                            defaultValue: '',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'menuFour',
+                    elements: [
+                        {
+                            type: 'TEXT_INPUT',
+                            id: `text${random(3)}`,
+                            label: 'Text',
+                            defaultValue: 'Menu 1',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'SELECT_SINGLE',
+                            id: `actionType${random(3)}`,
+                            label: 'Action type',
+                            defaultValue: 1,
+                            options: [
+                                {
+                                    name: 1,
+                                    label: 'Call Phone Number'
+                                }
+                            ],
+                            style: {
+                                styleChild: {
+                                    width: 150
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: `phone${random(3)}`,
+                            label: 'Phone',
+                            defaultValue: '',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            style: [
+                {
+                    id: 'menu',
+                    elements: [
+                        {
+                            type: 'FONT_FAMILY',
+                            id: 'fontFamily',
+                            label: 'Font',
+                            isShowIcon: true,
+                            defaultValue: 'arial',
+                            tooltip: 'Font family',
+                            options: [
+                                {
+                                    name: 'arial',
+                                    label: 'Arial'
+                                },
+                                {
+                                    name: 'boogaloo',
+                                    label: 'Boogaloo'
+                                },
+                                {
+                                    name: 'bubblegumSans',
+                                    label: 'Bubblegum Sans'
+                                },
+                                {
+                                    name: 'calibri',
+                                    label: 'Calibri'
+                                },
+                                {
+                                    name: 'chewy',
+                                    label: 'Chewy'
+                                },
+                                {
+                                    name: 'comicSansMS',
+                                    label: 'Comic Sans MS'
+                                },
+                                {
+                                    name: 'comingSoon',
+                                    label: 'Coming Soon'
+                                },
+                                {
+                                    name: 'cormorantUnicase',
+                                    label: 'Cormorant Unicase'
+                                },
+                                {
+                                    name: 'corsiva',
+                                    label: 'Corsiva'
+                                },
+                                {
+                                    name: 'courierNew',
+                                    label: 'Courier New'
+                                },
+                                {
+                                    name: 'droid',
+                                    label: 'Droid'
+                                },
+                                {
+                                    name: 'droidSans',
+                                    label: 'Droid Sans'
+                                },
+                                {
+                                    name: 'eater',
+                                    label: 'Eater'
+                                },
+                                {
+                                    name: 'georgia',
+                                    label: 'Georgia'
+                                },
+                                {
+                                    name: 'greatVibes',
+                                    label: 'Great Vibes'
+                                },
+                                {
+                                    name: 'impact',
+                                    label: 'Impact'
+                                },
+                                {
+                                    name: 'indieFlower',
+                                    label: 'Indie Flower'
+                                },
+                                {
+                                    name: 'lato',
+                                    label: 'Lato'
+                                },
+                                {
+                                    name: 'lora',
+                                    label: 'Lora'
+                                },
+                                {
+                                    name: 'montserrat',
+                                    label: 'Montserrat'
+                                },
+                                {
+                                    name: 'oleoScript',
+                                    label: 'Oleo Script'
+                                },
+                                {
+                                    name: 'openSans',
+                                    label: 'Open Sans'
+                                },
+                                {
+                                    name: 'orbitron',
+                                    label: 'Orbitron'
+                                },
+                                {
+                                    name: 'oswald',
+                                    label: 'Oswald'
+                                },
+                                {
+                                    name: 'permanentMarker',
+                                    label: 'Permanent Marker'
+                                },
+                                {
+                                    name: 'quicksand',
+                                    label: 'Quicksand'
+                                },
+                                {
+                                    name: 'raleway',
+                                    label: 'Raleway'
+                                },
+                                {
+                                    name: 'reenieBeanie',
+                                    label: 'Reenie Beanie'
+                                },
+                                {
+                                    name: 'roboto',
+                                    label: 'Roboto'
+                                },
+                                {
+                                    name: 'robotoCondensed',
+                                    label: 'Roboto Condensed'
+                                },
+                                {
+                                    name: 'syncopate',
+                                    label: 'Syncopate'
+                                },
+                                {
+                                    name: 'tahoma',
+                                    label: 'Tahoma'
+                                },
+                                {
+                                    name: 'timesNewRoman',
+                                    label: 'Times New Roman'
+                                },
+                                {
+                                    name: 'trebuchet',
+                                    label: 'Trebuchet'
+                                },
+                                {
+                                    name: 'ubuntu',
+                                    label: 'Ubuntu'
+                                },
+                                {
+                                    name: 'ubuntuMono',
+                                    label: 'Ubuntu Mono'
+                                },
+                                {
+                                    name: 'verdana',
+                                    label: 'Verdana'
+                                }
+                            ]
+                        },
+                        {
+                            type: 'FONT_SIZE',
+                            id: 'fontSize',
+                            label: 'Font Size',
+                            defaultValue: '12px',
+                            options: [
+                                {
+                                    name: '8px',
+                                    label: '8 px'
+                                },
+                                {
+                                    name: '9px',
+                                    label: '9 px'
+                                },
+                                {
+                                    name: '10px',
+                                    label: '10 px'
+                                },
+                                {
+                                    name: '11px',
+                                    label: '11 px'
+                                },
+                                {
+                                    name: '12px',
+                                    label: '12 px'
+                                },
+                                {
+                                    name: '13px',
+                                    label: '13 px'
+                                },
+                                {
+                                    name: '14px',
+                                    label: '14 px'
+                                },
+                                {
+                                    name: '18px',
+                                    label: '18 px'
+                                },
+                                {
+                                    name: '24px',
+                                    label: '24 px'
+                                },
+                                {
+                                    name: '28px',
+                                    label: '28 px'
+                                },
+                                {
+                                    name: '30px',
+                                    label: '30 px'
+                                },
+                                {
+                                    name: '32px',
+                                    label: '32 px'
+                                },
+                                {
+                                    name: '36px',
+                                    label: '36 px'
+                                },
+                                {
+                                    name: '48px',
+                                    label: '48 px'
+                                },
+                                {
+                                    name: '60px',
+                                    label: '60 px'
+                                },
+                                {
+                                    name: '72px',
+                                    label: '72 px'
+                                },
+                                {
+                                    name: '96px',
+                                    label: '96 px'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 80
+                                }
+                            }
+                        },
+                        {
+                            type: 'FILL_COLOR',
+                            id: 'textColorMenu',
+                            label: 'Text color',
+                            defaultValue: '#ff2500',
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'FILL_COLOR',
+                            id: 'textColorButton',
+                            label: 'Text color',
+                            defaultValue: '#FFFFFF',
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'ALIGNMENT',
+                            id: 'alignments',
+                            label: 'Alignments',
+                            defaultValue: 'left',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'SELECT_SINGLE',
+                            id: 'layout',
+                            label: 'Layout',
+                            defaultValue: 1,
+                            options: [
+                                {
+                                    name: 1,
+                                    label: 'Vertical'
+                                },
+                                {
+                                    name: 2,
+                                    label: 'Horizontal'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 80
+                                }
+                            }
+                        },
+                        {
+                            type: 'LABEL',
+                            id: 'menuPadding',
+                            label: 'Menu Padding',
+                            style: {
+                                styleParent: {
+                                    width: '60%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'SWITCH',
+                            id: 'moreOptionsMenuPadding',
+                            isShowMessageLeft: true,
+                            message: 'More options',
+                            defaultValue: true,
+                            style: {
+                                styleParent: {
+                                    width: '40%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'COMPONENT_CHILD',
+                            id: 'childMenuPadding',
+                            // keyShow: 'moreOptionsButtonPadding',
+                            elementChild: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'top',
+                                    label: 'Top',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'right',
+                                    label: 'Right',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'bottom',
+                                    label: 'Bottom',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'left',
+                                    label: 'Left',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'containerPadding',
+                            label: 'Container padding',
+                            defaultValue: '10',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '60%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
+                        {
+                            type: 'SWITCH',
+                            id: 'moreOptionsPaddingMenu',
+                            isShowMessageLeft: true,
+                            message: 'More options',
+                            defaultValue: false,
+                            style: {
+                                styleParent: {
+                                    width: '40%'
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'responsiveDesign',
+                    label: 'Responsive design',
+                    elements: [
+                        {
+                            type: 'SWITCH',
+                            id: 'responsive',
+                            isShowMessageRight: true,
+                            message: 'Hide on desktop',
+                            defaultValue: false,
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
     }
 ];
 

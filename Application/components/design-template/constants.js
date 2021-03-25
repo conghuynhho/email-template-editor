@@ -27,7 +27,8 @@ export const typeElement = {
     BUTTON: 'BUTTON',
     COLUMNS: 'COLUMNS',
     LINE: 'LINE',
-    GENERAL: 'GENERAL'
+    GENERAL: 'GENERAL',
+    MENU: 'MENU'
 };
 
 export const CONSTANTS = {

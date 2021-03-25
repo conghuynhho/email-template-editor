@@ -955,6 +955,10 @@ const Row = (props) => {
 
         let styleSelector = {zIndex: 100};
 
+        if (isEditing) {
+            styleSelector = {zIndex: 0};
+        }
+
         switch (typeOfIsDragging) {
             case 'rows': 
                 if (currentID.includes('u_content')) {
