@@ -94,3 +94,36 @@
     max-width: 49% !important;
     flex: 0 0 50%;
 }
+
+.block-tab-column {
+    width: 245px;
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    background: #f0f8fa;
+    padding: 8px 7px;
+    border-radius: 2px;
+    .tab {
+        padding: 2px 5px;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+    }
+    .active {
+        background: #13abd7;
+    }
+}
+
+.add-column {
+    border: 2px solid #dde1e2;
+    border-radius: 5px;
+    width: 28px;
+    height: 28px;
+    line-height: 21px;
+    text-align: center;
+    cursor: pointer;
+    i {
+        font-size: 10px;
+        color: #889199;
+    }
+}

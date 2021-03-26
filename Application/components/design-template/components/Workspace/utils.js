@@ -16,9 +16,9 @@ export const hierarchyDesignData = (data) => {
     rowPositions.forEach(row => {
 
         const columnKeys = getObjectPropSafely(() => data.rows[row].columns);
-    
+
         const columns = columnKeys.map(columnKey => {
-            
+
             for (const key in data.columns) {
                 if (key === columnKey) {
                     const contentKeys = getObjectPropSafely(
@@ -46,9 +46,9 @@ export const hierarchyDesignData = (data) => {
         });
 
         rows.push({
-            cells: getObjectPropSafely(() => data.rows[row].cells), 
-            values: getObjectPropSafely(() => data.rows[row].values), 
-            columns: columns 
+            cells: getObjectPropSafely(() => data.rows[row].cells),
+            values: getObjectPropSafely(() => data.rows[row].values),
+            columns: columns
         });
     });
 
@@ -167,10 +167,10 @@ export const getContentIndexFromID = (data, contentID) => {
     let contentIdx = -1;
 
     for (const key in columns) {
-        const contents = getObjectPropSafely(() =>columns[key].contents);
+        const contents = getObjectPropSafely(() => columns[key].contents);
 
         contents.length && contents.forEach((ID, index) => {
-            
+
             if (contentID + '' === ID + '') {
                 contentIdx = index;
             }
@@ -197,7 +197,7 @@ export const getColumnIndexFromID = (data, columnID) => {
 
     for (const key in rows) {
         const columns = getObjectPropSafely(() => rows[key].columns);
-        
+
         columns.length && columns.forEach((ID, index) => {
             if (columnID === ID) {
                 columnIdx = index;
@@ -275,17 +275,17 @@ export const updateUsageCounters = (usageCounters, htmlType, operator = 'add') =
 };
 
 export const getActiveElement = (data, activeElement) => {
-    const result = {};
+    const {contents} = data;
     let type = '';
 
     switch (true) {
-        case activeElement.indexOf('button') > -1: 
+        case activeElement.indexOf('button') > -1:
             type = 'button';
             break;
-        case activeElement.indexOf('text') > -1: 
+        case activeElement.indexOf('text') > -1:
             type = 'text';
             break;
-        case activeElement.indexOf('divider') > -1: 
+        case activeElement.indexOf('divider') > -1:
             type = 'line';
             break;
         case activeElement.indexOf('menu') > -1:
@@ -299,23 +299,13 @@ export const getActiveElement = (data, activeElement) => {
             break;
         default:
             type = 'general';
-        
+
     }
-    result.type = type.toUpperCase();
 
-    // if (activeElement.includes('text')) {typeElement = 'text'} else {typeElement = 'general'}
+    const content = Object.values(contents).length ? Object.values(contents).find(item => item.values._meta.htmlID === activeElement) : {};
 
-    const contents = Object.values(getObjectPropSafely(() => data.contents));
-
-    contents.forEach((content) => {
-        if (content.type == type) {
-            if (
-                getObjectPropSafely(() => content.values._meta.htmlID) === activeElement
-            ) {
-                result.values = getObjectPropSafely(() => content.values);
-                return result;
-            }
-        }
-    });
-    return result;
+    return {
+        type: type.toUpperCase(),
+        content
+    };
 };

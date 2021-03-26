@@ -21,7 +21,7 @@ const SidePanel = props => {
     const {state: store = {}} = useContext(StoreContext);
     const renderHtml = () => {
         try {
-            const activeElement = getObjectPropSafely(() => store.activeElement);
+            const activeElement = store.activeElement;
             const element = getActiveElement(store, activeElement);
             const config = sidePanelConfig.find(item => item.type === element.type);
 
@@ -29,10 +29,10 @@ const SidePanel = props => {
 
             switch (element.type) {
                 case typeElement.TEXT: {
-                    return <Text config={config} element={element.values} />;
+                    return <Text config={config} content={element.content} />;
                 }
                 case typeElement.LINE: {
-                    return <Line config={config} />;
+                    return <Line config={config} content={element.content} />;
                 }
                 case typeElement.COLUMNS: {
                     return <Columns config={config} />;

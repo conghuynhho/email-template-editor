@@ -513,7 +513,7 @@ const Style = props => {
                 return config.map(item => {
                     return (
                         <div key={item.id}>
-                            <div className="section">
+                            <div className="section" style={{...item.style}}>
                                 <div className={classnames(styles['section-label'])}>{translate(item.label, item.label)}</div>
                                 <div className='section-container pl-15 mb-15' style={{display: 'flex', flexWrap: 'wrap', marginLeft: 10, justifyContent: 'space-between'}}>
                                     {renderComponent(item.elements, item.id)}

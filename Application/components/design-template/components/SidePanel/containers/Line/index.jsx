@@ -10,6 +10,7 @@ import styles from 'Components/design-template/components/SidePanel/styles.modul
 const Line = props => {
     const {
         config = {},
+        content = {},
         translate = (lal) => lal
     } = props;
 
@@ -22,7 +23,7 @@ const Line = props => {
                 <div className={classnames(styles['block-full'])} style={{width: 'calc(100 % - 6px)'}}>
                     <div className={classnames(styles['section-label-title'])}>{translate(config.name, config.name)}</div>
                     <hr style={{marginTop: 5, marginBottom: 5}} />
-                    <Style style={style} />
+                    <Style style={style} content={content} />
                 </div>
             );
         } catch (error) {

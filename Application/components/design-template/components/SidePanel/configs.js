@@ -278,6 +278,11 @@ const sidePanelConfig = [
                                     width: '100%'
                                 }
                             ],
+                            style: {
+                                styleParent: {
+                                    marginBottom: 7
+                                }
+                            },
                             className: 'col-6'
                         },
                         {
@@ -293,6 +298,159 @@ const sidePanelConfig = [
                                     width: '67%'
                                 }
                             ],
+                            style: {
+                                styleParent: {
+                                    marginBottom: 7
+                                }
+                            },
+                            className: 'col-6'
+                        },
+                        {
+                            type: 'BLOCK_COLUMNS',
+                            id: `blockColumn${random(3)}`,
+                            listBlock: [
+                                {
+                                    id: random(3),
+                                    width: '50%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '50%'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    marginBottom: 7
+                                }
+                            },
+                            className: 'col-6'
+                        },
+                        {
+                            type: 'BLOCK_COLUMNS',
+                            id: `blockColumn${random(3)}`,
+                            listBlock: [
+                                {
+                                    id: random(3),
+                                    width: '67%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '33%'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    marginBottom: 7
+                                }
+                            },
+                            className: 'col-6'
+                        },
+                        {
+                            type: 'BLOCK_COLUMNS',
+                            id: `blockColumn${random(3)}`,
+                            listBlock: [
+                                {
+                                    id: random(3),
+                                    width: '33%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '33%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '34%'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    marginBottom: 7
+                                }
+                            },
+                            className: 'col-6'
+                        },
+                        {
+                            type: 'BLOCK_COLUMNS',
+                            id: `blockColumn${random(3)}`,
+                            listBlock: [
+                                {
+                                    id: random(3),
+                                    width: '15%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '35%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '15%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '35%'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    marginBottom: 7
+                                }
+                            },
+                            className: 'col-6'
+                        },
+                        {
+                            type: 'BLOCK_COLUMNS',
+                            id: `blockColumn${random(3)}`,
+                            listBlock: [
+                                {
+                                    id: random(3),
+                                    width: '25%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '25%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '25%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '25%'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    marginBottom: 7
+                                }
+                            },
+                            className: 'col-6'
+                        },
+                        {
+                            type: 'BLOCK_COLUMNS',
+                            id: `blockColumn${random(3)}`,
+                            listBlock: [
+                                {
+                                    id: random(3),
+                                    width: '35%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '15%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '35%'
+                                },
+                                {
+                                    id: random(3),
+                                    width: '15%'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    marginBottom: 7
+                                }
+                            },
                             className: 'col-6'
                         }
                     ]
@@ -301,6 +459,32 @@ const sidePanelConfig = [
                     id: 'columnProperties',
                     label: 'Column properties',
                     elements: [
+                        {
+                            type: 'TAB_COLUMN',
+                            id: 'tabColumn',
+                            listTab: [
+                                {
+                                    id: 'columnOne',
+                                    label: 'Column 1'
+                                },
+                                {
+                                    id: 'columnTwo',
+                                    label: 'Column 2'
+                                },
+                                {
+                                    id: 'columnThree',
+                                    label: 'Column 3'
+                                },
+                                {
+                                    id: 'columnFour',
+                                    label: 'Column 4'
+                                },
+                                {
+                                    id: 'columnFive',
+                                    label: 'Column 5'
+                                }
+                            ]
+                        },
                         {
                             type: 'FILL_COLOR',
                             id: 'backgroundColorColumn',
@@ -2122,6 +2306,11 @@ const sidePanelConfig = [
             general: [
                 {
                     id: 'menuOne',
+                    style: {
+                        background: '#F0F8FA',
+                        paddingRight: 10
+                    },
+                    isShowIconTrash: true,
                     elements: [
                         {
                             type: 'TEXT_INPUT',
