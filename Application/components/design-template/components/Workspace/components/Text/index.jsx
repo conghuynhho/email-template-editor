@@ -3,6 +3,7 @@ import {getObjectPropSafely} from 'Utils';
 import styles from 'Components/design-template/components/Workspace/components/Text/styles.module.scss';
 import {Editor} from '@tinymce/tinymce-react';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
+import {getActiveElement} from 'Components/design-template/components/Workspace/utils';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import './styles.scss';
 
@@ -25,8 +26,10 @@ const Text = (props) => {
 
     const handleEditorChange = (content, editor) => {
         const dispatch = {};
+        const activeElement = getObjectPropSafely(() => store.activeElement);
+        const getId = getActiveElement(store, activeElement);
 
-        dispatch.id = getObjectPropSafely(() => store.columns[store.draggingColumnId].contents[store.draggingContentIndex]);
+        dispatch.id = getId.id;
         dispatch.values = content;
         dispatchStore({
             type: actionType.UPDATE_CONTENT,

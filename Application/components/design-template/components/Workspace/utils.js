@@ -175,6 +175,7 @@ export const getActiveElement = (data, activeElement) => {
                 getObjectPropSafely(() => content.values._meta.htmlID) === activeElement
             ) {
                 result.values = getObjectPropSafely(() => content.values);
+                result.id = getObjectPropSafely(() => content.location.id); 
                 return result;
             }
         }
