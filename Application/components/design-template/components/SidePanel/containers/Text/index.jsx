@@ -28,7 +28,30 @@ const Text = props => {
                 break;
             case 'containerPadding': 
                 value.defaultValue = getObjectPropSafely(() => element[style]).replace(/px/g,'');
-                if (value.defaultValue.length() = 2)
+                const padding = value.defaultValue.split(' ');
+
+                switch (padding.length) {
+                    case 1:
+                        config.resource.style[0].elements[5].defaultValue = false;
+                        break;
+                    case 2:
+                        config.resource.style[0].elements[5].defaultValue = true;
+                        value.defaultValue = value.top = value.bottom = padding[0];
+                        value.left = value.rigth = padding[1];
+                        break;
+                    case 3:
+                        config.resource.style[0].elements[5].defaultValue = true;
+                        value.defaultValue = value.top = padding[0];
+                        value.left = value.rigth = padding[1];
+                        value.bottom = padding[2];
+                        break;
+                    default:
+                        config.resource.style[0].elements[5].defaultValue = true;
+                        value.defaultValue = value.top = padding[0];
+                        value.rigth = padding[1];
+                        value.left = padding[2];
+                        value.bottom = padding[3];
+                }
                 {break}
             case 'moreOptionsPaddingText':
                 break;
