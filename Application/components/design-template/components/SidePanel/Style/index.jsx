@@ -491,8 +491,6 @@ const Style = props => {
         }
     };
 
-    console.log('content', content);
-
     const renderComponent = (elements, id) => {
         try {
             if (elements && elements.length) {
