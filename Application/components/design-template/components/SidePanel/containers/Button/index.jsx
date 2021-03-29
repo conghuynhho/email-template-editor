@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {Nav, NavLink, NavItem, TabContent, TabPane} from 'reactstrap';
 import classnames from 'classnames';
 import Loadable from 'react-loadable';
+import {mapButtonDataToConfig} from 'Components/design-template/components/Workspace/utils';
 
 // Styles
 import {getObjectPropSafely} from 'Utils/index.ts';
@@ -21,11 +22,16 @@ const TabGeneral = Loadable({
 
 const Button = props => {
     const {
-        config = {},
+        configure = {},
+        activeElementValues,
         translate = (lal) => lal
     } = props;
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
 
+    console.log(activeElementValues, 'active');
+    const config = mapButtonDataToConfig(activeElementValues, configure);
+
+    console.log(config, 'config');
     const toggleTab = (tab) => {
         if (activeTab !== tab) {
             setActiveTab(tab);

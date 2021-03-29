@@ -24,6 +24,7 @@ const SidePanel = props => {
             if (type) {type = type.toUpperCase()}
             const config = sidePanelConfig.find(item => item.type === type);
 
+            // console.log(sidePanelConfig, 'config');
             switch (type) {
                 case typeElement.TEXT: {
                     return <Text config={config} />;
@@ -38,7 +39,7 @@ const SidePanel = props => {
                     return <General config={config} />;
                 }
                 case typeElement.BUTTON: {
-                    return <Button config={config} />;
+                    return <Button configure={config} activeElementValues={activeElement} />;
                 }
                 default: {
                     return <General config={config} />;
