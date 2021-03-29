@@ -27,12 +27,17 @@ const Button = props => {
         translate = (lal) => lal
     } = props;
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
-    const config = mapButtonDataToConfig(activeElementValues, configure);
+
+    console.log(configure, 'configSamples');
+    console.log(activeElementValues, 'activeElement');
+    const config = mapButtonDataToConfig(activeElementValues.content, configure);
     const toggleTab = (tab) => {
         if (activeTab !== tab) {
             setActiveTab(tab);
         }
     };
+
+    console.log(config, 'real config');
 
     const renderHtml = () => {
         try {

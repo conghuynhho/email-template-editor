@@ -464,14 +464,24 @@ export const mapButtonDataToConfig = (data, config) => {
     }
     
     // switch more option for button padding
-    // if (configClone.resource.style[0].elements[7].defaultValue) {
-    //     configClone.resource.style[0].elements[7].defaultValue = true;
-    // }
+    // 
 
     // set padding when is on moreOptions
     // getObjectPropSafely(() => config.resource.style[0].elements[8]);
     if (configClone.resource.style[0].elements[8].elementChild) {
         const elementChild = configClone.resource.style[0].elements[8].elementChild;
+        const paddingArray = (getObjectPropSafely(()=>data.values.padding)).split(' ');
+
+        if (paddingArray.length === 1) {
+            if (configClone.resource.style[0].elements[7].defaultValue) {
+                configClone.resource.style[0].elements[7].defaultValue = false;
+            }
+        }
+        else {
+            if (configClone.resource.style[0].elements[7].defaultValue) {
+                configClone.resource.style[0].elements[7].defaultValue = true;
+            }
+        }
         const values = convertShortHandCSS((getObjectPropSafely(()=> data.values.padding)));
 
         configClone.resource.style[0].elements[8].elementChild[0] = {
@@ -510,7 +520,7 @@ export const mapButtonDataToConfig = (data, config) => {
     if (configClone.resource.style[0].elements[13].defaultValue) {
         const values = convertShortHandCSS((getObjectPropSafely(()=> data.values.containerPadding)));
 
-        configClone.resource.style[0].elements[13].defaultValue = getObjectPropSafely(()=> values.top);
+        configClone.resource.style[0].elements[13].defaultValue = getObjectPropSafely(()=> (values.top.defaultValue));
     }
 
     // switch more option for container padding

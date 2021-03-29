@@ -4,7 +4,7 @@ import {Editor} from '@tinymce/tinymce-react';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import {getObjectPropSafely} from 'Utils';
-import {getActiveElementFromStore} from '../../utils';
+import {getContentIDFromHTMLID} from '../../utils';
 
 const Button = (props) => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
@@ -35,9 +35,7 @@ const Button = (props) => {
     const target = getObjectPropSafely(() => data.values.href.values.target);
 
     const handleEditorChange = (content) => {
-        const activeElement = getActiveElementFromStore(store);
-        const contentID = getObjectPropSafely(()=>activeElement.location.id);
-        
+        const contentID = getContentIDFromHTMLID(store,id);
         const payload = {
             id: contentID,
             values: content
