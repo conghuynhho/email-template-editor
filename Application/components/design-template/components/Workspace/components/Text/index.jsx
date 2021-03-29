@@ -29,7 +29,7 @@ const Text = (props) => {
         const activeElement = getObjectPropSafely(() => store.activeElement);
         const getId = getActiveElement(store, activeElement);
 
-        dispatch.id = getId.id;
+        dispatch.id = getId.content.location.id;
         dispatch.values = content;
         dispatchStore({
             type: actionType.UPDATE_CONTENT,
