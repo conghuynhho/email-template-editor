@@ -16,9 +16,9 @@ const Text = props => {
     } = props;
 
     console.log('config',config.resource);
-    console.log('element', element);
     const elements = (getObjectPropSafely(() => config.resource.style[0].elements));
     let style = '';
+    let morePadding = false;
 
     elements.forEach((value) => {
         style = value.id;
@@ -32,21 +32,21 @@ const Text = props => {
 
                 switch (padding.length) {
                     case 1:
-                        config.resource.style[0].elements[5].defaultValue = false;
+                        morePadding = false;
                         break;
                     case 2:
-                        config.resource.style[0].elements[5].defaultValue = true;
+                        morePadding = true;
                         value.defaultValue = value.top = value.bottom = padding[0];
                         value.left = value.rigth = padding[1];
                         break;
                     case 3:
-                        config.resource.style[0].elements[5].defaultValue = true;
+                        morePadding = true;
                         value.defaultValue = value.top = padding[0];
                         value.left = value.rigth = padding[1];
                         value.bottom = padding[2];
                         break;
                     default:
-                        config.resource.style[0].elements[5].defaultValue = true;
+                        morePadding = true;
                         value.defaultValue = value.top = padding[0];
                         value.rigth = padding[1];
                         value.left = padding[2];
@@ -54,13 +54,13 @@ const Text = props => {
                 }
                 {break}
             case 'moreOptionsPaddingText':
+                value.defaultValue = morePadding;
                 break;
             default:
                 value.defaultValue = getObjectPropSafely(() => element[style]);
             
         }
     });
-    console.log('value', elements);
 
     config.resource.style[0].elements[0].defaultValue = getObjectPropSafely(() => element.color);
     config.resource.style[1].elements[0].defaultValue = getObjectPropSafely(() => element.hideDesktop);
