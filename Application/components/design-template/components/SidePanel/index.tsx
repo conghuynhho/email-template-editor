@@ -25,7 +25,7 @@ const SidePanel = props => {
             const element = getActiveElement(store, activeElement);
             const config = sidePanelConfig.find(item => item.type === element.type);
 
-            console.log('activeElement', activeElement);
+            console.log('element',element);
 
             switch (element.type) {
                 case typeElement.TEXT: {

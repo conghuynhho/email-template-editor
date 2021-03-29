@@ -478,6 +478,24 @@ const Style = props => {
                             </div>
                         );
                     }
+                    case typeComponent.LIST_COMPONENTS: {
+
+                        return (
+                            <div className="row">
+                                {elementChild.length && elementChild.map((child) => {
+
+                                    return (
+                                        <div key={child.id} className={classnames('col-6', styles['list-component-item'])}>
+                                            <div className={classnames(styles['list-component-item-icon'])} >
+                                                <Icon type={child.icon} style={{color: '#ccc', fontSize: '16px'}} />
+                                            </div>
+                                            {translate(child.label, child.label)}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    }
                 }
             }
         } catch (error) {
@@ -488,8 +506,6 @@ const Style = props => {
             // });
         }
     };
-
-    console.log('content', content);
 
     const renderComponent = (elements, id) => {
         try {

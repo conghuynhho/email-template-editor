@@ -3,10 +3,9 @@ import {random} from 'Utils/index.ts';
 const sidePanelConfig = [
     {
         id: 'General',
-        name: 'General',
         type: 'GENERAL',
         resource: {
-            style: [
+            general: [
                 {
                     id: 'general',
                     elements: [
@@ -252,6 +251,65 @@ const sidePanelConfig = [
                                 },
                                 styleChild: {
                                     width: 110
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            style: [
+                {
+                    id: 'listComponents',
+                    elements: [
+                        {
+                            type: 'LABEL',
+                            id: 'listComponentsLabel',
+                            label: 'Drag and drop component to canvas'
+                        },
+                        {
+                            type: 'LIST_COMPONENTS',
+                            id: 'childListComponent',
+                            // keyShow: 'moreOptionsButtonPadding',
+                            elementChild: [
+                                {
+                                    id: 'text',
+                                    label: 'Text',
+                                    icon: 'icon-ants-remove-circle'
+                                },
+                                {
+                                    id: 'menu',
+                                    label: 'Menu',
+                                    icon: 'icon-ants-fixed-size'
+                                },
+                                {
+                                    id: 'image',
+                                    label: 'Image',
+                                    icon: 'icon-image-component'
+                                },
+                                {
+                                    id: 'divider',
+                                    label: 'Divider',
+                                    icon: 'icon-ants-remove-circle'
+                                },
+                                {
+                                    id: 'html',
+                                    label: 'HTML',
+                                    icon: 'icon-ants-expand-icon-hide'
+                                },
+                                {
+                                    id: 'column',
+                                    label: 'Columns',
+                                    icon: 'icon-ants-remove-circle'
+                                },
+                                {
+                                    id: 'button',
+                                    label: 'Button',
+                                    icon: 'icon-ants-remove-circle'
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
                                 }
                             }
                         }

@@ -125,5 +125,21 @@
     i {
         font-size: 10px;
         color: #889199;
+.list-component-item {
+    display: flex;
+    margin-bottom: 12px;
+    align-items: center;
+    font-size: 13px;
+    cursor: pointer;
+
+    .list-component-item-icon {
+        width: 32px;
+        height: 32px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
