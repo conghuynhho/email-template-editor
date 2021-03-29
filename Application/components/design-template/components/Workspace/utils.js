@@ -13,11 +13,12 @@ export const hierarchyDesignData = (data) => {
         rowPositions = getObjectPropSafely(() => data.bodies[key].rows);
     }
 
-    // for (const key in data.rows) { // 1
-    rowPositions.forEach((row) => {
-        const columnKeys = getObjectPropSafely(() => data.rows[row].columns); // 2
+    rowPositions.forEach(row => {
 
-        const columns = columnKeys.map((columnKey) => {
+        const columnKeys = getObjectPropSafely(() => data.rows[row].columns);
+
+        const columns = columnKeys.map(columnKey => {
+
             for (const key in data.columns) {
                 if (key === columnKey) {
                     const contentKeys = getObjectPropSafely(
@@ -45,13 +46,11 @@ export const hierarchyDesignData = (data) => {
         });
 
         rows.push({
-            cells: getObjectPropSafely(() => data.rows[row].cells), // 3
-            values: getObjectPropSafely(() => data.rows[row].values), // 4
+            cells: getObjectPropSafely(() => data.rows[row].cells),
+            values: getObjectPropSafely(() => data.rows[row].values),
             columns: columns
         });
     });
-
-    // }
 
     const saveDesignData = {
         body: {
@@ -94,6 +93,13 @@ export const getColumnId = (designData, rowId, columnIndex) => {
     const columnId = columns[columnIndex];
 
     return columnId;
+};
+
+export const getContentId = (designData, columnId, contentIndex) => {
+    const contents = getObjectPropSafely(() => designData.columns[columnId].contents);
+    const contentId = contents[contentIndex];
+
+    return contentId;
 };
 
 export const getRowsFromBodies = (bodies) => {
@@ -145,40 +151,161 @@ export const getRowIndexFromId = (data, rowId) => {
     return result;
 };
 
+export const getContentIDFromHtmlID = (data, htmlID) => {
+    const contents = getObjectPropSafely(() => data.contents);
+
+    for (const key in contents) {
+        if (getObjectPropSafely(() => contents[key].values._meta.htmlID) === htmlID) {
+            return key;
+        }
+    }
+    return '';
+};
+
+export const getContentIndexFromID = (data, contentID) => {
+    const columns = getObjectPropSafely(() => data.columns);
+    let contentIdx = -1;
+
+    for (const key in columns) {
+        const contents = getObjectPropSafely(() => columns[key].contents);
+
+        contents.length && contents.forEach((ID, index) => {
+
+            if (contentID + '' === ID + '') {
+                contentIdx = index;
+            }
+        });
+
+        if (contentIdx !== -1) {
+
+            return {
+                columnID: key,
+                contentIndex: contentIdx
+            };
+        }
+    }
+
+    return {
+        columnID: '',
+        contentIndex: -1
+    };
+};
+
+export const getColumnIndexFromID = (data, columnID) => {
+    const rows = getObjectPropSafely(() => data.rows);
+    let columnIdx = -1;
+
+    for (const key in rows) {
+        const columns = getObjectPropSafely(() => rows[key].columns);
+
+        columns.length && columns.forEach((ID, index) => {
+            if (columnID === ID) {
+                columnIdx = index;
+            }
+        });
+
+        if (columnIdx !== -1) {
+            return {
+                rowID: key,
+                columnIndex: columnIdx
+            };
+        }
+    }
+
+    return {
+        rowID: '',
+        columnIndex: -1
+    };
+};
+
+export const updateUsageCounters = (usageCounters, htmlType, operator = 'add') => {
+    const newUsageCounters = {...usageCounters};
+
+    if (operator === 'subtract') {
+        switch (htmlType) {
+            case 'page': newUsageCounters.u_page--;
+                break;
+            case 'body': newUsageCounters.u_body--;
+                break;
+            case 'row': newUsageCounters.u_row--;
+                break;
+            case 'column': newUsageCounters.u_column--;
+                break;
+            case 'button': newUsageCounters.u_content_button--;
+                break;
+            case 'divider': newUsageCounters.u_content_divider--;
+                break;
+            case 'image': newUsageCounters.u_content_image--;
+                break;
+            case 'menu': newUsageCounters.u_content_menu--;
+                break;
+            case 'social': newUsageCounters.u_content_social--;
+                break;
+            case 'text': newUsageCounters.u_content_text--;
+                break;
+            default: break;
+        }
+    }
+    if (operator === 'add') {
+        switch (htmlType) {
+            case 'page': newUsageCounters.u_page++;
+                break;
+            case 'body': newUsageCounters.u_body++;
+                break;
+            case 'row': newUsageCounters.u_row++;
+                break;
+            case 'column': newUsageCounters.u_column++;
+                break;
+            case 'button': newUsageCounters.u_content_button++;
+                break;
+            case 'divider': newUsageCounters.u_content_divider++;
+                break;
+            case 'image': newUsageCounters.u_content_image++;
+                break;
+            case 'menu': newUsageCounters.u_content_menu++;
+                break;
+            case 'social': newUsageCounters.u_content_social++;
+                break;
+            case 'text': newUsageCounters.u_content_text++;
+                break;
+            default: break;
+        }
+    }
+    return newUsageCounters;
+};
+
 export const getActiveElement = (data, activeElement) => {
-    const result = {};
+    const {contents} = data;
     let type = '';
 
     switch (true) {
-        case activeElement.indexOf('button') > -1: 
+        case activeElement.indexOf('button') > -1:
             type = 'button';
             break;
-        case activeElement.indexOf('text') > -1: 
+        case activeElement.indexOf('text') > -1:
             type = 'text';
             break;
-        case activeElement.indexOf('divider') > -1: 
+        case activeElement.indexOf('divider') > -1:
             type = 'line';
+            break;
+        case activeElement.indexOf('menu') > -1:
+            type = 'menu';
+            break;
+        case activeElement.indexOf('image') > -1:
+            type = 'image';
+            break;
+        case activeElement.indexOf('row') > -1:
+            type = 'columns';
             break;
         default:
             type = 'general';
-        
+
     }
-    result.type = type.toUpperCase();
 
-    // if (activeElement.includes('text')) {typeElement = 'text'} else {typeElement = 'general'}
+    const content = Object.values(contents).length ? Object.values(contents).find(item => item.values._meta.htmlID === activeElement) : {};
 
-    const contents = Object.values(getObjectPropSafely(() => data.contents));
-
-    contents.forEach((content) => {
-        if (content.type == type) {
-            if (
-                getObjectPropSafely(() => content.values._meta.htmlID) === activeElement
-            ) {
-                result.values = getObjectPropSafely(() => content.values);
-                result.id = getObjectPropSafely(() => content.location.id); 
-                return result;
-            }
-        }
-    });
-    return result;
+    return {
+        type: type.toUpperCase(),
+        content
+    };
 };

@@ -7,23 +7,21 @@ import Style from 'Components/design-template/components/SidePanel/Style';
 import {getObjectPropSafely} from 'Utils/index.ts';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
 
-const Line = props => {
+const Html = props => {
     const {
         config = {},
-        content = {},
         translate = (lal) => lal
     } = props;
 
     const renderHtml = () => {
         try {
             const style = getObjectPropSafely(() => config.resource.style) || [];
-            const general = getObjectPropSafely(() => config.resource.general) || [];
 
             return (
                 <div className={classnames(styles['block-full'])} style={{width: 'calc(100 % - 6px)'}}>
                     <div className={classnames(styles['section-label-title'])}>{translate(config.name, config.name)}</div>
                     <hr style={{marginTop: 5, marginBottom: 5}} />
-                    <Style style={style} content={content} />
+                    <Style style={style} />
                 </div>
             );
         } catch (error) {
@@ -38,4 +36,4 @@ const Line = props => {
     );
 };
 
-export default Line;
+export default Html;

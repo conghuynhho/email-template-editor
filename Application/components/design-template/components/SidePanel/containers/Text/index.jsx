@@ -19,6 +19,8 @@ const Text = props => {
     let style = '';
     let morePadding = false;
 
+    console.log('config', elements);
+
     elements.forEach((value) => {
         style = value.id;
         switch (style) {

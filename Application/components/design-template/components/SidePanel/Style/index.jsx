@@ -1,5 +1,5 @@
 // Libraries
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import classnames from 'classnames';
 
 // Components
@@ -17,10 +17,16 @@ import {
     FontFamily,
     FontSize,
     TextInput,
-    Switch
+    TextArea,
+    Switch,
+    Icon
 } from '@antscorp/components';
 import Alignment from 'Components/design-template/components/SidePanel/Style/components/Alignment';
 import Upload from 'Components/design-template/components/SidePanel/Style/components/Upload';
+
+// Context
+import {StoreContext} from 'Components/design-template/components/ContextStore';
+import {actionType} from 'Components/design-template/components/ContextStore/constants';
 
 // Assets
 import {getObjectPropSafely} from 'Utils/index.ts';
@@ -32,9 +38,11 @@ const PATH = 'Components/design-template/components/SidePanel/Style/index.jsx';
 const Style = props => {
     const {
         style = [],
+        content = {},
         translate = (lal) => lal
     } = props;
     const [config, setConfig] = useState({});
+    const {state, dispatch} = useContext(StoreContext);
 
     useEffect(() => {
         try {
@@ -63,20 +71,14 @@ const Style = props => {
 
     const updateComponent = (idParent, idChild, value) => {
         try {
-            // if (idChild && idParent) {
-            //     if (typeof props.updateComponent === 'function') {
-            //         props.updateComponent({
-            //             id: props.id,
-            //             style: {
-            //                 ...props.style,
-            //                 [idParent]: {
-            //                     ...props.style[idParent],
-            //                     [idChild]: value
-            //                 }
-            //             }
-            //         });
-            //     }
-            // }
+            if (idChild && idParent) {
+                dispatch({
+                    type: actionType.UPDATE_CONTENT,
+                    payload: {
+                        
+                    }
+                });
+            }
         } catch (error) {
             //
         }
@@ -94,6 +96,7 @@ const Style = props => {
                     style = {},
                     message = '',
                     listBlock = [],
+                    listTab = [],
                     unit = '',
                     isShowUnit = false,
                     isShowMessage = false,
@@ -104,8 +107,8 @@ const Style = props => {
                     isShowMessageRight = false
                 } = element;
                 const valueStyle = '';
-                // const valueStyle = getObjectPropSafely(() => props.style[idParent][idChild]) || '';
 
+                // const valueStyle = getObjectPropSafely(() => props.style[idParent][idChild]) || '';
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
                         return (
@@ -314,6 +317,31 @@ const Style = props => {
                             </>
                         ) : null;
                     }
+                    case typeComponent.TEXT_AREA: {
+                        return (
+                            <>
+                                <TextArea
+                                    label={label || null}
+                                    styleLabel={{height: 30}}
+                                    style={getObjectPropSafely(() => style.styleChild) || {width: 100}}
+                                    value={valueStyle || defaultValue}
+                                // onChange={handleOnChange}
+                                />
+                                {
+                                    isShowUnit ? (
+                                        <span style={{fontSize: 12, marginLeft: 5}}>{unit}</span>
+                                    ) : null
+                                }
+                                {
+                                    isShowMessage ? (
+                                        <div className="section-label font-weight-normal" style={{marginBottom: 5, height: 30}}>
+                                            <span style={{fontSize: 11, color: '#999999'}}>{translate(message, message)}</span>
+                                        </div>
+                                    ) : null
+                                }
+                            </>
+                        );
+                    }
                     case typeComponent.SWITCH: {
                         return (
                             <>
@@ -429,6 +457,31 @@ const Style = props => {
                             </div>
                         );
                     }
+                    case typeComponent.TAB_COLUMN: {
+                        const component = listTab.length ? listTab.map(item => {
+                            return (
+                                <div key={item.id} className={classnames(styles['tab'])}>
+                                    <span style={{fontSize: 12}}>{item.label}</span>
+                                </div>
+                            );
+                        }) : null;
+
+                        return (
+                            <div style={{display: 'flex'}}>
+                                <div className={classnames(styles['block-tab-column'])}>
+                                    {component}
+                                </div>
+                                <div style={{display: 'flex', alignItems: 'center', marginLeft: 5}}>
+                                    <div className={classnames(styles['add-column'])} style={{marginRight: 2}}>
+                                        <Icon type='icon-ants-add' />
+                                    </div>
+                                    <div className={classnames(styles['add-column'])}>
+                                        <Icon type='icon-ants-trash' />
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    }
                 }
             }
         } catch (error) {
@@ -440,12 +493,14 @@ const Style = props => {
         }
     };
 
+    console.log('content', content);
+
     const renderComponent = (elements, id) => {
         try {
             if (elements && elements.length) {
                 return elements.map(item => {
                     return (
-                        <div key={item.id} className={classnames(styles[`${item.className}`], `mb-15 ${item.className}`)} style={{...getObjectPropSafely(() => item.style.styleParent), marginBottom: 15}}>
+                        <div key={item.id} className={classnames(styles[`${item.className}`], `mb-15 ${item.className}`)} style={{marginBottom: 15, ...getObjectPropSafely(() => item.style.styleParent)}}>
                             {switchCaseComponent(item, id)}
                         </div>
                     );
@@ -462,7 +517,7 @@ const Style = props => {
                 return config.map(item => {
                     return (
                         <div key={item.id}>
-                            <div className="section">
+                            <div className="section" style={{...item.style}}>
                                 <div className={classnames(styles['section-label'])}>{translate(item.label, item.label)}</div>
                                 <div className='section-container pl-15 mb-15' style={{display: 'flex', flexWrap: 'wrap', marginLeft: 10, justifyContent: 'space-between'}}>
                                     {renderComponent(item.elements, item.id)}

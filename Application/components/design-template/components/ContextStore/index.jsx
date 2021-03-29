@@ -119,21 +119,6 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
-        case actionType.DRAGGING_COLUMN_ID: {
-            const checkValid = Object(payload).hasOwnProperty('columnId');
-
-            if (!checkValid) {
-                return state;
-            }
-
-            const newState = {
-                ...state,
-                draggingColumnId: payload.columnId,
-                draggingContentIndex: payload.contentIndex
-            };
-
-            return {...newState};
-        }
         case actionType.HANDLE_ROW: {
             const checkValid = Object.keys(payload).length;
 
@@ -148,22 +133,50 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
-        case actionType.HOVER_ROW: {
-            const checkValid = Object(payload).hasOwnProperty('hoverId');
+        case actionType.HANDLE_CONTENT: {
+            const checkValid = Object.keys(payload).length;
 
             if (!checkValid) {
-                return;
+                return state;
             }
 
             const newState = {
                 ...state,
-                hoverId: payload.hoverId
+                ...payload
             };
 
             return {...newState};
         }
-        case actionType.DRAG_IT_HERE_SPECS: {
-            const checkValid = Object(payload).hasOwnProperty('rowVisiblePosition');
+        // case actionType.HOVER_ROW: {
+        //     const checkValid = Object(payload).hasOwnProperty('hoverId');
+
+        //     if (!checkValid) {
+        //         return;
+        //     }
+
+        //     const newState = {
+        //         ...state,
+        //         hoverId: payload.hoverId
+        //     };
+
+        //     return {...newState};
+        // }
+        // case actionType.DRAG_IT_HERE_SPECS: {
+        //     const checkValid = Object(payload).hasOwnProperty('rowVisiblePosition');
+
+        //     if (!checkValid) {
+        //         return;
+        //     }
+
+        //     const newState = {
+        //         ...state,
+        //         rowVisiblePosition: {...payload.rowVisiblePosition}
+        //     };
+
+        //     return {...newState};
+        // }
+        case actionType.TOGGLE_DELETE_FORM: {
+            const checkValid = Object(payload).hasOwnProperty('toggleDeleteForm');
 
             if (!checkValid) {
                 return;
@@ -171,13 +184,13 @@ const reducer = (state, action) => {
 
             const newState = {
                 ...state,
-                rowVisiblePosition: {...payload.rowVisiblePosition}
+                toggleDeleteForm: {...payload.toggleDeleteForm}
             };
 
             return {...newState};
         }
-        case actionType.RENDER_DRAG_POSITION: {
-            const checkValid = Object(payload).hasOwnProperty('rowDraggingIndex');
+        case actionType.CONFIRM_DELETE: {
+            const checkValid = Object(payload).hasOwnProperty('confirmDelete');
 
             if (!checkValid) {
                 return;
@@ -185,21 +198,7 @@ const reducer = (state, action) => {
 
             const newState = {
                 ...state,
-                rowDraggingIndex: payload.rowDraggingIndex
-            };
-
-            return {...newState};
-        }
-        case actionType.UPDATE_DRAGGING_STATUS: {
-            const checkValid = Object(payload).hasOwnProperty('isDragging');
-
-            if (!checkValid) {
-                return;
-            }
-
-            const newState = {
-                ...state,
-                isDragging: payload.isDragging
+                confirmDelete: {...payload.confirmDelete}
             };
 
             return {...newState};
