@@ -360,3 +360,11 @@ export const mapButtonDataToConfig = (data, config) => {
     return configClone;
 };
 
+export const findAlignment = (list) => {
+    if (!Array.isArray(list)) {return}
+    const alignment = list.find(element => (getObjectPropSafely(() => element.type)) === 'ALIGNMENT');
+    const result = getObjectPropSafely(()=>alignment.defaultValue);
+
+    return result; 
+};
+

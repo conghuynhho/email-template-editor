@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './styles.module.scss';
+import {getObjectPropSafely} from 'Utils';
 import classnames from 'classnames';
 
 const Alignment = props => {
@@ -14,19 +15,19 @@ const Alignment = props => {
             }
             <div className={classnames(styles['bg-item-align'])}>
                 <span
-                    className={classnames(styles['item-align'])}
+                    className={classnames(styles[(getObjectPropSafely(()=> props.alignment) === 'left' ? 'item-align active' : 'item-align')])}
                     // onClick={() => this.handleTextAlignMetricName('left')}
                 >
                     <i className="icon-align-left" />
                 </span>
                 <span
-                    className={classnames(styles['item-align'])}
+                    className={classnames(styles[(getObjectPropSafely(()=> props.alignment) === 'center' ? 'item-align active' : 'item-align')])}
                     // onClick={() => this.handleTextAlignMetricName('center')}
                 >
                     <i className="icon-align-center" />
                 </span>
                 <span
-                    className={classnames(styles['item-align'])}
+                    className={classnames(styles[(getObjectPropSafely(()=> props.alignment) === 'right' ? 'item-align active' : 'item-align')])}
                     // onClick={() => this.handleTextAlignMetricName('right')}
                 >
                     <i className="icon-align-right" />
