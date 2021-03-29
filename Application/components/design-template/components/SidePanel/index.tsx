@@ -1,5 +1,4 @@
 import React, {useContext} from 'react';
-import {StoreContext} from 'Components/design-template/components/ContextStore';
 
 // Component
 import Button from 'Components/design-template/components/SidePanel/containers/Button';
@@ -7,30 +6,33 @@ import Text from 'Components/design-template/components/SidePanel/containers/Tex
 import Line from 'Components/design-template/components/SidePanel/containers/Line';
 import Columns from 'Components/design-template/components/SidePanel/containers/Columns';
 import General from 'Components/design-template/components/SidePanel/containers/General';
+import Menu from 'Components/design-template/components/SidePanel/containers/Menu';
+import {StoreContext} from 'Components/design-template/components/ContextStore';
+import Image from 'Components/design-template/components/SidePanel/containers/Image';
+import Html from 'Components/design-template/components/SidePanel/containers/Html';
 
 // Utils
 import {typeElement} from 'Components/design-template/constants';
 import sidePanelConfig from 'Components/design-template/components/SidePanel/configs';
-import {getActiveElement} from 'Components/design-template/components/Workspace/utils.js';
 import {getObjectPropSafely} from 'Utils';
+import {getActiveElement} from 'Components/design-template/components/Workspace/utils';
 
 const SidePanel = props => {
-    const {state: store = {}} = useContext(StoreContext);
+    const {state: store = {activeElement: {}}} = useContext(StoreContext);
     const renderHtml = () => {
         try {
-            const activeElement = getActiveElement(store);
-            let type = getObjectPropSafely(() => activeElement.type);
+            const activeElementID = store.activeElement;
+            const element = getActiveElement(store, activeElementID);
+            const config = sidePanelConfig.find(item => getObjectPropSafely(()=> item.type) === getObjectPropSafely(()=> element.type));
+            let type = (getObjectPropSafely(()=> element.type));
 
             if (type) {type = type.toUpperCase()}
-            const config = sidePanelConfig.find(item => item.type === type);
-
-            // console.log(sidePanelConfig, 'config');
             switch (type) {
                 case typeElement.TEXT: {
-                    return <Text config={config} />;
+                    return <Text config={config} content={element.content} />;
                 }
                 case typeElement.LINE: {
-                    return <Line config={config} />;
+                    return <Line config={config} content={element.content} />;
                 }
                 case typeElement.COLUMNS: {
                     return <Columns config={config} />;
@@ -39,10 +41,19 @@ const SidePanel = props => {
                     return <General config={config} />;
                 }
                 case typeElement.BUTTON: {
-                    return <Button configure={config} activeElementValues={activeElement} />;
+                    return <Button configure={config} activeElementValues={element} />;
                 }
                 default: {
                     return <General config={config} />;
+                }
+                case typeElement.MENU: {
+                    return <Menu config={config} />;
+                }
+                case typeElement.IMAGE: {
+                    return <Image config={config} />;
+                }
+                case typeElement.HTML: {
+                    return <Html config={config} />;
                 }
             }
         } catch (error) {

@@ -1,3 +1,5 @@
+import {result} from 'lodash';
+import {string} from 'prop-types';
 import {getObjectPropSafely} from 'Utils';
 import {typeElement} from 'Components/design-template/constants';
 
@@ -10,26 +12,23 @@ export const hierarchyDesignData = (data) => {
     for (const key in body) {
         bodyValues = getObjectPropSafely(() => data.bodies[key].values);
         rowPositions = getObjectPropSafely(() => data.bodies[key].rows);
-
     }
 
-    // for (const key in data.rows) { // 1
     rowPositions.forEach(row => {
 
-        const columnKeys = getObjectPropSafely(() => data.rows[row].columns); // 2
-    
+        const columnKeys = getObjectPropSafely(() => data.rows[row].columns);
+
         const columns = columnKeys.map(columnKey => {
-            
+
             for (const key in data.columns) {
                 if (key === columnKey) {
+                    const contentKeys = getObjectPropSafely(
+                        () => data.columns[key].contents
+                    );
 
-                    const contentKeys = getObjectPropSafely(() => data.columns[key].contents);
-    
-                    const contents = contentKeys.map(contentKey => {
-    
+                    const contents = contentKeys.map((contentKey) => {
                         for (const key in data.contents) {
                             if (key === contentKey) {
-    
                                 return {
                                     type: getObjectPropSafely(() => data.contents[key].type),
                                     slug: undefined,
@@ -38,7 +37,7 @@ export const hierarchyDesignData = (data) => {
                             }
                         }
                     });
-    
+
                     return {
                         contents: contents,
                         values: getObjectPropSafely(() => data.columns[key].values)
@@ -46,15 +45,13 @@ export const hierarchyDesignData = (data) => {
                 }
             }
         });
-    
+
         rows.push({
-            cells: getObjectPropSafely(() => data.rows[row].cells), // 3
-            values: getObjectPropSafely(() => data.rows[row].values), // 4
-            columns: columns 
+            cells: getObjectPropSafely(() => data.rows[row].cells),
+            values: getObjectPropSafely(() => data.rows[row].values),
+            columns: columns
         });
     });
-
-    // }
 
     const saveDesignData = {
         body: {
@@ -84,7 +81,9 @@ export const getRowId = (designData, rowIndex) => {
         bodyKeyList.push(key);
     }
 
-    const rows = getObjectPropSafely(() => designData.bodies[bodyKeyList[0]].rows);
+    const rows = getObjectPropSafely(
+        () => designData.bodies[bodyKeyList[0]].rows
+    );
     const rowId = rows[rowIndex];
 
     return rowId;
@@ -97,6 +96,13 @@ export const getColumnId = (designData, rowId, columnIndex) => {
     return columnId;
 };
 
+export const getContentId = (designData, columnId, contentIndex) => {
+    const contents = getObjectPropSafely(() => designData.columns[columnId].contents);
+    const contentId = contents[contentIndex];
+
+    return contentId;
+};
+
 export const getRowsFromBodies = (bodies) => {
     const valueList = Object.values(bodies);
 
@@ -106,20 +112,25 @@ export const getRowsFromBodies = (bodies) => {
 export const getLastUsingId = (data) => {
     const contentIdList = Object.keys(getObjectPropSafely(() => data.contents));
     const lastContentID = contentIdList[contentIdList.length - 1];
-    
+
     const columnIdList = Object.keys(getObjectPropSafely(() => data.columns));
     const lastColumnID = columnIdList[columnIdList.length - 1];
 
     const rowIdList = Object.keys(getObjectPropSafely(() => data.rows));
     const lastRowID = rowIdList[rowIdList.length - 1];
 
-    return (lastRowID > lastColumnID ? lastRowID : lastColumnID) > lastContentID ? (lastRowID > lastColumnID ? lastRowID : lastColumnID) : lastContentID;
+    return (lastRowID > lastColumnID ? lastRowID : lastColumnID) > lastContentID
+        ? lastRowID > lastColumnID
+            ? lastRowID
+            : lastColumnID
+        : lastContentID;
 };
 
 export const getRowIDFromHtmlID = (data, htmlID) => {
-    
     for (const key in data.rows) {
-        if (htmlID === getObjectPropSafely(() => data.rows[key].values._meta.htmlID)) {
+        if (
+            htmlID === getObjectPropSafely(() => data.rows[key].values._meta.htmlID)
+        ) {
             return key;
         }
     }
@@ -127,7 +138,6 @@ export const getRowIDFromHtmlID = (data, htmlID) => {
 };
 
 export const getRowIndexFromId = (data, rowId) => {
-
     const rows = getRowsFromBodies(getObjectPropSafely(() => data.bodies));
     let result = '';
 
@@ -136,10 +146,169 @@ export const getRowIndexFromId = (data, rowId) => {
             if (row === rowId) {
                 result = index;
             }
-        });    
+        });
     }
 
     return result;
+};
+
+export const getContentIDFromHtmlID = (data, htmlID) => {
+    const contents = getObjectPropSafely(() => data.contents);
+
+    for (const key in contents) {
+        if (getObjectPropSafely(() => contents[key].values._meta.htmlID) === htmlID) {
+            return key;
+        }
+    }
+    return '';
+};
+
+export const getContentIndexFromID = (data, contentID) => {
+    const columns = getObjectPropSafely(() => data.columns);
+    let contentIdx = -1;
+
+    for (const key in columns) {
+        const contents = getObjectPropSafely(() => columns[key].contents);
+
+        contents.length && contents.forEach((ID, index) => {
+
+            if (contentID + '' === ID + '') {
+                contentIdx = index;
+            }
+        });
+
+        if (contentIdx !== -1) {
+
+            return {
+                columnID: key,
+                contentIndex: contentIdx
+            };
+        }
+    }
+
+    return {
+        columnID: '',
+        contentIndex: -1
+    };
+};
+
+export const getColumnIndexFromID = (data, columnID) => {
+    const rows = getObjectPropSafely(() => data.rows);
+    let columnIdx = -1;
+
+    for (const key in rows) {
+        const columns = getObjectPropSafely(() => rows[key].columns);
+
+        columns.length && columns.forEach((ID, index) => {
+            if (columnID === ID) {
+                columnIdx = index;
+            }
+        });
+
+        if (columnIdx !== -1) {
+            return {
+                rowID: key,
+                columnIndex: columnIdx
+            };
+        }
+    }
+
+    return {
+        rowID: '',
+        columnIndex: -1
+    };
+};
+
+export const updateUsageCounters = (usageCounters, htmlType, operator = 'add') => {
+    const newUsageCounters = {...usageCounters};
+
+    if (operator === 'subtract') {
+        switch (htmlType) {
+            case 'page': newUsageCounters.u_page--;
+                break;
+            case 'body': newUsageCounters.u_body--;
+                break;
+            case 'row': newUsageCounters.u_row--;
+                break;
+            case 'column': newUsageCounters.u_column--;
+                break;
+            case 'button': newUsageCounters.u_content_button--;
+                break;
+            case 'divider': newUsageCounters.u_content_divider--;
+                break;
+            case 'image': newUsageCounters.u_content_image--;
+                break;
+            case 'menu': newUsageCounters.u_content_menu--;
+                break;
+            case 'social': newUsageCounters.u_content_social--;
+                break;
+            case 'text': newUsageCounters.u_content_text--;
+                break;
+            default: break;
+        }
+    }
+    if (operator === 'add') {
+        switch (htmlType) {
+            case 'page': newUsageCounters.u_page++;
+                break;
+            case 'body': newUsageCounters.u_body++;
+                break;
+            case 'row': newUsageCounters.u_row++;
+                break;
+            case 'column': newUsageCounters.u_column++;
+                break;
+            case 'button': newUsageCounters.u_content_button++;
+                break;
+            case 'divider': newUsageCounters.u_content_divider++;
+                break;
+            case 'image': newUsageCounters.u_content_image++;
+                break;
+            case 'menu': newUsageCounters.u_content_menu++;
+                break;
+            case 'social': newUsageCounters.u_content_social++;
+                break;
+            case 'text': newUsageCounters.u_content_text++;
+                break;
+            default: break;
+        }
+    }
+    return newUsageCounters;
+};
+
+export const getActiveElement = (data, activeElement) => {
+    const {contents} = data;
+    let type = '';
+
+    switch (true) {
+        case activeElement.indexOf('button') > -1:
+            type = 'button';
+            break;
+        case activeElement.indexOf('text') > -1:
+            type = 'text';
+            break;
+        case activeElement.indexOf('divider') > -1:
+            type = 'line';
+            break;
+        case activeElement.indexOf('menu') > -1:
+            type = 'menu';
+            break;
+        case activeElement.indexOf('image') > -1:
+            type = 'image';
+            break;
+        case activeElement.indexOf('row') > -1:
+            type = 'columns';
+            break;
+        default:
+            type = 'general';
+
+    }
+
+    const content = Object.values(contents).length ? Object.values(contents).find(item => item.values._meta.htmlID === activeElement) : {};
+
+    return {
+        type: type.toUpperCase(),
+        content
+    };
 };
 
 export const getContentIDFromHTMLID = (data, htmlID ) => {
@@ -151,7 +320,7 @@ export const getContentIDFromHTMLID = (data, htmlID ) => {
     return '';
 };
 
-export const getActiveElement = (store) => {
+export const getActiveElementFromStore = (store) => {
     // function to get search group
     const getSearchGroup = (searchString, typeElement) => {
         const searchStringUpperCase = searchString.toUpperCase();

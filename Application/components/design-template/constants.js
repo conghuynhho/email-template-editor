@@ -11,13 +11,15 @@ export const typeComponent = {
     FONT_FAMILY: 'FONT_FAMILY',
     FONT_SIZE: 'FONT_SIZE',
     TEXT_INPUT: 'TEXT_INPUT',
+    TEXT_AREA: 'TEXT_AREA',
     SWITCH: 'SWITCH',
     ALIGNMENT: 'ALIGNMENT',
     LABEL: 'LABEL',
     SELECT_RADIO: 'SELECT_RADIO',
     COMPONENT_CHILD: 'COMPONENT_CHILD',
     UPLOAD: 'UPLOAD',
-    BLOCK_COLUMNS: 'BLOCK_COLUMNS'
+    BLOCK_COLUMNS: 'BLOCK_COLUMNS',
+    TAB_COLUMN: 'TAB_COLUMN'
 };
 
 export const typeElement = {
@@ -25,7 +27,10 @@ export const typeElement = {
     BUTTON: 'BUTTON',
     COLUMNS: 'COLUMNS',
     LINE: 'LINE',
-    GENERAL: 'GENERAL'
+    GENERAL: 'GENERAL',
+    MENU: 'MENU',
+    IMAGE: 'IMAGE',
+    HTML: 'HTML'
 };
 
 export const CONSTANTS = {

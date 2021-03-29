@@ -10,15 +10,19 @@ import {
     FillColor,
     Opacity,
     BorderRadius,
+    SelectRadio,
     BorderColor,
     LineWeight,
     LineStyle,
     FontFamily,
     FontSize,
     TextInput,
-    Switch
+    TextArea,
+    Switch,
+    Icon
 } from '@antscorp/components';
 import Alignment from 'Components/design-template/components/SidePanel/Style/components/Alignment';
+import Upload from 'Components/design-template/components/SidePanel/Style/components/Upload';
 
 // Assets
 import {getObjectPropSafely} from 'Utils/index.ts';
@@ -88,15 +92,19 @@ const Style = props => {
                     id: idChild = '',
                     style = {},
                     message = '',
+                    listBlock = [],
+                    listTab = [],
                     unit = '',
                     isShowUnit = false,
                     isShowMessage = false,
                     isShowIcon = false,
+                    elementChild = [],
+                    keyShow = '',
                     isShowMessageLeft = false,
                     isShowMessageRight = false
                 } = element;
-                // const valueStyle = getObjectPropSafely(() => props.style[idParent][idChild]) || '';
                 const valueStyle = '';
+                // const valueStyle = getObjectPropSafely(() => props.style[idParent][idChild]) || '';
 
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
@@ -137,11 +145,22 @@ const Style = props => {
                             />
                         );
                     }
+                    case typeComponent.SELECT_RADIO: {
+                        return (
+                            <SelectRadio
+                                styleLabel={{height: 10}}
+                                defaultName={defaultValue}
+                                sources={options}
+                            // onChange={handleOnChange}
+                            />
+                        );
+                    }
                     case typeComponent.FILL_COLOR: {
                         return (
                             <FillColor
                                 styleCustom={getObjectPropSafely(() => style.styleChild) || {width: 44}}
                                 label={label || null}
+                                styleLabel={{marginBottom: 6}}
                                 tooltipName={label || tooltip}
                                 // selectColor={(color) => updateComponent(idParent, idChild, color)}
                                 color={defaultValue}
@@ -219,6 +238,7 @@ const Style = props => {
                                     menu: {minWidth: 70, maxHeight: 150, overflowX: 'auto', ...getObjectPropSafely(() => style.styleChild)}
                                 }}
                                 sources={options}
+                                label={label || null}
                                 tooltipName={label || tooltip}
                                 showIcon={isShowIcon}
                                 default={findValue(valueStyle || defaultValue, options)}
@@ -262,7 +282,15 @@ const Style = props => {
                         );
                     }
                     case typeComponent.TEXT_INPUT: {
-                        return (
+                        let isShow = true;
+
+                        if (keyShow) {
+                            const type = getObjectPropSafely(() => props.style[idParent][keyShow]);
+
+                            isShow = type === 'imageUrl' ? true : false;
+                        }
+
+                        return isShow ? (
                             <>
                                 <TextInput
                                     label={label || null}
@@ -273,7 +301,7 @@ const Style = props => {
                                 />
                                 {
                                     isShowUnit ? (
-                                        <span style={{fontSize: 12, marginLeft: 8}}>{unit}</span>
+                                        <span style={{fontSize: 12, marginLeft: 5}}>{unit}</span>
                                     ) : null
                                 }
                                 {
@@ -284,7 +312,34 @@ const Style = props => {
                                     ) : null
                                 }
                             </>
-                        );
+                        ) : null;
+                    }
+                    case typeComponent.TEXT_AREA: {
+                        let isShow = true;
+
+                        return isShow ? (
+                            <>
+                                <TextArea
+                                    label={label || null}
+                                    styleLabel={{height: 30}}
+                                    style={getObjectPropSafely(() => style.styleChild) || {width: 100}}
+                                    value={valueStyle || defaultValue}
+                                // onChange={handleOnChange}
+                                />
+                                {
+                                    isShowUnit ? (
+                                        <span style={{fontSize: 12, marginLeft: 5}}>{unit}</span>
+                                    ) : null
+                                }
+                                {
+                                    isShowMessage ? (
+                                        <div className="section-label font-weight-normal" style={{marginBottom: 5, height: 30}}>
+                                            <span style={{fontSize: 11, color: '#999999'}}>{translate(message, message)}</span>
+                                        </div>
+                                    ) : null
+                                }
+                            </>
+                        ) : null;
                     }
                     case typeComponent.SWITCH: {
                         return (
@@ -333,6 +388,98 @@ const Style = props => {
                             />
                         );
                     }
+                    case typeComponent.LABEL: {
+                        return (
+                            <div className="section-label text-nowrap font-weight-normal">
+                                <span style={{fontSize: 12}}>{translate(label, label)}</span>
+                            </div>
+                        );
+                    }
+                    case typeComponent.UPLOAD: {
+                        let isShow = true;
+
+                        // if (keyShow) {
+                        //     const type = getObjectPropSafely(() => props.style[idParent][keyShow]);
+
+                        //     isShow = type === 'uploadImage' ? true : false;
+                        // }
+
+                        return isShow ? (
+                            <>
+                                {
+                                    label && (
+                                        <div className="section-label text-nowrap font-weight-normal" style={{height: 22}}>
+                                            <span style={{fontSize: 12}}>{translate(label, label)}</span>
+                                        </div>
+                                    )
+                                }
+                                <Upload
+                                    isShowMessage
+                                    extensions={['jpg', 'gif', 'png']}
+                                    labelButton={'Browse Image'}
+                                    // isShowError={getObjectPropSafely(() => stateUpload.error.file.length)}
+                                    // messageError={translate(msgError[stateUpload.error.file[0]])}
+                                    // callback={handleUploadFile}
+                                    translate={translate}
+                                />
+                            </>
+                        ) : null;
+                    }
+                    case typeComponent.COMPONENT_CHILD: {
+                        let isShow = true;
+
+                        if (keyShow) {
+                            const isValid = getObjectPropSafely(() => props.style[idParent][keyShow]);
+
+                            isShow = typeof isValid === 'boolean' ? isValid : true;
+                        }
+
+                        return isShow ? (
+                            <div className={classnames(styles['content-child'])}>
+                                {renderComponent(elementChild, idParent)}
+                            </div>
+                        ) : null;
+                    }
+                    case typeComponent.BLOCK_COLUMNS: {
+                        const component = listBlock.length ? listBlock.map(item => {
+                            return (
+                                <div key={item.id} className={classnames(styles['blockbuilder-column'])} style={{width: item.width}}>
+                                    <div className={styles['blockbuilder-column-content']} title={item.width} />
+                                </div>
+                            );
+                        }) : null;
+
+                        return (
+                            <div className={classnames(styles['blockbuilder-row'], 'row')}>
+                                {component}
+                            </div>
+                        );
+                    }
+                    case typeComponent.TAB_COLUMN: {
+                        const component = listTab.length ? listTab.map(item => {
+                            return (
+                                <div key={item.id} className={classnames(styles['tab'])}>
+                                    <span style={{fontSize: 12}}>{item.label}</span>
+                                </div>
+                            );
+                        }) : null;
+
+                        return (
+                            <div style={{display: 'flex'}}>
+                                <div className={classnames(styles['block-tab-column'])}>
+                                    {component}
+                                </div>
+                                <div style={{display: 'flex', alignItems: 'center', marginLeft: 5}}>
+                                    <div className={classnames(styles['add-column'])} style={{marginRight: 2}}>
+                                        <Icon type='icon-ants-add' />
+                                    </div>
+                                    <div className={classnames(styles['add-column'])}>
+                                        <Icon type='icon-ants-trash' />
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    }
                 }
             }
         } catch (error) {
@@ -349,7 +496,7 @@ const Style = props => {
             if (elements && elements.length) {
                 return elements.map(item => {
                     return (
-                        <div key={item.id} className='mb-15' style={{...getObjectPropSafely(() => item.style.styleParent), marginBottom: 15}}>
+                        <div key={item.id} className={classnames(styles[`${item.className}`], `mb-15 ${item.className}`)} style={{marginBottom: 15, ...getObjectPropSafely(() => item.style.styleParent)}}>
                             {switchCaseComponent(item, id)}
                         </div>
                     );
@@ -366,9 +513,9 @@ const Style = props => {
                 return config.map(item => {
                     return (
                         <div key={item.id}>
-                            <div className="section">
+                            <div className="section" style={{...item.style}}>
                                 <div className={classnames(styles['section-label'])}>{translate(item.label, item.label)}</div>
-                                <div className='section-container pl-15 mb-15' style={{display: 'flex', flexWrap: 'wrap', marginLeft: 10}}>
+                                <div className='section-container pl-15 mb-15' style={{display: 'flex', flexWrap: 'wrap', marginLeft: 10, justifyContent: 'space-between'}}>
                                     {renderComponent(item.elements, item.id)}
                                 </div>
                             </div>
