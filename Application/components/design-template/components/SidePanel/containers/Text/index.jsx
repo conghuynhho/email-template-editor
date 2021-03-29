@@ -11,60 +11,83 @@ import {values} from 'lodash';
 const Text = props => {
     const {
         config = {},
-        element,
+        content,
         translate = (lal) => lal
     } = props;
 
     const elements = (getObjectPropSafely(() => config.resource.style[0].elements));
     let style = '';
     let morePadding = false;
+    let top, bottom, left, right;
 
     console.log('config', elements);
+    console.log('content', content);
 
     elements.forEach((value) => {
         style = value.id;
         switch (style) {
             case 'lineHeight': 
-                value.defaultValue = getObjectPropSafely(() => element[style]).replace('%','');
+                value.defaultValue = getObjectPropSafely(() => content.values[style]).replace('%','');
                 break;
-            case 'containerPadding': 
-                value.defaultValue = getObjectPropSafely(() => element[style]).replace(/px/g,'');
-                const padding = value.defaultValue.split(' ');
+            case 'textContainerPaddingLabel': 
+                value.defaultValue = getObjectPropSafely(() => content.values.containerPadding);
+                const padding = value.defaultValue.replace(/px/g,'').split(' ');
 
                 switch (padding.length) {
                     case 1:
                         morePadding = false;
+                        top = bottom = left = right = padding[0];
                         break;
                     case 2:
                         morePadding = true;
-                        value.defaultValue = value.top = value.bottom = padding[0];
-                        value.left = value.rigth = padding[1];
+                        top = bottom = padding[0];
+                        left = right = padding[1];
                         break;
                     case 3:
                         morePadding = true;
-                        value.defaultValue = value.top = padding[0];
-                        value.left = value.rigth = padding[1];
-                        value.bottom = padding[2];
+                        top = padding[0];
+                        left = right = padding[1];
+                        bottom = padding[2];
                         break;
                     default:
                         morePadding = true;
-                        value.defaultValue = value.top = padding[0];
-                        value.rigth = padding[1];
-                        value.left = padding[2];
-                        value.bottom = padding[3];
+                        top = padding[0];
+                        right = padding[1];
+                        left = padding[2];
+                        bottom = padding[3];
                 }
                 {break}
             case 'moreOptionsPaddingText':
                 value.defaultValue = morePadding;
                 break;
+            case 'childTextPadding':
+                value.elementChild.forEach((index) => {
+                    switch (index.id) {
+                        case 'top':
+                            index.defaultValue = top;
+                            break;
+                        case 'bottom':
+                            index.defaultValue = bottom;
+                            break;
+                        case 'right':
+                            index.defaultValue = right;
+                            break;
+                        default:
+                            index.defaultValue = left;
+                    }
+                });
+                break;
+            case 'lineStyle':
+                value.defaultValue = getObjectPropSafely(() => content.values.linkStyle.inherit);
+                break;
             default:
-                value.defaultValue = getObjectPropSafely(() => element[style]);
-            
+                // textAlign
+                value.defaultValue = getObjectPropSafely(() => content.values[style]);
         }
     });
 
-    config.resource.style[0].elements[0].defaultValue = getObjectPropSafely(() => element.color);
-    config.resource.style[1].elements[0].defaultValue = getObjectPropSafely(() => element.hideDesktop);
+    config.resource.style[0].elements[0].defaultValue = getObjectPropSafely(() => content.values.color);
+    config.resource.style[1].elements[0].defaultValue = getObjectPropSafely(() => content.values.hideDesktop);
 
     const renderHtml = () => {
         try {

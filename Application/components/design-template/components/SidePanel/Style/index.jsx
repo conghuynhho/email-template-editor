@@ -53,8 +53,6 @@ const Style = props => {
             //
         }
     }, [style]);
-
-    console.log('style', style);
     const align = (style[0].id === 'button' ? getObjectPropSafely(() => style[0].elements[4].defaultValue) : getObjectPropSafely(() => style[0].elements[1].defaultValue));
 
     const findValue = (name, options) => {
@@ -492,8 +490,6 @@ const Style = props => {
             // });
         }
     };
-
-    console.log('content', content);
 
     const renderComponent = (elements, id) => {
         try {
