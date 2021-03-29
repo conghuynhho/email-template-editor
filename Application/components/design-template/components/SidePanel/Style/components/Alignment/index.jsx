@@ -3,6 +3,7 @@ import styles from './styles.module.scss';
 import classnames from 'classnames';
 
 const Alignment = props => {
+    console.log('align', props);
     return (
         <div className="row-align">
             {
@@ -14,19 +15,19 @@ const Alignment = props => {
             }
             <div className={classnames(styles['bg-item-align'])}>
                 <span
-                    className={classnames(styles['item-align'])}
+                    className={classnames(styles[ (props.align === 'left' ? 'item-align active' : 'item-align')])}
                     // onClick={() => this.handleTextAlignMetricName('left')}
                 >
                     <i className="icon-align-left" />
                 </span>
                 <span
-                    className={classnames(styles['item-align'])}
+                    className={classnames(styles[ (props.align === 'center' ? 'item-align active' : 'item-align')])}
                     // onClick={() => this.handleTextAlignMetricName('center')}
                 >
                     <i className="icon-align-center" />
                 </span>
                 <span
-                    className={classnames(styles['item-align'])}
+                    className={classnames(styles[ (props.align === 'right' ? 'item-align active' : 'item-align')])}
                     // onClick={() => this.handleTextAlignMetricName('right')}
                 >
                     <i className="icon-align-right" />

@@ -46,6 +46,8 @@ const Style = props => {
         }
     }, [style]);
 
+    const align = getObjectPropSafely(() => style[0].elements[1].defaultValue);
+
     const findValue = (name, options) => {
         try {
             if (options && options.length) {
@@ -353,6 +355,7 @@ const Style = props => {
                                 label={label || null}
                                 styleLabel={{height: 30}}
                                 translate={translate}
+                                align={align}
                             // style={getObjectPropSafely(() => style.styleChild) || { width: 100 }}
                             // value={valueStyle || defaultValue}
                             />
