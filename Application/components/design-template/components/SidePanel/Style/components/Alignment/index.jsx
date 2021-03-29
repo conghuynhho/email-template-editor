@@ -3,7 +3,6 @@ import styles from './styles.module.scss';
 import classnames from 'classnames';
 
 const Alignment = props => {
-    console.log('align', props);
     return (
         <div className="row-align">
             {

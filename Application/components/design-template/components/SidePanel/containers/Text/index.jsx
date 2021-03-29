@@ -15,7 +15,6 @@ const Text = props => {
         translate = (lal) => lal
     } = props;
 
-    console.log('config',config.resource);
     const elements = (getObjectPropSafely(() => config.resource.style[0].elements));
     let style = '';
     let morePadding = false;
