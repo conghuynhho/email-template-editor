@@ -1,7 +1,7 @@
 import {getObjectPropSafely} from 'Utils'
 ;
 
-export const hierarchyDesignData = (data) => {
+export const hierarchyDesignData = (flatData) => {
     let nestedData = {
         body: {},
         counters:{},
@@ -17,29 +17,35 @@ export const hierarchyDesignData = (data) => {
 
         result[key] = [];
         if (key === 'rows') {
-            location.rows.forEach(element => {
-                result[key].push(baseData[element]);
+            const rows = getObjectPropSafely(()=>location.rows);
+
+            rows.forEach(element => {
+                const data = getObjectPropSafely(()=> baseData[element]);
+
+                result[key].push(data);
             });
-            result.values = location.values;
+            result.values = getObjectPropSafely(()=>location.values);
         }
         if (key === 'columns' || key === 'content') {
             location.forEach(element => {
-                result[key].push(baseData[element]);
+                const data = getObjectPropSafely(()=>baseData[element]);
+
+                result[key].push(data);
             });
         }
         return result;
     }
 
-    if (data) {
-        nestedData.schemaVersion = getObjectPropSafely(()=>data.design.schemaVersion); 
-        nestedData.counters = getObjectPropSafely(()=>data.design.idCounters);
-        // get data for body
-        const [body] = Object.values(getObjectPropSafely(()=>data.design.bodies));
-        const nestedBody = nestData(body, getObjectPropSafely(()=>data.design.rows), 'rows');
+    if (flatData) {
+        nestedData.schemaVersion = getObjectPropSafely(()=>flatData.design.schemaVersion); 
+        nestedData.counters = getObjectPropSafely(()=>flatData.design.idCounters);
+        // get flatData for body
+        const [body] = Object.values(getObjectPropSafely(()=>flatData.design.bodies));
+        const nestedBody = nestData(body, getObjectPropSafely(()=>flatData.design.rows), 'rows');
         const nestedRow = nestedBody.rows.map((rowItem) => {
-            const columns = nestData(rowItem.columns ,getObjectPropSafely(()=>data.design.columns), 'columns' );
+            const columns = nestData(rowItem.columns ,getObjectPropSafely(()=>flatData.design.columns), 'columns' );
             const nestedColumns = columns.columns.map(column => {
-                const content = nestData(column.contents,getObjectPropSafely(()=>data.design.contents), 'content');
+                const content = nestData(column.contents,getObjectPropSafely(()=>flatData.design.contents), 'content');
 
                 return {
                     ...column,
