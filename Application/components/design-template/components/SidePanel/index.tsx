@@ -14,7 +14,6 @@ import Html from 'Components/design-template/components/SidePanel/containers/Htm
 // Utils
 import {typeElement} from 'Components/design-template/constants';
 import sidePanelConfig from 'Components/design-template/components/SidePanel/configs';
-import {getObjectPropSafely} from 'Utils';
 import {getActiveElement} from 'Components/design-template/components/Workspace/utils';
 
 const SidePanel = props => {
@@ -24,8 +23,6 @@ const SidePanel = props => {
             const activeElement = store.activeElement;
             const element = getActiveElement(store, activeElement);
             const config = sidePanelConfig.find(item => item.type === element.type);
-
-            console.log('element',element);
 
             switch (element.type) {
                 case typeElement.TEXT: {

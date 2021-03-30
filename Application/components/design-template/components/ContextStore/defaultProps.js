@@ -88,6 +88,7 @@ const defaultStyleContent = {
         duplicatable: true,
         deletable: true,
         width: '100%',
+        moreOptions: false,
         border: {
             borderTopWidth: '0px',
             borderTopStyle: 'solid',

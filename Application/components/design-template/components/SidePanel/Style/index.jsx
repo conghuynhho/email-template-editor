@@ -32,6 +32,7 @@ import {actionType} from 'Components/design-template/components/ContextStore/con
 import {getObjectPropSafely} from 'Utils/index.ts';
 import {typeComponent} from 'Components/design-template/constants';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
+import {random} from 'Utils/index.ts';
 
 const PATH = 'Components/design-template/components/SidePanel/Style/index.jsx';
 
@@ -66,13 +67,16 @@ const Style = props => {
         }
     };
 
-    const updateComponent = (idParent, idChild, value) => {
+    const updateComponent = (idParent, idChild, values) => {
         try {
-            if (idChild && idParent) {
+            if (idChild) {
                 dispatch({
                     type: actionType.UPDATE_CONTENT,
                     payload: {
-                        
+                        id: getObjectPropSafely(() => content.location.id),
+                        keyParent: idParent,
+                        key: idChild,
+                        values
                     }
                 });
             }
@@ -81,7 +85,35 @@ const Style = props => {
         }
     };
 
-    const switchCaseComponent = (element, idParent) => {
+    const updateComponentChild = (key, idChild, value) => {
+        console.log('🚀 ~ file: index.jsx ~ line 89 ~ updateComponentChild ~ key', key, idChild, value, getObjectPropSafely(() => eval(`content.values.${key}`) || ''));
+        try {
+            const valueStore = getObjectPropSafely(() => eval(`content.values.${key}`) || '');
+
+            console.log('🚀 ~ file: index.jsx ~ line 92 ~ updateComponentChild ~ valueStore', valueStore);
+
+            // if (idChild) {
+            //     switch (idChild) {
+            //         case 'top': {
+
+            //         }
+            //         case 'right': {
+
+            //         }
+            //         case 'bottom': {
+
+            //         }
+            //         case 'left': {
+
+            //         }
+            //     }
+            // }
+        } catch (error) {
+            //
+        }
+    };
+
+    const switchCaseComponent = (element, key, type) => {
         try {
             if (element && Object.values(element).length) {
                 const {
@@ -90,6 +122,7 @@ const Style = props => {
                     tooltip = '',
                     defaultValue,
                     id: idChild = '',
+                    keyParent: idParent = '',
                     style = {},
                     message = '',
                     listBlock = [],
@@ -103,9 +136,11 @@ const Style = props => {
                     isShowMessageLeft = false,
                     isShowMessageRight = false
                 } = element;
-                const valueStyle = '';
 
-                // const valueStyle = getObjectPropSafely(() => props.style[idParent][idChild]) || '';
+                const value = getObjectPropSafely(() => eval(`content.values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
+                
+                const valueStyle = typeof value === 'boolean' ? value : value.replace(new RegExp(`${unit}`,'gi'), '');
+
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
                         return (
@@ -162,8 +197,8 @@ const Style = props => {
                                 label={label || null}
                                 styleLabel={{marginBottom: 6}}
                                 tooltipName={label || tooltip}
-                                // selectColor={(color) => updateComponent(idParent, idChild, color)}
-                                color={defaultValue}
+                                selectColor={(color) => updateComponent(idParent, idChild, color)}
+                                color={valueStyle || defaultValue}
                                 translate={translate}
                             />
                         );
@@ -285,10 +320,22 @@ const Style = props => {
                         let isShow = true;
 
                         if (keyShow) {
-                            const type = getObjectPropSafely(() => props.style[idParent][keyShow]);
+                            const isValid = getObjectPropSafely(() => content.values[keyShow]);
 
-                            isShow = type === 'imageUrl' ? true : false;
+                            isShow = typeof isValid === 'boolean' ? !isValid : true;
                         }
+
+                        const handleOnChange = (value) => {
+                            try {
+                                if (type === typeComponent.COMPONENT_CHILD) {
+                                    updateComponentChild(key, idChild, `${value}${unit || ''}`, valueStyle);
+                                } else {
+                                    updateComponent(idParent, idChild, `${value}${unit || ''}`);
+                                }
+                            } catch (error) {
+                                //
+                            }
+                        };
 
                         return isShow ? (
                             <>
@@ -296,8 +343,8 @@ const Style = props => {
                                     label={label || null}
                                     styleLabel={{height: 30}}
                                     style={getObjectPropSafely(() => style.styleChild) || {width: 100}}
-                                    value={valueStyle || defaultValue}
-                                // onChange={handleOnChange}
+                                    value={valueStyle}
+                                    onChange={(value) => handleOnChange(value)}
                                 />
                                 {
                                     isShowUnit ? (
@@ -362,7 +409,7 @@ const Style = props => {
                                         default={valueStyle || defaultValue}
                                         backgroundColor='#9cce24'
                                         size='12'
-                                    // onClick={this.onClickOpenParameter}
+                                        onClick={(isShow) => updateComponent(idParent, idChild, isShow)}
                                     />
                                     {
                                         isShowMessageRight ? (
@@ -381,8 +428,8 @@ const Style = props => {
                                 label={label || null}
                                 styleLabel={{height: 30}}
                                 translate={translate}
-                            // style={getObjectPropSafely(() => style.styleChild) || { width: 100 }}
-                            // value={valueStyle || defaultValue}
+                                callback={(value) => updateComponent(idParent, idChild, value)}
+                                value={valueStyle || defaultValue}
                             />
                         );
                     }
@@ -427,14 +474,14 @@ const Style = props => {
                         let isShow = true;
 
                         if (keyShow) {
-                            const isValid = getObjectPropSafely(() => props.style[idParent][keyShow]);
+                            const isValid = getObjectPropSafely(() => content.values[keyShow]);
 
                             isShow = typeof isValid === 'boolean' ? isValid : true;
                         }
 
                         return isShow ? (
                             <div className={classnames(styles['content-child'])}>
-                                {renderComponent(elementChild, idParent)}
+                                {renderComponent(elementChild, idChild, element.type)}
                             </div>
                         ) : null;
                     }
@@ -507,13 +554,13 @@ const Style = props => {
         }
     };
 
-    const renderComponent = (elements, id) => {
+    const renderComponent = (elements, id, type = '') => {
         try {
             if (elements && elements.length) {
                 return elements.map(item => {
                     return (
-                        <div key={item.id} className={classnames(styles[`${item.className}`], `mb-15 ${item.className}`)} style={{marginBottom: 15, ...getObjectPropSafely(() => item.style.styleParent)}}>
-                            {switchCaseComponent(item, id)}
+                        <div key={`${item.id}${random(3)}`} className={classnames(styles[`${item.className}`], `mb-15 ${item.className}`)} style={{marginBottom: 15, ...getObjectPropSafely(() => item.style.styleParent)}}>
+                            {switchCaseComponent(item, id, type)}
                         </div>
                     );
                 });
@@ -522,6 +569,8 @@ const Style = props => {
             //
         }
     };
+
+    console.log('content', content);
 
     const renderHtml = () => {
         try {

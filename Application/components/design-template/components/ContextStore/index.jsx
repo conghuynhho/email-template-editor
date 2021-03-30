@@ -72,12 +72,15 @@ const reducer = (state, action) => {
             return {...newState};
         }
         case actionType.UPDATE_CONTENT: {
-            if (!getObjectPropSafely(() => Object.keys(payload.values).length && payload.id)) {
-                return state;
-            }
+            const {id, values, keyParent, key} = payload;
+
             const contents = produce(state.contents, draft => {
-                if (draft[payload.id]) {
-                    draft[payload.id].values.text = payload.values;
+                if (draft[id]) {
+                    if (keyParent) {
+                        draft[id].values[keyParent][key]  = values;
+                    } else {
+                        draft[id].values[key] = values;
+                    }
                 }
             });
             

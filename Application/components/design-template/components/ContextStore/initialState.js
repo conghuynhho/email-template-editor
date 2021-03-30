@@ -41,7 +41,7 @@ export const initialState = {
         '5': {
             location: {'collection': 'contents','id': '5'},
             type: CONSTANTS.TYPE_CONTENT.DIVIDER,
-            values: defaultStyleContent.divider
+            values: defaultStyleContent[CONSTANTS.TYPE_CONTENT.DIVIDER]
         }
     },
     idCounters: {
