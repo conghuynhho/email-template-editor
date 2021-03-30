@@ -42,7 +42,7 @@ const SidePanel = () => {
                     return <Button config={config} />;
                 }
                 case typeElement.MENU: {
-                    return <Menu config={config} />;
+                    return <Menu config={config} content={element.content} />;
                 }
                 case typeElement.IMAGE: {
                     return <Image config={config} />;
