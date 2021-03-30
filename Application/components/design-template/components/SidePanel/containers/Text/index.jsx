@@ -7,6 +7,7 @@ import Style from 'Components/design-template/components/SidePanel/Style';
 import {getObjectPropSafely} from 'Utils/index.ts';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
 import {values} from 'lodash';
+import {getPaddingChild} from '../../utils';
 
 const Text = props => {
     const {
@@ -17,63 +18,40 @@ const Text = props => {
 
     const elements = (getObjectPropSafely(() => config.resource.style[0].elements));
     let style = '';
-    let morePadding = false;
-    let top, bottom, left, right;
-
-    console.log('config', elements);
-    console.log('content', content);
 
     elements.forEach((value) => {
         style = value.id;
         switch (style) {
+            case 'textColor':
+                value.defaultValue = getObjectPropSafely(() => content.values.color);
+                break;
             case 'lineHeight': 
                 value.defaultValue = getObjectPropSafely(() => content.values[style]).replace('%','');
                 break;
             case 'textContainerPaddingLabel': 
                 value.defaultValue = getObjectPropSafely(() => content.values.containerPadding);
-                const padding = value.defaultValue.replace(/px/g,'').split(' ');
-
-                switch (padding.length) {
-                    case 1:
-                        morePadding = false;
-                        top = bottom = left = right = padding[0];
-                        break;
-                    case 2:
-                        morePadding = true;
-                        top = bottom = padding[0];
-                        left = right = padding[1];
-                        break;
-                    case 3:
-                        morePadding = true;
-                        top = padding[0];
-                        left = right = padding[1];
-                        bottom = padding[2];
-                        break;
-                    default:
-                        morePadding = true;
-                        top = padding[0];
-                        right = padding[1];
-                        left = padding[2];
-                        bottom = padding[3];
-                }
                 {break}
             case 'moreOptionsPaddingText':
-                value.defaultValue = morePadding;
+                const paddingText = getObjectPropSafely(() => content.values.containerPadding).split(' ');
+
+                value.defaultValue = (paddingText.length > 1 ? true : false);
                 break;
             case 'childTextPadding':
+                const padding = getPaddingChild(getObjectPropSafely(() => content.values.containerPadding).replace(/px/g,'').split(' '));
+
                 value.elementChild.forEach((index) => {
                     switch (index.id) {
                         case 'top':
-                            index.defaultValue = top;
+                            index.defaultValue = padding.top;
                             break;
                         case 'bottom':
-                            index.defaultValue = bottom;
+                            index.defaultValue = padding.bottom;
                             break;
                         case 'right':
-                            index.defaultValue = right;
+                            index.defaultValue = padding.right;
                             break;
                         default:
-                            index.defaultValue = left;
+                            index.defaultValue = padding.left;
                     }
                 });
                 break;
@@ -86,7 +64,6 @@ const Text = props => {
         }
     });
 
-    config.resource.style[0].elements[0].defaultValue = getObjectPropSafely(() => content.values.color);
     config.resource.style[1].elements[0].defaultValue = getObjectPropSafely(() => content.values.hideDesktop);
 
     const renderHtml = () => {
