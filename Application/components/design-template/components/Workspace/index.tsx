@@ -14,7 +14,7 @@ import produce from 'immer';
 
 const Workspace = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
-    const {viewMode} = store;
+    const {viewMode, activeElement} = store;
     const nestedData = hierarchyDesignData(store);
 
     console.log('store', store);
@@ -26,6 +26,8 @@ const Workspace = () => {
         backgroundColor: getObjectPropSafely(() => nestedData.body.values.backgroundColor),
         fontFamily: getObjectPropSafely(() => nestedData.body.values.fontFamily.value)
     };
+
+    const [activeRowIndex, setActiveRowIndex] = useState(-1);
     const [rowDragItHereIndex, setDragItHereIndex] = useState(-1);
     
     const [rowAreaPosition, setRowAreaPosition] = useState('');
@@ -48,25 +50,23 @@ const Workspace = () => {
 
     const [typeOfIsDragging, setTypeOfIsDragging] = useState('');
 
-    const getDragItHereIndex = (type, rowIndex, columnIndex, contentIndex, area, destinationRowIdx, rowAreaPosition) => {
-        
-        switch (type) {
-            case 'draggingRow':
-                setDragItHereIndex(rowIndex); 
-                setRowAreaPosition(rowAreaPosition);
-                setDestinationRowIdx(destinationRowIdx);
-                break;
-            case 'draggingContent':
-                setRowContentDragItHereIndex(rowIndex);
-                setColumnContentDragItHereIndex(columnIndex);
-                setContentDragItHereIndex(contentIndex);
-                setContentDragItHereArea(area);
-                break;
-            default: 
-                setContentDragItHereIndex(-1);
-                break; 
+    const getActiveRowIndex = (index) => {
+        setActiveRowIndex(index);
+    };
+
+    const getDragItHereRowIndexes = (rowIndex, destinationRowIdx, rowArea) => {
+        setDragItHereIndex(rowIndex); 
+        setRowAreaPosition(rowArea);
+        setDestinationRowIdx(destinationRowIdx);
+    };
+
+    const getDragItHereContentIndexes = (rowIndex, columnIndex, contentIndex, contentArea) => {
+        if (rowIndex) {
+            setRowContentDragItHereIndex(rowIndex);
+            setColumnContentDragItHereIndex(columnIndex);
+            setContentDragItHereIndex(contentIndex);
+            setContentDragItHereArea(contentArea);
         }
-        
     };
 
     const getSourceIndexes = ({rowIdx, columnIdx, contentIdx}) => {
@@ -97,12 +97,11 @@ const Workspace = () => {
             return (
                 <Fragment key={index}>
                     {shouldRenderClone ? (
-                        <div>
+                        <div style={activeElement && activeElement.includes('row') ? {} : {border: '2px solid #13ABD7'}}>
                             <Row 
                                 data={row} 
                                 generalStyle={generalStyle}
                                 rowIndex={index}  
-                                getDragItHereIndex={getDragItHereIndex}
                                 rowDragItHereIndex={rowDragItHereIndex}   
                                 rowContentDragItHereIndex={rowContentDragItHereIndex}
                                 columnContentDragItHereIndex={columnContentDragItHereIndex}
@@ -111,7 +110,12 @@ const Workspace = () => {
                                 typeOfIsDragging={typeOfIsDragging}
                                 getSourceIndexes={getSourceIndexes}
                                 getNoContentIndexes={getNoContentIndexes}
+                                getDragItHereRowIndexes={getDragItHereRowIndexes}
+                                getDragItHereContentIndexes={getDragItHereContentIndexes}
+                                getActiveRowIndex={getActiveRowIndex}
                                 noContentClassName={noContentClassName}
+                                activeRowIndex={activeRowIndex}
+                                rowDraggingIndex={sourceIndexes.rowIdx}
                             />
                         </div>
                     ) : (
@@ -137,7 +141,6 @@ const Workspace = () => {
                                                 generalStyle={generalStyle}
                                                 rowIndex={index}
                                                 provided={provided}
-                                                getDragItHereIndex={getDragItHereIndex}
                                                 rowDragItHereIndex={rowDragItHereIndex}
                                                 rowContentDragItHereIndex={rowContentDragItHereIndex}
                                                 columnContentDragItHereIndex={columnContentDragItHereIndex}
@@ -146,7 +149,12 @@ const Workspace = () => {
                                                 typeOfIsDragging={typeOfIsDragging}
                                                 getSourceIndexes={getSourceIndexes}
                                                 getNoContentIndexes={getNoContentIndexes}
+                                                getDragItHereRowIndexes={getDragItHereRowIndexes}
+                                                getDragItHereContentIndexes={getDragItHereContentIndexes}
+                                                getActiveRowIndex={getActiveRowIndex}
                                                 noContentClassName={noContentClassName}
+                                                activeRowIndex={activeRowIndex}
+                                                rowDraggingIndex={sourceIndexes.rowIdx}
                                             />
                                             
                                         </div>
@@ -288,6 +296,33 @@ const Workspace = () => {
 
     };
 
+    const setNewContentListWhileNoContent = (data, source, destination) => {
+        const {rowIdx, columnIdx, contentIdx} = source;
+        const {desRowIndex, desColumnIndex, desContentIndex} = destination;
+
+        const sourceRowID = getRowId(data, rowIdx);
+        const sourceColumnId = getColumnId(data, sourceRowID, columnIdx);
+        const columns = getObjectPropSafely(() => data.columns);
+
+        const destinationRowID = getRowId(data, desRowIndex);
+        const destinationColumnId = getColumnId(data, destinationRowID, desColumnIndex);
+
+        const newColumns = produce(columns, draft => {
+            const [removed] = draft[sourceColumnId].contents.splice(contentIdx, 1);
+
+            draft[destinationColumnId].contents.push(removed);
+        });
+
+        dispatchStore({
+            type: actionType.UPDATE_COLUMN,
+            payload: {
+                id: id,
+                values: newColumns
+            }
+        });
+        
+    };
+
     const onDragEnd = () => {
 
         switch (typeOfIsDragging) {
@@ -297,7 +332,7 @@ const Workspace = () => {
                 const {rowIdx, columnIdx} = sourceIndexes;
 
                 if (noContentClassName) {
-                    console.log('check');
+                    setNewContentListWhileNoContent(store, sourceIndexes, {desRowIndex: noContentRowIndex, desColumnIndex: noContentColumnIndex, desContentIndex: 0});
                 } else {
                     if (columnIdx === columnContentDragItHereIndex && rowIdx === rowContentDragItHereIndex) {               
                         setNewContentListInColumn(store, sourceIndexes, contentDragItHereIndex, contentDragItHereArea);

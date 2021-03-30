@@ -34,12 +34,14 @@ const Text = (props) => {
 
         });
     };
+
+    // , display: 'flex', justifyContent: styleExtra.textAlign === 'center' ? 'center' : 'flex-start'
     
     return (<>
         <div
             id={id}
             className={styles[classTitle]}
-            style={style}
+            // style={{...style}}
         >           
             
             {isEditing && activeElement === id ? (
@@ -51,6 +53,8 @@ const Text = (props) => {
                     inline={true}
                     onEditorChange={handleEditorChange}
                     init={{
+                        // selector: `div#tiny-${id}`,
+                        // custom_ui_selector: `#${id}`,
                         auto_focus: isEditing && activeElement === id ? isEditing : false,
                         menubar: false,
                         branding: false,
@@ -62,18 +66,21 @@ const Text = (props) => {
                         toolbar1: 'fontselect fontsizeselect | bold italic underline strikethrough superscript subscript | emoticons ',
                         toolbar2: 'alignleft aligncenter alignright | bullist numlist | forecolor backcolor | ltr rtl | link unlink',
                         fontsize_formats: '8px 10px 12px 14px 16px 18px 20px 22px 24px 26px 28px 30px 32px 34px 36px 38px 40px 44px 48px 72px',
+                        margin: '1 1 1 1',
                         content_style: `#tiny-${id} {
                             text-align: ${styleExtra.textAlign}; 
                             line-height: ${styleExtra.lineHeight};
                             color: ${styleExtra.color};
                             overflow-wrap: ${styleExtra.overflowWrap};
+                            padding: ${style.padding};
+
                         }`
                     }}
                 />   
 
             ) : (<div 
                 className="editable" 
-                style={styleExtra}
+                style={{...styleExtra, ...style}}
                 dangerouslySetInnerHTML={{
                     __html: text
                 }}
