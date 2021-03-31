@@ -287,6 +287,13 @@ const Row = (props) => {
     const onClickAddContent = (e) => {
         e.stopPropagation();
         setIsShowAddContent(false);
+        dispatchStore({
+            type: actionType.ACTIVE_ELEMENT,
+            payload: {
+                activeElement: 'u_body',
+                isEditing: false
+            }
+        });
     };
 
     const onClickAddRow = (e, position, currentRowIdx) => {
@@ -816,7 +823,7 @@ const Row = (props) => {
                                                                 {...provided.draggableProps}
                                                                 style={{
                                                                     ...getItemStyle(false, provided.draggableProps.style),
-                                                                    ...(true && {transform: 'none'})
+                                                                    transform: 'none'
                                                                 }}
                                                             >
                                                                 {renderSelector({

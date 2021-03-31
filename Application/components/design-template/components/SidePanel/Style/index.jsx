@@ -1,6 +1,7 @@
 // Libraries
 import React, {useEffect, useState, useContext} from 'react';
 import classnames from 'classnames';
+import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 
 // Components
 import {
@@ -43,6 +44,7 @@ const Style = props => {
         translate = (lal) => lal
     } = props;
     const [config, setConfig] = useState({});
+    const [desElement, setDesElement] = useState('');
     const {state, dispatch} = useContext(StoreContext);
 
     useEffect(() => {
@@ -530,9 +532,11 @@ const Style = props => {
                         return (
                             <div className="row">
                                 {elementChild.length && elementChild.map((child) => {
-
                                     return (
-                                        <div key={child.id} className={classnames('col-6', styles['list-component-item'])}>
+                                        <div 
+                                            key={child.id}
+                                            className={classnames('col-6', styles['list-component-item'])}                                          
+                                        >
                                             <div className={classnames(styles['list-component-item-icon'])} >
                                                 <Icon type={child.icon} style={{color: '#ccc', fontSize: '16px'}} />
                                             </div>

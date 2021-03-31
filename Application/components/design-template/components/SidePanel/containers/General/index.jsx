@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import classnames from 'classnames';
 import {Nav, NavLink, NavItem, TabContent, TabPane} from 'reactstrap';
 import Loadable from 'react-loadable';
+import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 
 // Utils
 import {getObjectPropSafely} from 'Utils/index.ts';
@@ -38,11 +39,6 @@ const General = props => {
             const general = getObjectPropSafely(() => config.resource.general) || [];
 
             return (
-                // <div className={classnames(styles['block-full'])} style={{width: 'calc(100 % - 6px)'}}>
-                //     <div className={classnames(styles['section-label-title'])}>{translate(config.name, config.name)}</div>
-                //     <hr style={{marginTop: 5, marginBottom: 5}} />
-                //     <Style style={style} />
-                // </div>
                 <div className={classnames(styles['block-full'])} style={{width: 'calc(100 % - 6px)'}}>
                     <div className={classnames(styles['section-label-title'])}>{translate(config.name, config.name)}</div>
                     <hr style={{marginTop: 5, marginBottom: 5}} />

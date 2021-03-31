@@ -152,7 +152,7 @@
 
     .blockbuilder-placeholder { 
         position: relative;
-        z-index: 101;
+        z-index: 106;
 
         &.active {
             &::before {
@@ -337,7 +337,6 @@
 
 .react-beatiful-dnd-copy {
     background: lightblue;
-    // border: 1px solid #13ABD7;
 }
 
 .react-beatiful-dnd-copy ~ [data-rbd-placeholder-context-id] {

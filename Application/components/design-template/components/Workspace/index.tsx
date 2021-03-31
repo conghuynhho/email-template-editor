@@ -133,7 +133,7 @@ const Workspace = () => {
                                             {...provided.draggableProps} 
                                             style={{
                                                 ...getItemStyle(false, getObjectPropSafely(() => provided.draggableProps.style)),
-                                                ...(true && {transform: 'none'})
+                                                transform: 'none'
                                             }}
                                         >
                                             <Row 
