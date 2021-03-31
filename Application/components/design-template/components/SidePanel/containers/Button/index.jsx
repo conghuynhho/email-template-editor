@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {Nav, NavLink, NavItem, TabContent, TabPane} from 'reactstrap';
 import classnames from 'classnames';
 import Loadable from 'react-loadable';
-import {mapButtonDataToConfig} from 'Components/design-template/components/Workspace/utils';
+import {removePercentPattern, convertShortHandCSS} from 'Components/design-template/components/Workspace/utils';
 
 // Styles
 import {getObjectPropSafely} from 'Utils/index.ts';
@@ -22,27 +22,118 @@ const TabGeneral = Loadable({
 
 const Button = props => {
     const {
-        configure = {},
+        config = {},
         activeElementValues,
         translate = (lal) => lal
     } = props;
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
 
-    console.log(configure, 'configSamples');
-    console.log(activeElementValues, 'activeElement');
-    const config = mapButtonDataToConfig(activeElementValues.content, configure);
+    const mapButtonDataToConfig = (data, config) => {
+        const configClone = {...config};
+    
+        // set background color
+        if (configClone.resource.style[0].elements[0].defaultValue) {
+            configClone.resource.style[0].elements[0].defaultValue = getObjectPropSafely(() => data.values.buttonColors.backgroundColor);
+        }
+        // set textColorButton
+        if (configClone.resource.style[0].elements[1].defaultValue) {
+            configClone.resource.style[0].elements[1].defaultValue = getObjectPropSafely(() => data.values.buttonColors.color);
+        }
+        // set text-input width
+        if (configClone.resource.style[0].elements[2].defaultValue) {
+            configClone.resource.style[0].elements[2].defaultValue = removePercentPattern(getObjectPropSafely(() => data.values.size.width));
+        }
+        // set width to auto 
+        if (configClone.resource.style[0].elements[3].defaultValue) {
+            configClone.resource.style[0].elements[3].defaultValue = (getObjectPropSafely(() => data.values.size.autoWidth));
+        }
+        // set alignment
+        if (configClone.resource.style[0].elements[4].defaultValue) {
+            configClone.resource.style[0].elements[4].defaultValue = (getObjectPropSafely(() => data.values.textAlign));
+        }
+        // set lineHeight
+        if (configClone.resource.style[0].elements[5].defaultValue) {
+            configClone.resource.style[0].elements[5].defaultValue = removePercentPattern(getObjectPropSafely(() => data.values.lineHeight));
+        }
+        // switch more option for button padding
+        // 
+        // set padding when is on moreOptions
+        if (configClone.resource.style[0].elements[8].elementChild) {
+            const elementChild = configClone.resource.style[0].elements[8].elementChild;
+            const paddingArray = (getObjectPropSafely(()=>data.values.padding)).split(' ');
+
+            if (paddingArray.length === 1) {
+                if (configClone.resource.style[0].elements[7].defaultValue) {
+                    configClone.resource.style[0].elements[7].defaultValue = false;
+                }
+            }
+            else {
+                if (configClone.resource.style[0].elements[7].defaultValue) {
+                    configClone.resource.style[0].elements[7].defaultValue = true;
+                }
+            }
+            const values = convertShortHandCSS((getObjectPropSafely(()=> data.values.padding)));
+
+            configClone.resource.style[0].elements[8].elementChild[0] = {
+                ...elementChild[0],
+                ...getObjectPropSafely(() =>values.top)
+            };
+            configClone.resource.style[0].elements[8].elementChild[1] = {
+                ...elementChild[1],
+                ...getObjectPropSafely(() =>values.right)
+            };
+            configClone.resource.style[0].elements[8].elementChild[2] = {
+                ...elementChild[2],
+                ...getObjectPropSafely(() =>values.bottom)
+            };
+            configClone.resource.style[0].elements[8].elementChild[3] = {
+                ...elementChild[3],
+                ...getObjectPropSafely(() =>values.left)
+            };
+        }
+        // set roundBorder
+        if (configClone.resource.style[0].elements[9].defaultValue) {
+            configClone.resource.style[0].elements[9].defaultValue = getObjectPropSafely(()=> data.values.borderRadius);
+        }
+        // switch true/false moreOptions Border
+
+        // set border when is on moreOption border mode
+        // getObjectPropSafely(() => config.resource.style[0].elements[9]);
+        // TODO: DO IT LATER
+
+        // set container padding
+        if (configClone.resource.style[0].elements[13].defaultValue) {
+            const values = convertShortHandCSS((getObjectPropSafely(()=> data.values.containerPadding)));
+
+            configClone.resource.style[0].elements[13].defaultValue = getObjectPropSafely(()=> (values.top.defaultValue));
+        }
+        // switch more option for container padding
+        // getObjectPropSafely(() => config.resource.style[0].elements[11]);
+
+        // switch mode hide on destop
+        if (configClone.resource.style[1].elements[0].defaultValue) {
+            configClone.resource.style[1].elements[0].defaultValue = getObjectPropSafely(() => data.values.hideOnDesktop);
+        }
+        // GENERAL  *** setLink of button
+        if (configClone.resource.general[0].elements[1].defaultValue) {
+            configClone.resource.general[0].elements[0].defaultValue = getObjectPropSafely(() => data.values.href.values.href);
+        }   
+        return configClone;
+    };
+
+    // console.log(configure, 'configSamples');
+    // console.log(activeElementValues, 'activeElement');
+    const configConverted = mapButtonDataToConfig(activeElementValues.content, config);
+
     const toggleTab = (tab) => {
         if (activeTab !== tab) {
             setActiveTab(tab);
         }
     };
-
-    console.log(config, 'real config');
-
     const renderHtml = () => {
         try {
-            const style = getObjectPropSafely(() => config.resource.style) || [];
-            const general = getObjectPropSafely(() => config.resource.general) || [];
+            const style = getObjectPropSafely(() => configConverted.resource.style) || [];
+            const general = getObjectPropSafely(() => configConverted.resource.general) || [];
 
             return (
                 <>

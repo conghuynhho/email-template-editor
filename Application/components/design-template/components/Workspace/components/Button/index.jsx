@@ -4,7 +4,7 @@ import {Editor} from '@tinymce/tinymce-react';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import {getObjectPropSafely} from 'Utils';
-import {getContentIDFromHTMLID} from '../../utils';
+import {getContentIDFromHTMLID} from 'Components/design-template/components/Workspace/utils';
 
 const Button = (props) => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
@@ -33,7 +33,6 @@ const Button = (props) => {
     };
     const text = getObjectPropSafely(() => data.values.text);
     const target = getObjectPropSafely(() => data.values.href.values.target);
-
     const handleEditorChange = (content) => {
         const contentID = getContentIDFromHTMLID(store,id);
         const payload = {
@@ -88,7 +87,7 @@ const Button = (props) => {
                                 word-wrap: ${styleInner.wordWrap};
                             }`
                         }}
-                        onEditorChange={handleEditorChange}
+                        onChange={handleEditorChange}
                     />
                 ) : (
                     <a

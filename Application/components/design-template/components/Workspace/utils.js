@@ -1,7 +1,8 @@
-import {result} from 'lodash';
+import {debounce, result} from 'lodash';
 import {string} from 'prop-types';
 import {getObjectPropSafely} from 'Utils';
 import {typeElement} from 'Components/design-template/constants';
+import {useCallback} from 'react';
 
 export const hierarchyDesignData = (data) => {
     const body = getObjectPropSafely(() => data.bodies);
@@ -360,7 +361,7 @@ export const getActiveElementFromStore = (store) => {
 
 };
 
-const removePercentPattern = (string) => {
+export const removePercentPattern = (string) => {
     if (typeof string !== 'string') {return }
     if (string.indexOf('%') > -1) {
         return string.replace('%','');
@@ -368,17 +369,21 @@ const removePercentPattern = (string) => {
     return string;
 };
 
-const getUnitAndValue = (string) => {
+export const getUnitAndValue = (string) => {
     const result = {
         unit: '',
         defaultValue: ''
     };
 
-    result.defaultValue = string.match(/\d+/g);
-    result.unit = string.match(/[a-zA-Z]+/g);
+    const [unit] = string.match(/[a-zA-Z]+|%/g);
+    const [defaultValue] = string.match(/\d+/g);
+
+    result.defaultValue = defaultValue;
+    result.unit = unit;
     return result;
 };
-const convertShortHandCSS = (shortHand) => {
+
+export const convertShortHandCSS = (shortHand) => {
     const list = shortHand.split(' ');
     let result = {
         top: {
@@ -426,119 +431,6 @@ const convertShortHandCSS = (shortHand) => {
     return result;
 };
 
-export const mapButtonDataToConfig = (data, config) => {
-    const configClone = {...config};
-    
-    // set background color
-    // getObjectPropSafely(() => config.resource.style[0].element[0]);
-    if (configClone.resource.style[0].elements[0].defaultValue) {
-        configClone.resource.style[0].elements[0].defaultValue = getObjectPropSafely(() => data.values.buttonColors.backgroundColor);
-    }
-
-    // set textColorButton
-    // getObjectPropSafely(() => config.resource.style[0].elements[1]);
-    if (configClone.resource.style[0].elements[1].defaultValue) {
-        configClone.resource.style[0].elements[1].defaultValue = getObjectPropSafely(() => data.values.buttonColors.color);
-    }
-    // set text-input width
-    // getObjectPropSafely(() => config.resource.style[0].elements[2]);
-    if (configClone.resource.style[0].elements[2].defaultValue) {
-        configClone.resource.style[0].elements[2].defaultValue = removePercentPattern(getObjectPropSafely(() => data.values.size.width));
-    }
-
-    // set width to auto 
-    // getObjectPropSafely(() => config.resource.style[0].elements[3]);
-    if (configClone.resource.style[0].elements[3].defaultValue) {
-        configClone.resource.style[0].elements[3].defaultValue = (getObjectPropSafely(() => data.values.size.autoWidth));
-    }
-
-    // set alignment
-    if (configClone.resource.style[0].elements[4].defaultValue) {
-        configClone.resource.style[0].elements[4].defaultValue = (getObjectPropSafely(() => data.values.textAlign));
-    }
-
-    // set lineHeight
-    // getObjectPropSafely(() => config.resource.style[0].elements[5]);
-    if (configClone.resource.style[0].elements[5].defaultValue) {
-        configClone.resource.style[0].elements[5].defaultValue = removePercentPattern(getObjectPropSafely(() => data.values.lineHeight));
-    }
-    
-    // switch more option for button padding
-    // 
-
-    // set padding when is on moreOptions
-    // getObjectPropSafely(() => config.resource.style[0].elements[8]);
-    if (configClone.resource.style[0].elements[8].elementChild) {
-        const elementChild = configClone.resource.style[0].elements[8].elementChild;
-        const paddingArray = (getObjectPropSafely(()=>data.values.padding)).split(' ');
-
-        if (paddingArray.length === 1) {
-            if (configClone.resource.style[0].elements[7].defaultValue) {
-                configClone.resource.style[0].elements[7].defaultValue = false;
-            }
-        }
-        else {
-            if (configClone.resource.style[0].elements[7].defaultValue) {
-                configClone.resource.style[0].elements[7].defaultValue = true;
-            }
-        }
-        const values = convertShortHandCSS((getObjectPropSafely(()=> data.values.padding)));
-
-        configClone.resource.style[0].elements[8].elementChild[0] = {
-            ...elementChild[0],
-            ...getObjectPropSafely(() =>values.top)
-        };
-        configClone.resource.style[0].elements[8].elementChild[1] = {
-            ...elementChild[1],
-            ...getObjectPropSafely(() =>values.right)
-        };
-        configClone.resource.style[0].elements[8].elementChild[2] = {
-            ...elementChild[2],
-            ...getObjectPropSafely(() =>values.bottom)
-        };
-        configClone.resource.style[0].elements[8].elementChild[3] = {
-            ...elementChild[3],
-            ...getObjectPropSafely(() =>values.left)
-        };
-    }
-
-    // set roundBorder
-    // getObjectPropSafely(() => config.resource.style[0].elements[7]);
-    if (configClone.resource.style[0].elements[9].defaultValue) {
-        configClone.resource.style[0].elements[9].defaultValue = getObjectPropSafely(()=> data.values.borderRadius);
-    }
-
-    // switch true/false moreOptions Border
-    // getObjectPropSafely(() => config.resource.style[0].elements[8]);
-
-    // set border when is on moreOption border mode
-    // getObjectPropSafely(() => config.resource.style[0].elements[9]);
-    // TODO: DO IT LATER
-
-    // set container padding
-    // getObjectPropSafely(() => config.resource.style[0].elements[10]);
-    if (configClone.resource.style[0].elements[13].defaultValue) {
-        const values = convertShortHandCSS((getObjectPropSafely(()=> data.values.containerPadding)));
-
-        configClone.resource.style[0].elements[13].defaultValue = getObjectPropSafely(()=> (values.top.defaultValue));
-    }
-
-    // switch more option for container padding
-    // getObjectPropSafely(() => config.resource.style[0].elements[11]);
-
-    // STYLE[1]
-    // switch mode hide on destop
-    if (configClone.resource.style[1].elements[0].defaultValue) {
-        configClone.resource.style[1].elements[0].defaultValue = getObjectPropSafely(() => data.values.hideOnDesktop);
-    }
-    // SET GENERAL
-    // set link
-    if (configClone.resource.general[0].elements[1].defaultValue) {
-        configClone.resource.general[0].elements[0].defaultValue = getObjectPropSafely(() => data.values.href.values.href);
-    }   
-    return configClone;
-};
-
 export const findAlignment = (list) => {
     if (!Array.isArray(list)) {return}
     const alignment = list.find(element => (getObjectPropSafely(() => element.type)) === 'ALIGNMENT');
@@ -546,4 +438,29 @@ export const findAlignment = (list) => {
 
     return result; 
 };
+export const validURL = (str) => {
+    let pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+    return !!pattern.test(str);
+};
+// export const useDebounce = (fnToDebounce, durationInMs = 200) => {
+//     if (isNaN(durationInMs)) {
+//         throw new TypeError('durationInMs for debounce should be a number');
+//     }
+
+//     if (fnToDebounce == null) {
+//         throw new TypeError('fnToDebounce cannot be null');
+//     }
+
+//     if (typeof fnToDebounce !== 'function') {
+//         throw new TypeError('fnToDebounce should be a function');
+//     }
+
+//     return useCallback(debounce(fnToDebounce, durationInMs), [fnToDebounce, durationInMs]);
+// };
 

@@ -41,7 +41,7 @@ const SidePanel = props => {
                     return <General config={config} />;
                 }
                 case typeElement.BUTTON: {
-                    return <Button configure={config} activeElementValues={element} />;
+                    return <Button config={config} activeElementValues={element} />;
                 }
                 default: {
                     return <General config={config} />;
@@ -50,7 +50,7 @@ const SidePanel = props => {
                     return <Menu config={config} />;
                 }
                 case typeElement.IMAGE: {
-                    return <Image config={config} />;
+                    return <Image config={config} activeElementValues={element} />;
                 }
                 case typeElement.HTML: {
                     return <Html config={config} />;
