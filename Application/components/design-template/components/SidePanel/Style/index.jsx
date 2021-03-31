@@ -44,7 +44,6 @@ const Style = props => {
         translate = (lal) => lal
     } = props;
     const [config, setConfig] = useState({});
-    const [desElement, setDesElement] = useState('');
     const {state, dispatch} = useContext(StoreContext);
 
     useEffect(() => {
@@ -530,22 +529,95 @@ const Style = props => {
                     case typeComponent.LIST_COMPONENTS: {
 
                         return (
-                            <div className="row">
-                                {elementChild.length && elementChild.map((child) => {
-                                    return (
-                                        <div 
-                                            key={child.id}
-                                            className={classnames('col-6', styles['list-component-item'])}                                          
-                                        >
-                                            <div className={classnames(styles['list-component-item-icon'])} >
-                                                <Icon type={child.icon} style={{color: '#ccc', fontSize: '16px'}} />
+                            <div>
+                                <Droppable 
+                                    droppableId='droppable-side-panel-1' 
+                                    type='side-panel'
+                                    renderClone={(provided, snapshot, rubric) => {
+                                        const item = {...elementChild[rubric.source.index]};
+
+                                        return (
+                                            <div 
+                                                className={classnames('col-6', styles['list-component-item'])} 
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}                                        
+                                            >
+                                                <div className={classnames(styles['list-component-item-icon'])} >
+                                                    <Icon type={item.icon} style={{color: '#ccc', fontSize: '16px'}} />
+                                                </div>
+                                                {translate(item.label, item.label)}
                                             </div>
-                                            {translate(child.label, child.label)}
-                                        </div>
-                                    );
-                                })}
+                                        );
+                                    }}
+                                >
+                                    {(provided, snapshot) => {
+
+                                        return (
+                                            <div className="row" ref={provided.innerRef} {...provided.droppableProps}>
+                                                {elementChild.length && elementChild.map((child, index) => {
+                                                    const shouldRenderClone = 'draggable-new-' + child.id === snapshot.draggingFromThisWith;
+
+                                                    return (
+                                                        <React.Fragment key={child.id}>
+                                                            {shouldRenderClone ? 
+                                                                (
+                                                                    <div 
+                                                                        className={classnames('col-6', styles['list-component-item'])}                                         
+                                                                    >
+                                                                        <div className={classnames(styles['list-component-item-icon'])} >
+                                                                            <Icon type={child.icon} style={{color: '#ccc', fontSize: '16px'}} />
+                                                                        </div>
+                                                                        {translate(child.label, child.label)}
+                                                                    </div>
+                                                                ) : 
+                                                                (
+                                                                    <Draggable draggableId={'draggable-new-' + child.id} index={index}>
+                                                                        {(provided, snapshot) => {
+                                                                            return (
+                                                                                <div 
+                                                                                    className={classnames('col-6', styles['list-component-item'])} 
+                                                                                    ref={provided.innerRef}
+                                                                                    {...provided.draggableProps}
+                                                                                    {...provided.dragHandleProps}
+                                                                                    style={{...provided.draggableProps.style, transform: 'none'}}                                        
+                                                                                >
+                                                                                    <div className={classnames(styles['list-component-item-icon'])} >
+                                                                                        <Icon type={child.icon} style={{color: '#ccc', fontSize: '16px'}} />
+                                                                                    </div>
+                                                                                    {translate(child.label, child.label)}
+                                                                                </div>
+                                                                            );
+                                                                        }}
+                                                                    </Draggable>
+                                                                )}
+                                                        </React.Fragment>
+                                                       
+                                                    );
+                                                })}
+                                            </div>
+                                        );
+                                    }}
+                                </Droppable>
                             </div>
                         );
+                        // return (
+                        //     <div className="row">
+                        //         {elementChild.length && elementChild.map((child) => {
+                        //             return (
+                        //                 <div 
+                        //                     key={child.id}
+                        //                     className={classnames('col-6', styles['list-component-item'])}                                          
+                        //                 >
+                        //                     <div className={classnames(styles['list-component-item-icon'])} >
+                        //                         <Icon type={child.icon} style={{color: '#ccc', fontSize: '16px'}} />
+                        //                     </div>
+                        //                     {translate(child.label, child.label)}
+                        //                 </div>
+                        //             );
+                        //         })}
+                        //     </div>
+                        // );
                     }
                 }
             }
@@ -573,8 +645,6 @@ const Style = props => {
             //
         }
     };
-
-    console.log('content', content);
 
     const renderHtml = () => {
         try {

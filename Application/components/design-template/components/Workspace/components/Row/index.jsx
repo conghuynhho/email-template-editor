@@ -958,11 +958,11 @@ const Row = (props) => {
             };
         }
 
-        if (isSelected && currentID.includes('row')) {
+        if (isSelected && currentID.includes('row') && !typeOfIsDragging) {
             styleSelector = {zIndex: 105};
         }
 
-        if (isInsideRow && !isEditing && !typeOfIsDragging) {
+        if (isInsideRow && !isEditing) {
             styleSelector = {zIndex: 106};
         }
 

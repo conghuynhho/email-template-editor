@@ -1,9 +1,9 @@
 // Libraries
-import React, {useState} from 'react';
+import React, {useState, memo} from 'react';
 import classnames from 'classnames';
 import {Nav, NavLink, NavItem, TabContent, TabPane} from 'reactstrap';
 import Loadable from 'react-loadable';
-import {DragDropContext, Droppable} from 'react-beautiful-dnd';
+import {DragDropContext} from 'react-beautiful-dnd';
 
 // Utils
 import {getObjectPropSafely} from 'Utils/index.ts';
@@ -84,4 +84,4 @@ const General = props => {
     );
 };
 
-export default General;
+export default memo(General);
