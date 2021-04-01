@@ -18,7 +18,7 @@ import {getObjectPropSafely} from 'Utils';
 import {getActiveElement} from 'Components/design-template/components/Workspace/utils';
 
 const SidePanel = props => {
-    const {state: store = {activeElement: {}}} = useContext(StoreContext);
+    const {state: store = {activeElement: {}, bodies: {}}} = useContext(StoreContext);
     const renderHtml = () => {
         try {
             const activeElementID = store.activeElement;
@@ -38,7 +38,7 @@ const SidePanel = props => {
                     return <Columns config={config} />;
                 }
                 case typeElement.GENERAL: {
-                    return <General config={config} />;
+                    return <General config={config} content={getObjectPropSafely(()=>store.bodies[2])} />;
                 }
                 case typeElement.BUTTON: {
                     return <Button config={config} activeElementValues={element} />;

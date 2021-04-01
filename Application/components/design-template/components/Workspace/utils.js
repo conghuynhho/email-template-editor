@@ -448,6 +448,14 @@ export const validURL = (str) => {
 
     return !!pattern.test(str);
 };
+
+export const getFontFamily = (string) => {
+    const array = string.split(',');
+    const result = array[0].replace(/'|"/g, '');
+
+    return result;
+};
+
 // export const useDebounce = (fnToDebounce, durationInMs = 200) => {
 //     if (isNaN(durationInMs)) {
 //         throw new TypeError('durationInMs for debounce should be a number');
