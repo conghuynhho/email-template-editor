@@ -5,12 +5,12 @@ import {actionType} from 'Components/design-template/components/ContextStore/con
 import Row from 'Components/design-template/components/Workspace/components/Row';
 import styles from 'Components/design-template/components/Workspace/styles.module.scss';
 import {CONSTANTS} from 'Components/design-template/constants';
-import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import {
     hierarchyDesignData
 } from 'Components/design-template/components/Workspace/utils';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
 import {Icon} from '@antscorp/components';
+import {getObjectPropSafely} from 'Utils';
 
 const Workspace = (props) => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);

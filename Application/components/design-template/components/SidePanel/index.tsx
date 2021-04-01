@@ -15,6 +15,7 @@ import Html from 'Components/design-template/components/SidePanel/containers/Htm
 import {typeElement} from 'Components/design-template/constants';
 import sidePanelConfig from 'Components/design-template/components/SidePanel/configs';
 import {getActiveElement} from 'Components/design-template/components/Workspace/utils';
+import {getObjectPropSafely} from 'Utils';
 
 const SidePanel = props => {
     const {state: store = {activeElement: {}, bodies: {}}} = useContext(StoreContext);
@@ -36,7 +37,7 @@ const SidePanel = props => {
                     return <Columns config={config} />;
                 }
                 case typeElement.GENERAL: {
-                    return <General config={config} content={getObjectPropSafely(()=>store.bodies[2])} />;
+                    return <General config={config} />;
                 }
                 case typeElement.BUTTON: {
                     return <Button config={config} activeElementValues={element} />;
