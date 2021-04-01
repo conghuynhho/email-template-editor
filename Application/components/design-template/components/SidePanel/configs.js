@@ -2821,7 +2821,7 @@ const sidePanelConfig = [
                         {
                             type: 'FILL_COLOR',
                             id: 'textColorButton',
-                            label: 'Text color',
+                            label: 'Link color',
                             defaultValue: '#FFFFFF',
                             style: {
                                 styleParent: {
