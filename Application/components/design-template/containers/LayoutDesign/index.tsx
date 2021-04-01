@@ -252,8 +252,6 @@ const LayoutDesign = () => {
         }
     };
 
-    console.log('element', element);
-
     const onDragStart = (provided) => {
 
         if (provided.draggableId) {

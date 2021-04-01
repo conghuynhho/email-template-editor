@@ -23,7 +23,7 @@ const TabGeneral = Loadable({
 const Button = props => {
     const {
         config = {},
-        activeElementValues,
+        content,
         translate = (lal) => lal
     } = props;
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
@@ -122,8 +122,8 @@ const Button = props => {
     };
 
     // console.log(configure, 'configSamples');
-    // console.log(activeElementValues, 'activeElement');
-    const configConverted = mapButtonDataToConfig(activeElementValues.content, config);
+    // console.log(activeElementValuescontent'activeElement');
+    const configConverted = mapButtonDataToConfig(content,config);
 
     const toggleTab = (tab) => {
         if (activeTab !== tab) {

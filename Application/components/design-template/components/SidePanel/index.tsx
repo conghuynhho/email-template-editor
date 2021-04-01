@@ -24,8 +24,7 @@ const SidePanel = props => {
             const activeElementID = store.activeElement;
             const element = getActiveElement(store, activeElementID);
             const config = sidePanelConfig.find(item => getObjectPropSafely(()=> item.type) === getObjectPropSafely(()=> element.type));
-            const type = (getObjectPropSafely(()=> element.type));
-
+            
             switch (element.type) {
                 case typeElement.TEXT: {
                     return <Text config={config} content={element.content} />;
@@ -37,22 +36,22 @@ const SidePanel = props => {
                     return <Columns config={config} />;
                 }
                 case typeElement.GENERAL: {
-                    return <General config={config} content={getObjectPropSafely(()=>store.bodies[2])} />;
+                    return <General config={config} />;
                 }
                 case typeElement.BUTTON: {
-                    return <Button config={config} activeElementValues={element} />;
-                }
-                default: {
-                    return <General config={config} />;
+                    return <Button config={config} content={element.content} />;
                 }
                 case typeElement.MENU: {
                     return <Menu config={config} />;
                 }
                 case typeElement.IMAGE: {
-                    return <Image config={config} activeElementValues={element} />;
+                    return <Image config={config} content={element.content} />;
                 }
                 case typeElement.HTML: {
                     return <Html config={config} />;
+                }
+                default: {
+                    return <General config={config} />;
                 }
             }
         } catch (error) {

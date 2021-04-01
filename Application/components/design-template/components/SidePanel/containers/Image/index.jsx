@@ -24,7 +24,7 @@ const TabGeneral = Loadable({
 const Image = props => {
     const {
         config = {},
-        activeElementValues,
+        content,
         translate = (lal) => lal
     } = props;
 
@@ -70,14 +70,14 @@ const Image = props => {
                 case 'uploadImage': {
                     const selectRadioImage = {
                         ...getObjectPropSafely(()=>gen.elements[0]),
-                        defaultValue: getTypeOfImage(getObjectPropSafely(()=>data.content.values.src.url))
+                        defaultValue: getTypeOfImage(getObjectPropSafely(()=>data.values.src.url))
                     };
                     const imageUpload = {
                         ...getObjectPropSafely(()=>gen.elements[1])
                     };
                     const alternalText = {
                         ... getObjectPropSafely(()=>gen.elements[2]),
-                        defaultValue: getObjectPropSafely(()=>data.content.values.altText)
+                        defaultValue: getObjectPropSafely(()=>data.values.altText)
                     };
 
                     uploadImage = {
@@ -93,15 +93,15 @@ const Image = props => {
                 case 'action': {
                     const actionType = {
                         ...getObjectPropSafely(()=>gen.elements[0]),
-                        defaultValue: getActionType(getObjectPropSafely(()=>data.content.values.action.name))
+                        defaultValue: getActionType(getObjectPropSafely(()=>data.values.action.name))
                     };
                     const urlImage3d = {
                         ...getObjectPropSafely(()=>gen.elements[1]),
-                        defaultValue: getObjectPropSafely(()=>data.content.values.action.values.href)
+                        defaultValue: getObjectPropSafely(()=>data.values.action.values.href)
                     };
                     const target = {
                         ...getObjectPropSafely(()=>gen.elements[2]),
-                        defaultValue: getTarget(getObjectPropSafely(()=>data.content.values.action.values.target))
+                        defaultValue: getTarget(getObjectPropSafely(()=>data.values.action.values.target))
                     };
 
                     action = {
@@ -133,8 +133,8 @@ const Image = props => {
                 case 'image': {
                     let maxWidth = '100%';
 
-                    if (getObjectPropSafely(()=>data.content.values.src.maxWidth)) {
-                        maxWidth = getObjectPropSafely(()=> data.content.values.src.maxWidth);
+                    if (getObjectPropSafely(()=>data.values.src.maxWidth)) {
+                        maxWidth = getObjectPropSafely(()=> data.values.src.maxWidth);
                     }
                     const width = {
                         ...getObjectPropSafely(()=>sty.elements[0]),
@@ -142,18 +142,18 @@ const Image = props => {
                     };
                     const autoWidth = {
                         ...getObjectPropSafely(()=>sty.elements[1]),
-                        defaultValue: getObjectPropSafely(()=>data.content.values.src.autoWidth)
+                        defaultValue: getObjectPropSafely(()=>data.values.src.autoWidth)
                     };
                     const alignment = {
                         ...getObjectPropSafely(()=>sty.elements[2]),
-                        defaultValue: getObjectPropSafely(()=>data.content.values.textAlign)
+                        defaultValue: getObjectPropSafely(()=>data.values.textAlign)
                     };
                     const label = {
                         ...getObjectPropSafely(()=>sty.elements[3])
                     };
                     // padding:
                     // check is moreOption on
-                    const paddingArray = (getObjectPropSafely(()=>data.content.values.containerPadding).split(' '));
+                    const paddingArray = (getObjectPropSafely(()=>data.values.containerPadding).split(' '));
                     let switchValue = false;
 
                     if (paddingArray.length > 1) {
@@ -163,7 +163,7 @@ const Image = props => {
                         ...getObjectPropSafely(()=>sty.elements[4]),
                         default: switchValue
                     };
-                    const paddingValues = convertShortHandCSS(getObjectPropSafely(()=>data.content.values.containerPadding));
+                    const paddingValues = convertShortHandCSS(getObjectPropSafely(()=>data.values.containerPadding));
                     const top = {
                         ...getObjectPropSafely(()=>sty.elements[5].elementChild[0]),
                         ...paddingValues.top
@@ -226,7 +226,7 @@ const Image = props => {
 
         return saveData;
     };
-    const convertedConfig = mapMenuDataToSidePanel(activeElementValues,config);
+    const convertedConfig = mapMenuDataToSidePanel(content,config);
     const renderHtml = () => {
         try {
             const style = getObjectPropSafely(() => convertedConfig.resource.style) || [];
