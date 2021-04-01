@@ -1,6 +1,6 @@
-import {result} from 'lodash';
-import {string} from 'prop-types';
-import {getObjectPropSafely} from 'Utils';
+import { result } from 'lodash';
+import { string } from 'prop-types';
+import { getObjectPropSafely } from 'Utils';
 
 export const hierarchyDesignData = (data) => {
     const body = getObjectPropSafely(() => data.bodies);
@@ -219,7 +219,7 @@ export const getColumnIndexFromID = (data, columnID) => {
 };
 
 export const updateUsageCounters = (usageCounters, htmlType, operator = 'add') => {
-    const newUsageCounters = {...usageCounters};
+    const newUsageCounters = { ...usageCounters };
 
     if (operator === 'subtract') {
         switch (htmlType) {
@@ -301,6 +301,7 @@ export const getActiveElement = (data, activeElement) => {
             type = 'general';
 
     }
+    result.type = type.toUpperCase();
 
     const content = Object.values(contents).length ? Object.values(contents).find(item => item.values._meta.htmlID === activeElement) : {};
 

@@ -41,7 +41,7 @@ export const initialState = {
         '5': {
             location: {'collection': 'contents','id': '5'},
             type: CONSTANTS.TYPE_CONTENT.DIVIDER,
-            values: defaultStyleContent.divider
+            values: defaultStyleContent[CONSTANTS.TYPE_CONTENT.DIVIDER]
         }
     },
     idCounters: {
@@ -73,5 +73,5 @@ export const initialState = {
     viewMode: CONSTANTS.VIEW_MODE.DESKTOP,
     sidePanelMode: CONSTANTS.SIDE_PANEL_MODE.RIGHT,
     isOpenPreview: false,
-    activeElement: 'u_content_divider_6' // Example: u_row_13, u_column_16, u_content_divider_6
+    activeElement: 'u_body' // Example: u_row_13, u_column_16, u_content_divider_6
 };

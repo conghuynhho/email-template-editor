@@ -23,6 +23,7 @@ export const nestedData = {
                                 'type': 'divider',
                                 'values': {
                                     'containerPadding': '5px',
+                                    'moreOptions': false,
                                     '_meta': {
                                         'htmlID': 'u_content_divider_6',
                                         'htmlClassNames': 'u_content_divider'
@@ -378,6 +379,7 @@ export const nestedData = {
                                 'type': 'divider',
                                 'values': {
                                     'containerPadding': '150px 10px 10px',
+                                    'moreOptions': false,
                                     '_meta': {
                                         'htmlID': 'u_content_divider_2',
                                         'htmlClassNames': 'u_content_divider'
@@ -1153,6 +1155,7 @@ export const nestedData = {
                                 'type': 'divider',
                                 'values': {
                                     'containerPadding': '15px',
+                                    'moreOptions': false,
                                     '_meta': {
                                         'htmlID': 'u_content_divider_4',
                                         'htmlClassNames': 'u_content_divider'
@@ -1328,6 +1331,7 @@ export const nestedData = {
                                 'type': 'divider',
                                 'values': {
                                     'containerPadding': '10px',
+                                    'moreOptions': false,
                                     '_meta': {
                                         'htmlID': 'u_content_divider_5',
                                         'htmlClassNames': 'u_content_divider'
@@ -1449,6 +1453,7 @@ export const designData = {
                 'type': 'divider',
                 'values': {
                     'containerPadding': '5px',
+                    'moreOptions': false,
                     '_meta': {
                         'htmlID': 'u_content_divider_6',
                         'htmlClassNames': 'u_content_divider'
@@ -1638,6 +1643,7 @@ export const designData = {
                 'type': 'divider',
                 'values': {
                     'containerPadding': '150px 10px 10px',
+                    'moreOptions': false,
                     '_meta': {
                         'htmlID': 'u_content_divider_2',
                         'htmlClassNames': 'u_content_divider'
@@ -2238,6 +2244,7 @@ export const designData = {
                 'type': 'divider',
                 'values': {
                     'containerPadding': '15px',
+                    'moreOptions': false,
                     '_meta': {
                         'htmlID': 'u_content_divider_4',
                         'htmlClassNames': 'u_content_divider'
@@ -2335,6 +2342,7 @@ export const designData = {
                 'type': 'divider',
                 'values': {
                     'containerPadding': '10px',
+                    'moreOptions': false,
                     '_meta': {
                         'htmlID': 'u_content_divider_5',
                         'htmlClassNames': 'u_content_divider'

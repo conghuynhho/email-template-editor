@@ -27,7 +27,7 @@ const Image = (props) => {
             className={styles[classTitle]}
             style={style}
         >
-            <div style={styleExtra}>
+            <div style={{...styleExtra, position: ''}}>
                 <img 
                     alt="Image" 
                     className="v-src-width v-src-max-width" 
