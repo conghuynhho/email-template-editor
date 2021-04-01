@@ -432,13 +432,13 @@ export const convertShortHandCSS = (shortHand) => {
     return result;
 };
 
-export const findAlignment = (list) => {
-    if (!Array.isArray(list)) {return}
-    const alignment = list.find(element => (getObjectPropSafely(() => element.type)) === 'ALIGNMENT');
-    const result = getObjectPropSafely(()=>alignment.defaultValue);
+// export const findAlignment = (list) => {
+//     if (!Array.isArray(list)) {return}
+//     const alignment = list.find(element => (getObjectPropSafely(() => element.type)) === 'ALIGNMENT');
+//     const result = getObjectPropSafely(()=>alignment.defaultValue);
 
-    return result; 
-};
+//     return result; 
+// };
 export const validURL = (str) => {
     let pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name

@@ -1,8 +1,6 @@
 // Libraries
 import React, {useEffect, useState, useContext} from 'react';
 import classnames from 'classnames';
-import {findAlignment} from 'Components/design-template/components/Workspace/utils';
-import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 
 // Components
 import {
@@ -430,7 +428,6 @@ const Style = props => {
                                 label={label || null}
                                 styleLabel={{height: 30}}
                                 translate={translate}
-                                alignment={findAlignment(getObjectPropSafely(()=> config[0].elements))}
                                 // style={getObjectPropSafely(() => style.styleChild) || { width: 100 }}
                                 // value={valueStyle || defaultValue}
                                 callback={(value) => updateComponent(idParent, idChild, value)}
