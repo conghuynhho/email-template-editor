@@ -72,15 +72,11 @@ const reducer = (state, action) => {
             return {...newState};
         }
         case actionType.UPDATE_CONTENT: {
-            const {id, values, keyParent, key} = payload;
+            const {id, values} = payload;
 
             const contents = produce(state.contents, draft => {
                 if (draft[id]) {
-                    if (keyParent) {
-                        draft[id].values[keyParent][key]  = values;
-                    } else {
-                        draft[id].values[key] = values;
-                    }
+                    draft[id] = {...draft[id], ...values};
                 }
             });
             
