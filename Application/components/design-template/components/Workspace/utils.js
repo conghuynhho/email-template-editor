@@ -1,6 +1,8 @@
-import { result } from 'lodash';
-import { string } from 'prop-types';
-import { getObjectPropSafely } from 'Utils';
+import {debounce, result} from 'lodash';
+import {string} from 'prop-types';
+import {getObjectPropSafely} from 'Utils';
+import {typeElement} from 'Components/design-template/constants';
+import {useCallback} from 'react';
 
 export const hierarchyDesignData = (data) => {
     const body = getObjectPropSafely(() => data.bodies);
@@ -219,7 +221,7 @@ export const getColumnIndexFromID = (data, columnID) => {
 };
 
 export const updateUsageCounters = (usageCounters, htmlType, operator = 'add') => {
-    const newUsageCounters = { ...usageCounters };
+    const newUsageCounters = {...usageCounters};
 
     if (operator === 'subtract') {
         switch (htmlType) {
@@ -310,3 +312,164 @@ export const getActiveElement = (data, activeElement) => {
         content
     };
 };
+
+export const getContentIDFromHTMLID = (data, htmlID ) => {
+    for (const key in data.contents) {
+        if (htmlID === getObjectPropSafely(() => data.contents[key].values._meta.htmlID)) {
+            return key;
+        }
+    }
+    return '';
+};
+
+export const getActiveElementFromStore = (store) => {
+    // function to get search group
+    const getSearchGroup = (searchString, typeElement) => {
+        const searchStringUpperCase = searchString.toUpperCase();
+        let result = '';
+
+        for ( const key in typeElement) {
+            const type = typeElement[key];
+
+            if (searchStringUpperCase.includes(type)) {result = type}
+        }
+        return result;
+    };
+
+    const activeElementHTMLID = getObjectPropSafely(() => store.activeElement);
+    const groupKey = getSearchGroup(activeElementHTMLID, typeElement);
+
+    switch (groupKey) {
+        case typeElement.TEXT : {
+            const textID = getContentIDFromHTMLID(store, activeElementHTMLID);
+            const textElement = getObjectPropSafely(() => store.contents[textID]);
+
+            return textElement;
+        }
+        case typeElement.BUTTON: {
+            const buttonID = getContentIDFromHTMLID(store, activeElementHTMLID);
+            const buttonElement = getObjectPropSafely(() => store.contents[buttonID]);
+
+            return buttonElement;
+        }
+        case typeElement.COLUMNS:
+            return groupKey;
+        case typeElement.LINE:
+            return groupKey;
+        default:
+            return groupKey;
+    }
+
+};
+
+export const removePercentPattern = (string) => {
+    if (typeof string !== 'string') {return }
+    if (string.indexOf('%') > -1) {
+        return string.replace('%','');
+    }
+    return string;
+};
+
+export const getUnitAndValue = (string) => {
+    const result = {
+        unit: '',
+        defaultValue: ''
+    };
+
+    const [unit] = string.match(/[a-zA-Z]+|%/g);
+    const [defaultValue] = string.match(/\d+/g);
+
+    result.defaultValue = defaultValue;
+    result.unit = unit;
+    return result;
+};
+
+export const convertShortHandCSS = (shortHand) => {
+    const list = shortHand.split(' ');
+    let result = {
+        top: {
+            unit: '',
+            defaultValue: ''
+        },
+        right: {
+            unit: '',
+            defaultValue: ''
+        },
+        bottom: {
+            unit: '',
+            defaultValue: ''
+        },
+        left: {
+            unit: '',
+            defaultValue: ''
+        }
+    };
+
+    if (!Array.isArray(list)) {return}
+    switch (list.length) {
+        case 1:
+            result.top = result.bottom = result.left = result.right = {...getUnitAndValue(list[0])};
+            break;
+        case 2:
+            result.top = result.bottom = {...getUnitAndValue(list[0])};
+            result.left = result.right = {...getUnitAndValue(list[1])};
+            break;
+        case 3: 
+            result.top = {...getUnitAndValue(list[0])};
+            result.left = result.right = {...getUnitAndValue(list[1])};
+            result.bottom = {...getUnitAndValue(list[2])};
+            break;
+        case 4: 
+            result.top = {...getUnitAndValue(list[0])};
+            result.right = {...getUnitAndValue(list[1])};
+            result.bottom = {...getUnitAndValue(list[2])};
+            result.left = {...getUnitAndValue(list[3])};
+            break;
+        default:
+            break;
+    }
+
+    return result;
+};
+
+export const findAlignment = (list) => {
+    if (!Array.isArray(list)) {return}
+    const alignment = list.find(element => (getObjectPropSafely(() => element.type)) === 'ALIGNMENT');
+    const result = getObjectPropSafely(()=>alignment.defaultValue);
+
+    return result; 
+};
+export const validURL = (str) => {
+    let pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+    return !!pattern.test(str);
+};
+
+export const getFontFamily = (string) => {
+    const array = string.split(',');
+    const result = array[0].replace(/'|"/g, '');
+
+    return result;
+};
+
+// export const useDebounce = (fnToDebounce, durationInMs = 200) => {
+//     if (isNaN(durationInMs)) {
+//         throw new TypeError('durationInMs for debounce should be a number');
+//     }
+
+//     if (fnToDebounce == null) {
+//         throw new TypeError('fnToDebounce cannot be null');
+//     }
+
+//     if (typeof fnToDebounce !== 'function') {
+//         throw new TypeError('fnToDebounce should be a function');
+//     }
+
+//     return useCallback(debounce(fnToDebounce, durationInMs), [fnToDebounce, durationInMs]);
+// };
+

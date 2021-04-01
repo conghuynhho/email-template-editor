@@ -17,12 +17,13 @@ import sidePanelConfig from 'Components/design-template/components/SidePanel/con
 import {getActiveElement} from 'Components/design-template/components/Workspace/utils';
 
 const SidePanel = props => {
-    const {state: store = {}} = useContext(StoreContext);
+    const {state: store = {activeElement: {}, bodies: {}}} = useContext(StoreContext);
     const renderHtml = () => {
         try {
-            const activeElement = store.activeElement;
-            const element = getActiveElement(store, activeElement);
-            const config = sidePanelConfig.find(item => item.type === element.type);
+            const activeElementID = store.activeElement;
+            const element = getActiveElement(store, activeElementID);
+            const config = sidePanelConfig.find(item => getObjectPropSafely(()=> item.type) === getObjectPropSafely(()=> element.type));
+            const type = (getObjectPropSafely(()=> element.type));
 
             switch (element.type) {
                 case typeElement.TEXT: {
@@ -35,16 +36,19 @@ const SidePanel = props => {
                     return <Columns config={config} />;
                 }
                 case typeElement.GENERAL: {
-                    return <General config={config} />;
+                    return <General config={config} content={getObjectPropSafely(()=>store.bodies[2])} />;
                 }
                 case typeElement.BUTTON: {
-                    return <Button config={config} />;
+                    return <Button config={config} activeElementValues={element} />;
+                }
+                default: {
+                    return <General config={config} />;
                 }
                 case typeElement.MENU: {
                     return <Menu config={config} />;
                 }
                 case typeElement.IMAGE: {
-                    return <Image config={config} />;
+                    return <Image config={config} activeElementValues={element} />;
                 }
                 case typeElement.HTML: {
                     return <Html config={config} />;

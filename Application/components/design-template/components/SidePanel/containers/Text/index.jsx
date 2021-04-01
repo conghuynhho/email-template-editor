@@ -15,8 +15,8 @@ const Text = props => {
         translate = (lal) => lal
     } = props;
 
-    console.log('config',config.resource);
-    console.log('element', element);
+    // console.log('config',config.resource);
+    // console.log('element', element);
     const elements = (getObjectPropSafely(() => config.resource.style[0].elements));
     let style = '';
 
