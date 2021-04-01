@@ -46,14 +46,18 @@ const Row = (props) => {
         data, 
         generalStyle, 
         rowIndex, 
-        getDragItHereIndex, 
         rowDragItHereIndex, 
         rowContentDragItHereIndex, 
         columnContentDragItHereIndex, 
         contentDragItHereIndex, 
         contentDragItHereArea,
         typeOfIsDragging = '',
-        noContentClassName = ''
+        noContentClassName = '',
+        getDragItHereRowIndexes,
+        getDragItHereContentIndexes,
+        getActiveRowIndex,
+        activeRowIndex,
+        rowDraggingIndex
     } = props;
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => data.values._meta.htmlClassNames);
@@ -81,7 +85,7 @@ const Row = (props) => {
         ...(!fullWidth ? styleBackgroundImage : {})
     };
 
-    const [currentRowIndex, setCurrentRowIndex] = useState(-1);
+    // const [currentRowIndex, setCurrentRowIndex] = useState(-1);
     const [isShowAddContent, setIsShowAddContent] = useState(false);
     const [isOverSelectorHtmlID, setIsOverSelectorHtmlID] = useState('');
 
@@ -89,7 +93,8 @@ const Row = (props) => {
     
     useEffect(() => {
         if (activeElement === id) {
-            setCurrentRowIndex(rowIndex);
+            // setCurrentRowIndex(rowIndex);
+            typeof getActiveRowIndex === 'function' && getActiveRowIndex(rowIndex);
         }
     });
 
@@ -169,7 +174,7 @@ const Row = (props) => {
                             
                     // delete at bodies 
                     const rowPositions = [...getRowsFromBodies(bodies)];
-                    const deleteRowId = rowPositions.splice(currentRowIndex, 1);
+                    const deleteRowId = rowPositions.splice(activeRowIndex, 1); // current row index
         
                     const newBodyId = Object.keys(bodies)[0];
 
@@ -282,6 +287,13 @@ const Row = (props) => {
     const onClickAddContent = (e) => {
         e.stopPropagation();
         setIsShowAddContent(false);
+        dispatchStore({
+            type: actionType.ACTIVE_ELEMENT,
+            payload: {
+                activeElement: 'u_body',
+                isEditing: false
+            }
+        });
     };
 
     const onClickAddRow = (e, position, currentRowIdx) => {
@@ -403,7 +415,7 @@ const Row = (props) => {
     
             const rowPositions = [...getRowsFromBodies(bodies)];
     
-            rowPositions.splice(currentRowIndex + 1, 0, newRowId);
+            rowPositions.splice(activeRowIndex + 1, 0, newRowId); // currentRowIndex
     
             // update bodies
             const newBodyId = Object.keys(bodies)[0];
@@ -647,7 +659,7 @@ const Row = (props) => {
                     const rowDragItHereIndex = tempSpecs.areaPosition === 'below' ? getRowIndexFromId(store, rowNumberId) : getRowIndexFromId(store, rowNumberId) - 1;
                     
                     if (targetElement.includes('u_row')) {
-                        typeof getDragItHereIndex === 'function' && getDragItHereIndex('draggingRow', rowDragItHereIndex, -1, -1, '', getRowIndexFromId(store, rowNumberId), visiblePosition.areaPosition);
+                        typeof getDragItHereRowIndexes === 'function' && getDragItHereRowIndexes(rowDragItHereIndex, getRowIndexFromId(store, rowNumberId), visiblePosition.areaPosition);
                     }
 
                 } 
@@ -661,10 +673,13 @@ const Row = (props) => {
                     const rowIndex = getRowIndexFromId(store, rowID);
 
                     if (targetElement.includes('u_content')) {
-                        typeof getDragItHereIndex === 'function' && getDragItHereIndex('draggingContent', rowIndex, columnIndex, contentIndex, visiblePosition.areaPosition);
-                    }
+                        typeof getDragItHereContentIndexes === 'function' && getDragItHereContentIndexes(rowIndex, columnIndex, contentIndex, visiblePosition.areaPosition);
+                    } 
                 }
-            }    
+            } else {
+                typeof getDragItHereRowIndexes === 'function' && getDragItHereRowIndexes(-1, -1, '');
+                typeof getDragItHereContentIndexes === 'function' && getDragItHereContentIndexes(-1 , -1, -1, '');
+            }
         }
     };
 
@@ -755,10 +770,15 @@ const Row = (props) => {
                                         {shouldRenderClone ? (
                                             <>
                                                 {index === 0 && renderDragItHere('content', {rowIndex, columnIndex, index}, true)}
-                                                <div className={classnames(styles['react-beautiful-dnd-copy'])}>
+                                                <div className={classnames(styles['react-beautiful-dnd-copy'])} style={{border: '2px solid #13ABD7'}}>
                                                     
                                                     <div
-                                                        id={contentID}                                                    
+                                                        id={contentID}  
+                                                        className={classnames(
+                                                            'layer-selectable', 
+                                                            styles['layer-content'],
+                                                            {[styles['layer-selected']]: activeElement === contentID}
+                                                        )}                                                  
                                                     >
                                                         {renderSelector({
                                                             isShowAddTop: false, 
@@ -780,7 +800,7 @@ const Row = (props) => {
                                                 {(provided, snapshot) => {
                                                     let isInsideRow = false;
         
-                                                    if (currentRowIndex === rowIndex) {
+                                                    if (activeRowIndex === rowIndex && activeElement.includes('row')) {
                                                         isInsideRow = true;
                                                     } else {
                                                         isInsideRow = false;
@@ -803,7 +823,7 @@ const Row = (props) => {
                                                                 {...provided.draggableProps}
                                                                 style={{
                                                                     ...getItemStyle(false, provided.draggableProps.style),
-                                                                    ...(true && {transform: 'none'})
+                                                                    transform: 'none'
                                                                 }}
                                                             >
                                                                 {renderSelector({
@@ -925,68 +945,33 @@ const Row = (props) => {
         contentIndex = -1
     } = {}) => {
 
-        // const selectorIndex = () => {
-
-        //     if (isRow === true && isSelected === true) {
-        //         return {
-        //             zIndex: 100
-        //         };
-        //     }
-        //     if (isRow === true && isSelected === false) {
-        //         return {
-        //             zIndex: 0
-        //         };
-        //     }
-
-        //     if (isRow === false && isInsideRow === true) {
-        //         return {
-        //             zIndex: 101
-        //         };
-        //     }
-
-        //     if (isEditing === false) {
-        //         return {
-        //             zIndex: 99
-        //         };
-        //     }
-
-        //     return {};
-        // };
-
         let styleSelector = {zIndex: 100};
 
         if (isEditing) {
-            styleSelector = {zIndex: 0};
+            styleSelector = {zIndex: 0, position: 'static'};
         }
 
-        switch (typeOfIsDragging) {
-            case 'rows': 
-                if (currentID.includes('u_content')) {
-                    styleSelector['zIndex'] = 0;
-                }
-                break;
-            case 'contents':
-                if (currentID.includes('u_row')) {
-                    styleSelector = {
-                        zIndex: 0,
-                        opacity: 0
-                    };
-                }
-                break;
-            default: break;
+        if (typeOfIsDragging) {
+            styleSelector = {
+                zIndex: 0,
+                opacity: 0
+            };
         }
-        // if (typeOfIsDragging === 'rows') {
-        //     if (currentID.includes('u_content')) {
-        //         styleSelector['zIndex'] = 0;
-        //     }
-        // }
+
+        if (isSelected && currentID.includes('row') && !typeOfIsDragging) {
+            styleSelector = {zIndex: 105};
+        }
+
+        if (isInsideRow && !isEditing) {
+            styleSelector = {zIndex: 106};
+        }
 
         return (
             <div className={classnames(
                 `${currentID}`,
                 styles['layer-selector-row'],
                 {[styles['active']]: isSelected},
-                {[styles['layout-mobile-row']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE && isRow}
+                {[styles['layout-mobile-row']]: viewMode === CONSTANTS.VIEW_MODE.MOBILE && isRow}              
             )}
             id={`selector_${currentID}`}
             style={{...styleSelector}}
@@ -998,7 +983,7 @@ const Row = (props) => {
                         styles['layer-add-row'],
                         styles['layer-add-row-top']
                     )}
-                    onClick={(e) => onClickAddRow(e, 'top', currentRowIndex)}
+                    onClick={(e) => onClickAddRow(e, 'top', activeRowIndex)} // currentRowIndex
                     // style={isOverSelectorHtmlID === currentID ? {opacity: 1, display: 'inline-block'} : {}}
                     >
                         <Icon className={classnames('icon-ants-add')} />
@@ -1010,7 +995,7 @@ const Row = (props) => {
                         styles['layer-add-row'],
                         styles['layer-add-row-bottom']
                     )}
-                    onClick={(e) => onClickAddRow(e, 'bottom', currentRowIndex)}
+                    onClick={(e) => onClickAddRow(e, 'bottom', activeRowIndex)} // currentRowIndex
                     // style={isOverSelectorHtmlID === currentID ? {opacity: 1, display: 'inline-block'} : {}}
                     >
                         <Icon className={classnames('icon-ants-add')} />
@@ -1019,7 +1004,9 @@ const Row = (props) => {
                     
                 <div className={classnames(
                     styles['layer-action-row']
-                )}>
+                )}
+                style={{zIndex: 200, position: 'absolute'}}
+                >
                     <div className={classnames(styles['duplicate-row'])} onClick={(e) => onClickDuplicate(e, isRow, columnIndex, contentIndex)}>
                         <Icon className={classnames('icon-ants-copy-report')} />
                     </div>

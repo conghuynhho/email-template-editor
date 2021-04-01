@@ -19,7 +19,8 @@ export const typeComponent = {
     COMPONENT_CHILD: 'COMPONENT_CHILD',
     UPLOAD: 'UPLOAD',
     BLOCK_COLUMNS: 'BLOCK_COLUMNS',
-    TAB_COLUMN: 'TAB_COLUMN'
+    TAB_COLUMN: 'TAB_COLUMN',
+    LIST_COMPONENTS: 'LIST_COMPONENTS'
 };
 
 export const typeElement = {
@@ -30,7 +31,8 @@ export const typeElement = {
     GENERAL: 'GENERAL',
     MENU: 'MENU',
     IMAGE: 'IMAGE',
-    HTML: 'HTML'
+    HTML: 'HTML',
+    LIST_COMPONENTS: 'LIST_COMPONENTS'
 };
 
 export const CONSTANTS = {

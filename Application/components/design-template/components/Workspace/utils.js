@@ -1,8 +1,8 @@
-import {debounce, result} from 'lodash';
-import {string} from 'prop-types';
-import {getObjectPropSafely} from 'Utils';
 import {typeElement} from 'Components/design-template/constants';
 import {useCallback} from 'react';
+import {result} from 'lodash';
+import {string} from 'prop-types';
+import {getObjectPropSafely} from 'Utils';
 
 export const hierarchyDesignData = (data) => {
     const body = getObjectPropSafely(() => data.bodies);
@@ -303,6 +303,7 @@ export const getActiveElement = (data, activeElement) => {
             type = 'general';
 
     }
+    result.type = type.toUpperCase();
 
     const content = Object.values(contents).length ? Object.values(contents).find(item => item.values._meta.htmlID === activeElement) : {};
 

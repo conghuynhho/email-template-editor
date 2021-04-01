@@ -14,8 +14,8 @@ import Html from 'Components/design-template/components/SidePanel/containers/Htm
 // Utils
 import {typeElement} from 'Components/design-template/constants';
 import sidePanelConfig from 'Components/design-template/components/SidePanel/configs';
-import {getObjectPropSafely} from 'Utils';
 import {getActiveElement} from 'Components/design-template/components/Workspace/utils';
+import {getObjectPropSafely} from 'Utils/index';
 
 const SidePanel = props => {
     const {state: store = {activeElement: {}, bodies: {}}} = useContext(StoreContext);
@@ -24,10 +24,9 @@ const SidePanel = props => {
             const activeElementID = store.activeElement;
             const element = getActiveElement(store, activeElementID);
             const config = sidePanelConfig.find(item => getObjectPropSafely(()=> item.type) === getObjectPropSafely(()=> element.type));
-            let type = (getObjectPropSafely(()=> element.type));
+            const type = (getObjectPropSafely(()=> element.type));
 
-            if (type) {type = type.toUpperCase()}
-            switch (type) {
+            switch (element.type) {
                 case typeElement.TEXT: {
                     return <Text config={config} content={element.content} />;
                 }

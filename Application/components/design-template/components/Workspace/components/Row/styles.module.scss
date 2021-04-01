@@ -82,11 +82,11 @@
         }
 
         .layer-action-row {
-            position: absolute;
+            // position: absolute;
             right: 2px;
-            top: 2px;
+            bottom: -25px;
             display: none;
-            z-index: 101;
+            // z-index: 101;
 
             .duplicate-row {
                 display: inline-block;
@@ -100,7 +100,12 @@
                 border-radius: 3px 0px 0px 3px;
                 padding: 0px 7px 0px 9px;
                 margin: 0px 1px;
-                cursor: pointer;            
+                cursor: pointer;
+                
+                &:hover {
+                    background-color: #1998d1;
+                }
+
             }
 
             .delete-row {
@@ -115,6 +120,11 @@
                 font-size: 14px;
                 border-radius: 0px 3px 3px 0px;
                 cursor: pointer;
+
+                &:hover {
+                    background-color: #c2282c;
+                    border-color: #c2282c;
+                }
             }
         }
 
@@ -136,9 +146,13 @@
         }
     }
 
+    .dragging {
+        border: 2px solid #13ABD7;
+    }
+
     .blockbuilder-placeholder { 
         position: relative;
-        z-index: 101;
+        z-index: 106;
 
         &.active {
             &::before {
@@ -322,10 +336,10 @@
 }
 
 .react-beatiful-dnd-copy {
-background: lightblue;
+    background: lightblue;
 }
 
 .react-beatiful-dnd-copy ~ [data-rbd-placeholder-context-id] {
-display: none !important;
+    display: none !important;
 }
   
