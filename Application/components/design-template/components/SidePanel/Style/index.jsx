@@ -541,7 +541,11 @@ const Style = props => {
                                                 className={classnames('col-6', styles['list-component-item'])} 
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
-                                                {...provided.dragHandleProps}                                        
+                                                {...provided.dragHandleProps}
+                                                style={{
+                                                    ...provided.draggableProps.style,
+                                                    ...(snapshot.isDropAnimating && {transitionDuration: '0.001s'})
+                                                }}                                        
                                             >
                                                 <div className={classnames(styles['list-component-item-icon'])} >
                                                     <Icon type={item.icon} style={{color: '#ccc', fontSize: '16px'}} />
@@ -580,7 +584,9 @@ const Style = props => {
                                                                                     ref={provided.innerRef}
                                                                                     {...provided.draggableProps}
                                                                                     {...provided.dragHandleProps}
-                                                                                    style={{...provided.draggableProps.style, transform: 'none'}}                                        
+                                                                                    style={{
+                                                                                        ...provided.draggableProps.style, transform: 'none'                 
+                                                                                    }}                                        
                                                                                 >
                                                                                     <div className={classnames(styles['list-component-item-icon'])} >
                                                                                         <Icon type={child.icon} style={{color: '#ccc', fontSize: '16px'}} />
