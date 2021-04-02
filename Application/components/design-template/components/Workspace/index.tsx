@@ -12,7 +12,7 @@ import {Icon} from '@antscorp/components';
 import {getObjectPropSafely} from 'Utils';
 
 const Workspace = (props) => {
-    const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
+    const {state: store = {}} = useContext(StoreContext);
     const {viewMode, activeElement} = store;
     const nestedData = hierarchyDesignData(store);
     const {
@@ -29,7 +29,9 @@ const Workspace = (props) => {
         noContentClassName,
         rowDraggingIndex,
         getActiveRowIndex,
-        activeRowIndex
+        activeRowIndex,
+        typeDragDropSidePanel,
+        targetElement
     } = props;
 
     const id = getObjectPropSafely(() => nestedData.body.values._meta.htmlID);
@@ -69,6 +71,8 @@ const Workspace = (props) => {
                                 activeRowIndex={activeRowIndex}
                                 noContentClassName={noContentClassName}
                                 rowDraggingIndex={rowDraggingIndex}
+                                typeDragDropSidePanel={typeDragDropSidePanel}
+                                targetElement={targetElement}
                             />
                         </div>
                     ) : (
@@ -108,6 +112,8 @@ const Workspace = (props) => {
                                                 noContentClassName={noContentClassName}
                                                 activeRowIndex={activeRowIndex}
                                                 rowDraggingIndex={rowDraggingIndex}
+                                                typeDragDropSidePanel={typeDragDropSidePanel}
+                                                targetElement={targetElement}
                                             />
                                             
                                         </div>

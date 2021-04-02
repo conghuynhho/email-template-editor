@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import classnames from 'classnames';
 import SidePanel from 'Components/design-template/components/SidePanel';
 import Workspace from 'Components/design-template/components/Workspace';
@@ -7,13 +7,8 @@ import DeleteForm from 'Components/design-template/components/DeleteForm';
 import styles from 'Components/design-template/containers/LayoutDesign/styles.module.scss';
 import {StateProvider} from 'Components/design-template/components/ContextStore';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
-import {CONSTANTS, typeDnD, NEW_CONTENT} from 'Components/design-template/constants';
-import {
-    defaultStyleGeneral,
-    defaultStyleRow,
-    defaultStyleColumn,
-    defaultStyleContent
-} from 'Components/design-template/components/ContextStore/defaultProps';
+import {CONSTANTS, typeDnD} from 'Components/design-template/constants';
+import {defaultStyleContent} from 'Components/design-template/components/ContextStore/defaultProps';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import {DragDropContext} from 'react-beautiful-dnd';
 import {
@@ -93,7 +88,7 @@ const LayoutDesign = () => {
     };
 
     const getNoContentIndexes = (rowIdx, columnIdx, classNameCompare) => {
-        if (rowIdx && columnIdx) {
+        if (rowIdx !== -1 && columnIdx !== -1) {
             setNoContentRowIndex(rowIdx);
             setNoContentColumnIndex(columnIdx);
             setNoContentClassName(classNameCompare);
@@ -133,7 +128,7 @@ const LayoutDesign = () => {
         const bodies = {...data.bodies};
         const rows = getRowsFromBodies(bodies);
 
-        if (destinationRowIdx) {
+        if (destinationRowIdx !== -1) {
             const endIndex = findEndIndex(currentRowIdx, destinationRowIdx, areaPosition);
     
             const newRows = reorder(rows, currentRowIdx, endIndex);
@@ -228,26 +223,29 @@ const LayoutDesign = () => {
         const {rowIdx, columnIdx, contentIdx} = source;
         const {desRowIndex, desColumnIndex} = destination;
 
-        const sourceRowID = getRowId(data, rowIdx);
-        const sourceColumnId = getColumnId(data, sourceRowID, columnIdx);
-        const columns = getObjectPropSafely(() => data.columns);
+        if (desRowIndex !== -1 && desColumnIndex !== -1) {
 
-        const destinationRowID = getRowId(data, desRowIndex);
-        const destinationColumnId = getColumnId(data, destinationRowID, desColumnIndex);
-
-        const newColumns = produce(columns, draft => {
-            const [removed] = draft[sourceColumnId].contents.splice(contentIdx, 1);
-
-            draft[destinationColumnId].contents.push(removed);
-        });
-
-        dispatchStore({
-            type: actionType.UPDATE_COLUMN,
-            payload: {
-                id: 'u_body',
-                values: newColumns
-            }
-        });
+            const sourceRowID = getRowId(data, rowIdx);
+            const sourceColumnId = getColumnId(data, sourceRowID, columnIdx);
+            const columns = getObjectPropSafely(() => data.columns);
+    
+            const destinationRowID = getRowId(data, desRowIndex);
+            const destinationColumnId = getColumnId(data, destinationRowID, desColumnIndex);
+    
+            const newColumns = produce(columns, draft => {
+                const [removed] = draft[sourceColumnId].contents.splice(contentIdx, 1);
+    
+                draft[destinationColumnId].contents.push(removed);
+            });
+    
+            dispatchStore({
+                type: actionType.UPDATE_COLUMN,
+                payload: {
+                    id: 'u_body',
+                    values: newColumns
+                }
+            });
+        }
         
     };
 
@@ -303,20 +301,25 @@ const LayoutDesign = () => {
                     case typeDragDropSidePanel === typeDnD.SIDE_PANEL.COLUMN && targetElement.includes('row'): {
                         const rowNumberId = getRowIDFromHtmlID(store, visiblePosition.id);
                         const rowDragItHereIdx = visiblePosition.areaPosition === typeDnD.DROP_AREA.BELOW ? getRowIndexFromId(store, rowNumberId) : getRowIndexFromId(store, rowNumberId) - 1;
-
+    
                         setDragItHereIndex(rowDragItHereIdx);
                         break;
                     }
-                    case targetElement.includes('content'): {
+                    case typeDragDropSidePanel !== typeDnD.SIDE_PANEL.COLUMN && targetElement.includes('content'): {
                         const contentNumberID = getContentIDFromHtmlID(store, visiblePosition.id);
                         const {columnID, contentIndex} = getContentIndexFromID(store, contentNumberID);
                         const {rowID, columnIndex} = getColumnIndexFromID(store, columnID);
                         const rowIndex = getRowIndexFromId(store, rowID);
-
+    
                         setRowContentDragItHereIndex(rowIndex);
                         setColumnContentDragItHereIndex(columnIndex);
                         setContentDragItHereIndex(contentIndex);
                         setContentDragItHereArea(visiblePosition.areaPosition);
+
+                        break;
+                    }
+                    case typeDragDropSidePanel === typeDnD.SIDE_PANEL.COLUMN && targetElement.includes('content'): {
+                        setDragItHereIndex(-1);
                         break;
                     }
                     default: break;
@@ -324,9 +327,7 @@ const LayoutDesign = () => {
 
                 setTargetElement(targetElement);
             } else {
-                setDragItHereIndex(-1);
-                setTargetElement('');
-                
+                setDragItHereIndex(-1);              
             }
 
             if (!targetElement.includes('content')) {
@@ -334,6 +335,31 @@ const LayoutDesign = () => {
                 setColumnContentDragItHereIndex(-1);
                 setContentDragItHereIndex(-1);
                 setContentDragItHereArea('');
+            }
+
+            if (e.target.className.includes('no_content')) {
+                if (typeDragDropSidePanel !== typeDnD.SIDE_PANEL.COLUMN) {
+                    const classNameCompare = e.target.className.split(' ')[0];
+    
+                    const noContentRowIndex = classNameCompare.split('_')[2];
+                    const noContentColumnIndex = classNameCompare.split('_')[3];
+    
+                    if (noContentRowIndex !== -1 && noContentColumnIndex !== -1) {
+                        setNoContentRowIndex(noContentRowIndex);
+                        setNoContentColumnIndex(noContentColumnIndex);
+                        setNoContentClassName(classNameCompare);
+    
+                        setTargetElement(e.target.className);
+                    } 
+                }
+            } else {
+                setNoContentRowIndex(-1);
+                setNoContentColumnIndex(-1);
+                setNoContentClassName('');
+            }
+
+            if (!e.target.id.slice(9).includes('row') && !e.target.id.slice(9).includes('content') && !e.target.className.includes('no_content')) {
+                setTargetElement('');
             }
         }
     };
@@ -415,8 +441,8 @@ const LayoutDesign = () => {
         }
 
         if (typeDragDropSidePanel) {
-
             if (typeDragDropSidePanel === typeDnD.SIDE_PANEL.COLUMN) {
+
                 if (targetElement.includes('row')) {
                     const newId = (parseInt(getLastUsingId(store), 0) + 1) + '';
                     const newColumnId = (parseInt(newId, 0) + 1) + '';
@@ -509,10 +535,22 @@ const LayoutDesign = () => {
                     });
                 } 
             } else {
-                const newContentIndex = getNewContentIndex(contentDragItHereIndex, contentDragItHereArea);
+                let newContentIndex = -1;
+                let rowId = -1;
+                let columnId = -1;
                 const newContentId = (parseInt(getLastUsingId(store), 0) + 1) + '';
-                const rowId = getRowId(store, rowContentDragItHereIndex);
-                const columnId = getColumnId(store, rowId, columnContentDragItHereIndex);
+
+                if (targetElement.includes('content')) {
+                    newContentIndex = getNewContentIndex(contentDragItHereIndex, contentDragItHereArea);
+                    rowId = getRowId(store, rowContentDragItHereIndex);
+                    columnId = getColumnId(store, rowId, columnContentDragItHereIndex);
+                }
+
+                if (targetElement.includes('no_content')) {
+                    newContentIndex = 0;
+                    rowId = getRowId(store, noContentRowIndex);
+                    columnId = getColumnId(store, rowId, noContentColumnIndex);
+                }
 
                 if (newContentIndex !== -1) {
                     const newColumns = produce(columns, draft => {
@@ -628,7 +666,7 @@ const LayoutDesign = () => {
                                             borderTopColor: '#BBBBBB'
                                         },
                                         _meta: {
-                                            htmlID: `u_content_divider_${usageCounters.u_content_divider + 1}`,
+                                            htmlID: `u_content_divider_${usageCounters.u_content_divider + 3}`,
                                             htmlClassNames: 'u_content_divider'
                                         }
                                     }
@@ -747,6 +785,8 @@ const LayoutDesign = () => {
                         rowDraggingIndex={sourceIndexes.rowIdx}
                         getActiveRowIndex={getActiveRowIndex}
                         activeRowIndex={activeRowIndex}
+                        typeDragDropSidePanel={typeDragDropSidePanel}
+                        targetElement={targetElement}
                     />
                 </div>
 

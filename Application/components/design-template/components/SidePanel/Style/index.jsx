@@ -1,7 +1,7 @@
 // Libraries
 import React, {useEffect, useState, useContext} from 'react';
 import classnames from 'classnames';
-import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
+import {Droppable, Draggable} from 'react-beautiful-dnd';
 
 // Components
 import {
@@ -87,11 +87,8 @@ const Style = props => {
     };
 
     const updateComponentChild = (key, idChild, value) => {
-        console.log('🚀 ~ file: index.jsx ~ line 89 ~ updateComponentChild ~ key', key, idChild, value, getObjectPropSafely(() => eval(`content.values.${key}`) || ''));
         try {
             const valueStore = getObjectPropSafely(() => eval(`content.values.${key}`) || '');
-
-            console.log('🚀 ~ file: index.jsx ~ line 92 ~ updateComponentChild ~ valueStore', valueStore);
 
             // if (idChild) {
             //     switch (idChild) {
@@ -547,8 +544,8 @@ const Style = props => {
                                                     ...(snapshot.isDropAnimating && {transitionDuration: '0.001s'})
                                                 }}                                        
                                             >
-                                                <div className={classnames(styles['list-component-item-icon'])} >
-                                                    <Icon type={item.icon} style={{color: '#ccc', fontSize: '16px'}} />
+                                                <div className={classnames(styles['list-component-item-icon'])} style={{borderColor: '#222'}}>
+                                                    <Icon type={item.icon} style={{color: '#222', fontSize: '16px'}} />
                                                 </div>
                                                 {translate(item.label, item.label)}
                                             </div>
@@ -577,7 +574,7 @@ const Style = props => {
                                                                 ) : 
                                                                 (
                                                                     <Draggable draggableId={'draggable-new-' + child.id} index={index}>
-                                                                        {(provided, snapshot) => {
+                                                                        {(provided) => {
                                                                             return (
                                                                                 <div 
                                                                                     className={classnames('col-6', styles['list-component-item'])} 

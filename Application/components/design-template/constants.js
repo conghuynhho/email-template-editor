@@ -80,12 +80,3 @@ export const typeDnD = {
         BELOW: 'BELOW'
     }
 };
-
-export const NEW_CONTENT = {
-    type: 'menu',
-    location: {
-        collection: 'contents',
-        id: ''
-    },
-    values: {}
-};

@@ -57,7 +57,8 @@ const Row = (props) => {
         getDragItHereContentIndexes,
         getActiveRowIndex,
         activeRowIndex,
-        rowDraggingIndex
+        typeDragDropSidePanel,
+        targetElement
     } = props;
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => data.values._meta.htmlClassNames);
@@ -100,7 +101,7 @@ const Row = (props) => {
                     // delete at columns
                     const columns = getObjectPropSafely(() => store.columns);
                     const contentID = getContentIDFromHtmlID(store, confirmDelete.id);
-                    const {columnID, contentIndex} = getContentIndexFromID(store, contentID);
+                    const {columnID} = getContentIndexFromID(store, contentID);
                     const contents = getObjectPropSafely(() => columns[columnID].contents);
                     let currentContentIndex = -1;
 
@@ -305,7 +306,6 @@ const Row = (props) => {
 
         // update row
         const newRows = produce(rows, draft => {
-            console.log('draft', draft);
             draft[newId] = {
                 cells: [1],
                 columns: [newColumnId],
@@ -600,21 +600,22 @@ const Row = (props) => {
         });
     };
 
-    const onMouseMoveDragIcon = (e, isRow) => {
+    const onMouseMoveDragIcon = (e) => {
         if (typeDraggingWorkspace) {
             const currentPosition = e.pageY;
 
             const targetElement = e.target.id.slice(9);
 
             if (e.target.className.includes('no_content')) {
-                const classNameCompare = e.target.className.split(' ')[0];
+                if (typeDraggingWorkspace !== typeDnD.WORKSPACE.ROW) {
+                    const classNameCompare = e.target.className.split(' ')[0];
+    
+                    const noContentRowIndex = classNameCompare.split('_')[2];
+                    const noContentColumnIndex = classNameCompare.split('_')[3];
 
-                const noContentRowIndex = classNameCompare.split('_')[2];
-                const noContentColumnIndex = classNameCompare.split('_')[3];
-
-                typeof props.getNoContentIndexes === 'function' && props.getNoContentIndexes(noContentRowIndex, noContentColumnIndex, classNameCompare);
+                    typeof props.getNoContentIndexes === 'function' && props.getNoContentIndexes(noContentRowIndex, noContentColumnIndex, classNameCompare);
+                }
             } else {
-
                 typeof props.getNoContentIndexes === 'function' && props.getNoContentIndexes(-1, -1, '');
             }
 
@@ -778,7 +779,7 @@ const Row = (props) => {
                                             </>
                                         ) : (
                                             <Draggable draggableId={`draggable-${contentID}`} index={index}>
-                                                {(provided, snapshot) => {
+                                                {provided => {
                                                     let isInsideRow = false;
         
                                                     if (activeRowIndex === rowIndex && activeElement.includes('row')) {
@@ -799,7 +800,7 @@ const Row = (props) => {
                                                                     
                                                                 )}
                                                                 onClick={(e) => onClickSelectContent(e, contentID)}
-                                                                onMouseMove={(e) => onMouseMoveDragIcon(e, false)}
+                                                                onMouseMove={onMouseMoveDragIcon}
                                                                 ref={provided.innerRef}
                                                                 {...provided.draggableProps}
                                                                 style={{
@@ -831,27 +832,30 @@ const Row = (props) => {
                                 );
                             }) : (
                                 <div 
-                                    className={classnames(styles['blockbuilder-placeholder'], {[styles['active']] : isVisibleNoContent})} 
+                                    className={classnames(styles['blockbuilder-placeholder'], {[styles['active']] : isVisibleNoContent})} // isVisibleNoContent
                                     data-name="Drag it here"
+                                    style={{position: (typeDragDropSidePanel && targetElement.includes('no_content')) || (typeDraggingWorkspace && isVisibleNoContent) ? 'relative' : 'static'}}
                                 >
                                     <div className={classnames(`no_content_${rowIndex}_${columnIndex}`, styles['empty-column'])} onClick={onClickEmptyColumn}>
                                         <div 
-                                            style={{
-                                                zIndex: 112
+                                            style={isEditing ? {} : {
+                                                zIndex: id === activeElement ? 104 : 102,
+                                                width: '100%',
+                                                minHeight: '100px'
                                             }}
                                         >
-                                            <div className={`no_content_${rowIndex}_${columnIndex}`}>
+                                            <div className={`no_content_${rowIndex}_${columnIndex}`} style={{width: '100%', minHeight: 'inherit', paddingTop: '30px'}}>
                                                     No content here. Drag content from right.
+                                                {
+                                                    isShowAddContent && (
+                                                        <div>
+                                                            <button className={classnames(`no_content_${rowIndex}_${columnIndex}`, 'btn', styles['add-content'])} onClick={onClickAddContent}>
+                                                                Add Content
+                                                            </button>
+                                                        </div>
+                                                    )
+                                                }
                                             </div>
-                                            {
-                                                isShowAddContent && (
-                                                    <div>
-                                                        <button className={classnames(`no_content_${rowIndex}_${columnIndex}`, 'btn', styles['add-content'])} onClick={onClickAddContent}>
-                                                        Add Content
-                                                        </button>
-                                                    </div>
-                                                )
-                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -932,7 +936,7 @@ const Row = (props) => {
             styleSelector = {zIndex: 0, position: 'static'};
         }
 
-        if (typeDraggingWorkspace) {
+        if (typeDraggingWorkspace || typeDragDropSidePanel) {
             styleSelector = {
                 zIndex: 0,
                 opacity: 0
@@ -940,7 +944,7 @@ const Row = (props) => {
         }
 
         if (isSelected && currentID.includes('row') && !typeDraggingWorkspace) {
-            styleSelector = {zIndex: 105};
+            styleSelector = {zIndex: 103};
         }
 
         if (isInsideRow && !isEditing) {
@@ -1044,9 +1048,9 @@ const Row = (props) => {
                         data-name="Drag it here" 
                     />                  
                 );
-            default: 
+            case 'row': 
                 const isHoverRow = rowDragItHereIndex === rowIndex ? true : false;
-                
+
                 return (
                     <div 
                         className={classnames(
@@ -1062,6 +1066,7 @@ const Row = (props) => {
 
     return (
         <>
+            {/* {rowIndex === 0 && renderDragItHere('row', {}, true)} */}
             <div
                 id={id}   
                 className={classnames(
@@ -1070,7 +1075,7 @@ const Row = (props) => {
                     {[styles['layer-selected']]: activeElement === id}
                 )}
                 onClick={onClickSelectRow}
-                onMouseMove={(e) => onMouseMoveDragIcon(e, true)}
+                onMouseMove={onMouseMoveDragIcon}
             >
                 {renderSelector({isSelected: activeElement === id, dragHandleProps: getObjectPropSafely(() => props.provided.dragHandleProps), isRow: true, currentID: id})}
                 <div
