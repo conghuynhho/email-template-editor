@@ -6,6 +6,7 @@ import {StoreContext} from 'Components/design-template/components/ContextStore';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import './styles.scss';
 import {getContentIDFromHtmlID} from '../../utils';
+import produce from 'immer';
 
 const Text = (props) => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
@@ -25,15 +26,20 @@ const Text = (props) => {
     const text = getObjectPropSafely(() => data.values.text);
 
     const handleEditorChange = (content, editor) => {
-        const dispatch = {};
+        const payload = {
+            values: {
+                values: produce(data.values, draft => {
+                    draft.text = content;
+                })
+            },
+            id: getContentIDFromHtmlID(store, getObjectPropSafely(() => store.activeElement))
+        };
 
-        // const getId = getActiveElement(store, activeElement);
-        // dispatch.id = getId.content.location.id;
-        dispatch.id = getContentIDFromHtmlID(store, getObjectPropSafely(() => store.activeElement));
-        dispatch.values = content;
+        // console.log('dispatch', payload);
+        // dispatch.values.text = content;
         dispatchStore({
             type: actionType.UPDATE_CONTENT,
-            payload: dispatch
+            payload: payload
 
         });
     };
