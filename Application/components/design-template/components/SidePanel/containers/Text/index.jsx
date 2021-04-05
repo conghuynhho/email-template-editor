@@ -7,39 +7,64 @@ import Style from 'Components/design-template/components/SidePanel/Style';
 import {getObjectPropSafely} from 'Utils/index.ts';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
 import {values} from 'lodash';
+import {getPaddingChild} from '../../utils';
 
 const Text = props => {
     const {
         config = {},
-        element,
+        content,
         translate = (lal) => lal
     } = props;
 
-    // console.log('config',config.resource);
-    // console.log('element', element);
     const elements = (getObjectPropSafely(() => config.resource.style[0].elements));
     let style = '';
 
     elements.forEach((value) => {
         style = value.id;
         switch (style) {
-            case 'lineHeight': 
-                value.defaultValue = getObjectPropSafely(() => element[style]).replace('%','');
+            case 'textColor':
+                value.defaultValue = getObjectPropSafely(() => content.values.color);
                 break;
-            case 'containerPadding': 
-                value.defaultValue = getObjectPropSafely(() => element[style]).replace(/px/g,'');
-                // if (value.defaultValue.length === 2)
-                //     break;
-                // case 'moreOptionsPaddingText':
+            case 'lineHeight': 
+                value.defaultValue = getObjectPropSafely(() => content.values[style]).replace('%','');
+                break;
+            case 'textContainerPaddingLabel': 
+                value.defaultValue = getObjectPropSafely(() => content.values.containerPadding);
+                {break}
+            case 'moreOptionsPaddingText':
+                const paddingText = getObjectPropSafely(() => content.values.containerPadding).split(' ');
+
+                value.defaultValue = (paddingText.length > 1 ? true : false);
+                break;
+            case 'childTextPadding':
+                const padding = getPaddingChild(getObjectPropSafely(() => content.values.containerPadding).replace(/px/g,'').split(' '));
+
+                value.elementChild.forEach((index) => {
+                    switch (index.id) {
+                        case 'top':
+                            index.defaultValue = padding.top;
+                            break;
+                        case 'bottom':
+                            index.defaultValue = padding.bottom;
+                            break;
+                        case 'right':
+                            index.defaultValue = padding.right;
+                            break;
+                        default:
+                            index.defaultValue = padding.left;
+                    }
+                });
+                break;
+            case 'lineStyle':
+                value.defaultValue = getObjectPropSafely(() => content.values.linkStyle.inherit);
                 break;
             default:
-                value.defaultValue = getObjectPropSafely(() => element[style]);
-            
+                // textAlign
+                value.defaultValue = getObjectPropSafely(() => content.values[style]);
         }
     });
 
-    config.resource.style[0].elements[0].defaultValue = getObjectPropSafely(() => element.color);
-    config.resource.style[1].elements[0].defaultValue = getObjectPropSafely(() => element.hideDesktop);
+    config.resource.style[1].elements[0].defaultValue = getObjectPropSafely(() => content.values.hideDesktop);
 
     const renderHtml = () => {
         try {

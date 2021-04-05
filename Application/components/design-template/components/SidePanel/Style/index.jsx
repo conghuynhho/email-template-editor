@@ -34,6 +34,8 @@ import {getObjectPropSafely} from 'Utils/index.ts';
 import {typeComponent} from 'Components/design-template/constants';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
 import {random} from 'Utils/index.ts';
+import {getContentIDFromHtmlID} from '../../Workspace/utils';
+import produce from 'immer';
 
 const PATH = 'Components/design-template/components/SidePanel/Style/index.jsx';
 
@@ -69,15 +71,75 @@ const Style = props => {
     };
 
     const updateComponent = (idParent, idChild, values) => {
+        const id = getContentIDFromHtmlID(state, getObjectPropSafely(() => state.activeElement));
+        const value = state.contents[id].values;
+
+        console.log('child', idChild);
+        console.log('values', values);
+        console.log('value edit', value);
+        values = {
+            values: produce(value, draft => {
+                switch (idChild) {
+                    // Text
+                    case 'textColor':
+                        draft.color = values;
+                        break;
+                    case 'lineStyle':
+                        draft.linkStyle.inherit = values;
+                        break;
+                    case 'moreOptionsPaddingText':
+                        break;
+                    case 'responsive':
+                        break;
+                    // Line
+                    case 'borderTopStyle':
+                        draft.border.borderTopStyle = values;
+                        break;
+                    case 'borderTopWidth':
+                        draft.border.borderTopWidth = values;
+                        break;
+                    case 'borderTopColor':
+                        draft.border.borderTopColor = values;
+                        break;
+                    // Menu
+                    case 'textColorMenu':
+                        draft.textColor = values;
+                        break;
+                        // Menu + Button
+                    case 'textColorButton':
+                        (draft.linkColor) ? draft.linkColor = values : draft.buttonColors.color = values;
+                        break;
+                        // chưa biết url, value trong fontFamily
+                    case 'fontFamily':
+                        draft.fontFamily.label = values;
+                        break;
+                    case 'layout':
+                        draft.layout = (values == 1 ? 'vertical' : 'horizontal');
+                        break;
+                        // Menu + Button
+                    case 'alignments':
+                        (draft.align) ? draft.align = values : draft.textAlign = values;
+                        break;
+                    // Button
+                    case 'backgroundColorButton':
+                        draft.buttonColors.backgroundColor = values;
+                        break;
+                    // textAlign, width(Line), fontSize(Menu)
+                    default: 
+                        draft[idChild] = values;
+                }
+            })
+        };
+        
         try {
             console.log(idChild);
             if (idChild) {
                 dispatch({
                     type: actionType.UPDATE_CONTENT,
                     payload: {
-                        id: getObjectPropSafely(() => content.location.id),
-                        keyParent: idParent,
-                        key: idChild,
+                        id: id,
+                        // keyParent: idParent,
+                        // key: idChild,
                         values
                     }
                 });
@@ -596,7 +658,6 @@ const Style = props => {
                                                                     </Draggable>
                                                                 )}
                                                         </React.Fragment>
-                                                       
                                                     );
                                                 })}
                                             </div>

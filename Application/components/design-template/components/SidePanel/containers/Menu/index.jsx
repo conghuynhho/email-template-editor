@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {Nav, NavLink, NavItem, TabContent, TabPane} from 'reactstrap';
 import classnames from 'classnames';
 import Loadable from 'react-loadable';
+import {getPaddingChild} from '../../utils';
 
 // Styles
 import {getObjectPropSafely} from 'Utils/index.ts';
@@ -22,9 +23,71 @@ const TabGeneral = Loadable({
 const Menu = (props) => {
     const {
         config = {},
+        content,
         translate = (lal) => lal
     } = props;
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
+
+    console.log('config', config);
+    // console.log('content', content);
+    // Lấy data style của Menu đổ vào sidePanel
+    config.resource.style[0].elements.forEach((element) => {
+        switch (element.id) {
+            case 'fontFamily': 
+                element.defaultValue = getObjectPropSafely(() => content.values.fontFamily.label.toLowerCase());
+                break;
+            case 'fontSize': 
+                element.defaultValue = getObjectPropSafely(() => content.values.fontSize);
+                break;
+            case 'textColorMenu': 
+                element.defaultValue = getObjectPropSafely(() => content.values.textColor);
+                break;
+            case 'textColorButton': 
+                element.defaultValue = getObjectPropSafely(() => content.values.linkColor);
+                break;
+            case 'alignments': 
+                element.defaultValue = getObjectPropSafely(() =>content.values.align);
+                break;
+            case 'layout': 
+                element.defaultValue = getObjectPropSafely(() => content.values.layout.toLowerCase() == 'vertical' ? 1 : 2);
+                break;
+            case 'moreOptionsMenuPadding': 
+                element.defaultValue = getObjectPropSafely(() => content.values.padding.split(' ')).length > 1 ? true : false;
+                break;
+            case 'childMenuPadding': 
+                const padding = getPaddingChild(getObjectPropSafely(() => content.values.padding.replace(/px/g,'').split(' ')));
+
+                element.elementChild.forEach((index) => {
+                    switch (index.id) {
+                        case 'top':
+                            index.defaultValue = padding.top;
+                            break;
+                        case 'bottom':
+                            index.defaultValue = padding.bottom;
+                            break;
+                        case 'right':
+                            index.defaultValue = padding.right;
+                            break;
+                        default:
+                            index.defaultValue = padding.left;
+                    }
+                });
+                break;
+            case 'containerPadding': 
+                element.defaultValue = getObjectPropSafely(() => content.values.containerPadding.replace(/px/g,''));
+                break;
+            case 'moreOptionsPaddingMenu': 
+                element.defaultValue = getObjectPropSafely(() => content.values.padding.split(' ')).length > 1 ? true : false;
+                break;
+            default:
+                break;
+        }
+    });
+
+    // General
+    content.values.menu.items.forEach((value, index) => {
+        config.resource.general[index].elements[0].defaultValue = value.text;
+    });
 
     const toggleTab = (tab) => {
         if (activeTab !== tab) {
