@@ -151,10 +151,9 @@
     }
 
     .blockbuilder-placeholder { 
-        position: relative;
+        // position: relative;
         z-index: 106;
-
-        &.active {
+        &.active {   
             &::before {
                 content: attr(data-name);
                 font-size: 11px;
@@ -194,7 +193,7 @@
             min-height: 100px;
             font-size: 13px;
             color: #2faade;
-            padding: 20px;
+            // padding: 20px;
             text-align: center;
             display: flex;
             align-items: center;
@@ -213,27 +212,6 @@
                 border-radius: 0px;
                 font-size: 13px;
             }
-        }
-    }
-
-    .isOver {
-        &::after {
-            opacity: 1;
-            outline: #13ABD7 solid 2px;
-        }
-
-        .layer-add-row {
-            display: inline-block;
-            background-color: #13ABD7;
-        }
-
-        .layer-action-row {
-            display: inline-block;
-        }
-
-        .layer-drag-row {
-            display: flex;
-            background-color: #13ABD7;
         }
     }
 

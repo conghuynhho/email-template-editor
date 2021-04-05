@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './styles.module.scss';
+import {getObjectPropSafely} from 'Utils';
 import classnames from 'classnames';
 
 const Alignment = props => {
