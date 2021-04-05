@@ -349,11 +349,11 @@ const sidePanelConfig = [
                             listBlock: [
                                 {
                                     id: random(3),
-                                    width: '33%'
+                                    width: `${(1 / 3) * 100}%`
                                 },
                                 {
                                     id: random(3),
-                                    width: '67%'
+                                    width: `${(2 / 3) * 100}%`
                                 }
                             ],
                             style: {
@@ -389,11 +389,11 @@ const sidePanelConfig = [
                             listBlock: [
                                 {
                                     id: random(3),
-                                    width: '67%'
+                                    width: `${(2 / 3) * 100}%`
                                 },
                                 {
                                     id: random(3),
-                                    width: '33%'
+                                    width: `${(1 / 3) * 100}%`
                                 }
                             ],
                             style: {
@@ -409,15 +409,15 @@ const sidePanelConfig = [
                             listBlock: [
                                 {
                                     id: random(3),
-                                    width: '33%'
+                                    width: `${(1 / 3) * 100}%`
                                 },
                                 {
                                     id: random(3),
-                                    width: '33%'
+                                    width: `${(1 / 3) * 100}%`
                                 },
                                 {
                                     id: random(3),
-                                    width: '34%'
+                                    width: `${(1 / 3) * 100}%`
                                 }
                             ],
                             style: {
@@ -545,7 +545,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'FILL_COLOR',
-                            id: 'backgroundColorColumn',
+                            id: 'backgroundColor',
                             label: 'Background color',
                             defaultValue: '#707070',
                             style: {
@@ -1069,7 +1069,7 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'FILL_COLOR',
-                            id: 'backgroundColorRow',
+                            id: 'backgroundColor',
                             label: 'Background color',
                             defaultValue: '#707070',
                             style: {

@@ -6,7 +6,8 @@ import {actionType} from 'Components/design-template/components/ContextStore/con
 
 const DeleteForm = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
-    const {toggleDeleteForm = {type: '', isDeleteFormOpening: false, id: '', rowID: ''}} = store;
+    const {toggleDeleteForm = {type: '', isDeleteFormOpening: false, id: '', rowID: '', message: ''}} = store;
+    const {type, id, rowID, message} = toggleDeleteForm;
     const onClickCancel = () => {
         dispatchStore({
             type: actionType.TOGGLE_DELETE_FORM,
@@ -26,10 +27,10 @@ const DeleteForm = () => {
             type: actionType.CONFIRM_DELETE,
             payload: {
                 confirmDelete: {
-                    type: toggleDeleteForm.type,
+                    type: type,
                     willBeDelete: true,
-                    id: toggleDeleteForm.id, 
-                    rowID: toggleDeleteForm.rowID
+                    id: id, 
+                    rowID: rowID
                 }
             }
         });
@@ -42,7 +43,7 @@ const DeleteForm = () => {
                 <div className={styles['form-body']}>
                     <div className={styles['form-header']}>Delete</div>
                     <div className={styles['form-content']}>
-                        <p>Are you sure you want to delete this? This action cannot be undone.</p>
+                        <p>{message ? message : 'Are you sure you want to delete this? This action cannot be undone.'}</p>
                     </div>
                     <div className={styles['form-footer']}>
                         <button 

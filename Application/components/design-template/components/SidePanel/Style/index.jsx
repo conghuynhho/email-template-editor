@@ -2,6 +2,8 @@
 import React, {useEffect, useState, useContext} from 'react';
 import classnames from 'classnames';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
+import isEqual from 'react-fast-compare';
+import _ from 'lodash';
 
 // Components
 import {
@@ -37,16 +39,33 @@ import {random} from 'Utils/index.ts';
 import {getContentIDFromHtmlID} from '../../Workspace/utils';
 import produce from 'immer';
 
+// utils
+import {
+    getRowIDFromHtmlID
+} from 'Components/design-template/components/Workspace/utils';
+
 const PATH = 'Components/design-template/components/SidePanel/Style/index.jsx';
 
 const Style = props => {
     const {
         style = [],
-        content = {},
+        values = {},
+        content = [],
         translate = (lal) => lal
     } = props;
     const [config, setConfig] = useState({});
-    const {state, dispatch} = useContext(StoreContext);
+    const [activeColumn, setActiveColumn] = useState(0);
+    const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
+    const {
+        activeElement,
+        rows
+    } = store;
+    const rowId = getRowIDFromHtmlID(store, activeElement);
+    const row = getObjectPropSafely(() => rows[rowId]);
+    const cells = getObjectPropSafely(() => row.cells);
+
+    const columnId = getObjectPropSafely(() => row.columns[activeColumn]);
+    const columnValues = getObjectPropSafely(() =>store.columns[columnId].values);
 
     useEffect(() => {
         try {
@@ -134,7 +153,7 @@ const Style = props => {
         try {
             console.log(idChild);
             if (idChild) {
-                dispatch({
+                dispatchStore({
                     type: actionType.UPDATE_CONTENT,
                     payload: {
                         id: id,
@@ -198,8 +217,8 @@ const Style = props => {
                     isShowMessageRight = false
                 } = element;
 
-                const value = getObjectPropSafely(() => eval(`content.values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
-                
+                const value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
+
                 const valueStyle = typeof value === 'boolean' ? value : value.replace(new RegExp(`${unit}`,'gi'), '');
 
                 switch (element.type) {
@@ -214,6 +233,7 @@ const Style = props => {
                         );
                     }
                     case typeComponent.FONT_COLOR: {
+
                         return (
                             <FontColor
                                 styleCustom={getObjectPropSafely(() => style.styleChild) || {width: 44}}
@@ -547,6 +567,40 @@ const Style = props => {
                         ) : null;
                     }
                     case typeComponent.BLOCK_COLUMNS: {
+                        let listWidth = [];
+
+                        const listBlockWidth = listBlock.length ? listBlock.map((column) => column.width) : [];
+
+                        Array.isArray(cells) && cells.length && cells.forEach(cell => {
+                            const width = getObjectPropSafely(() => `${(cell / _.sum(cells)) * 100}%`);
+
+                            listWidth.push(width);
+                        });
+                        
+                        const isActive = isEqual(listBlockWidth, listWidth);
+
+                        const onClickColumn = (e) => {
+                            if (!isActive) {
+                                if (listWidth.length > listBlockWidth.length) {
+                                    dispatchStore({
+                                        type: actionType.TOGGLE_DELETE_FORM,
+                                        payload: {
+                                            toggleDeleteForm : {
+                                                isDeleteFormOpening: true,
+                                                type: 'content',
+                                                id: '',
+                                                rowID: rowId,
+                                                message: `You will lose ${listWidth.length - listBlockWidth.length} column. Are you sure?`
+                                            }                                         
+                                        }
+                                    });
+                                } else {
+                                    console.log('add new columns');
+                                }
+                                
+                            }
+                        };
+
                         const component = listBlock.length ? listBlock.map(item => {
                             return (
                                 <div key={item.id} className={classnames(styles['blockbuilder-column'])} style={{width: item.width}}>
@@ -556,18 +610,30 @@ const Style = props => {
                         }) : null;
 
                         return (
-                            <div className={classnames(styles['blockbuilder-row'], 'row')}>
+                            <div 
+                                className={classnames(
+                                    styles['blockbuilder-row'], 
+                                    {[styles['active']]: isActive},
+                                    'row'
+                                )} 
+                                onClick={onClickColumn}
+                            >
                                 {component}
                             </div>
                         );
                     }
                     case typeComponent.TAB_COLUMN: {
-                        const component = listTab.length ? listTab.map(item => {
-                            return (
-                                <div key={item.id} className={classnames(styles['tab'])}>
-                                    <span style={{fontSize: 12}}>{item.label}</span>
-                                </div>
-                            );
+                        const onClickChangeColumn = (index) => {
+                            setActiveColumn(index);
+                        };
+                        const component = listTab.length ? listTab.map((item, index) => {
+                            if (index < cells.length) {
+                                return (
+                                    <div key={item.id} className={classnames(styles['tab'], {[styles['active']] : activeColumn === index})} onClick={() => onClickChangeColumn(index)}>
+                                        <span style={{fontSize: 12}}>{item.label}</span>
+                                    </div>
+                                );
+                            }
                         }) : null;
 
                         return (

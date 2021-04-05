@@ -69,7 +69,7 @@ const LayoutDesign = () => {
     };
 
     const getDragItHereContentIndexes = (rowIndex, columnIndex, contentIndex, contentArea) => {
-        if (rowIndex) {
+        if (rowIndex !== -1) {
             setRowContentDragItHereIndex(rowIndex);
             setColumnContentDragItHereIndex(columnIndex);
             setContentDragItHereIndex(contentIndex);
@@ -249,13 +249,6 @@ const LayoutDesign = () => {
         
     };
 
-    const onClickWorkspace = () => {
-        dispatchStore({
-            type: actionType.ACTIVE_ELEMENT,
-            payload: {activeElement: 'u_body'}
-        });
-    };
-
     const getNewContentIndex = (index, area) => {
         if (area === 'BELOW') {
             return index + 1;
@@ -407,7 +400,7 @@ const LayoutDesign = () => {
                     break;
                 default: break;
             }
-    
+            
         }
     };
   
@@ -757,8 +750,6 @@ const LayoutDesign = () => {
 
     };
 
-    console.log('store', store);
-
     return (
         <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
 
@@ -769,7 +760,7 @@ const LayoutDesign = () => {
             )}
             onMouseMove={onMouseMoveItem}
             >
-                <div className={classnames(styles['grid-workspace'])} onClick={onClickWorkspace}>
+                <div className={classnames(styles['grid-workspace'])}>
                     <Workspace 
                         typeDraggingWorkspace={typeDraggingWorkspace} 
                         getSourceIndexes={getSourceIndexes}

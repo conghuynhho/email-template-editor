@@ -144,34 +144,6 @@ const reducer = (state, action) => {
 
             return {...newState};
         }
-        // case actionType.HOVER_ROW: {
-        //     const checkValid = Object(payload).hasOwnProperty('hoverId');
-
-        //     if (!checkValid) {
-        //         return;
-        //     }
-
-        //     const newState = {
-        //         ...state,
-        //         hoverId: payload.hoverId
-        //     };
-
-        //     return {...newState};
-        // }
-        // case actionType.DRAG_IT_HERE_SPECS: {
-        //     const checkValid = Object(payload).hasOwnProperty('rowVisiblePosition');
-
-        //     if (!checkValid) {
-        //         return;
-        //     }
-
-        //     const newState = {
-        //         ...state,
-        //         rowVisiblePosition: {...payload.rowVisiblePosition}
-        //     };
-
-        //     return {...newState};
-        // }
         case actionType.TOGGLE_DELETE_FORM: {
             const checkValid = Object(payload).hasOwnProperty('toggleDeleteForm');
 

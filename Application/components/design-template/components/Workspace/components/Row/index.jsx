@@ -875,8 +875,9 @@ const Row = (props) => {
             const id = getObjectPropSafely(() => column.values._meta.htmlID);
             const classTitle = getObjectPropSafely(() => column.values._meta.htmlClassNames);
             const styleColumn = {
-                width: `${(1 / columns.length) * 100}%`
+                width: column.width ? column.width : `${(1 / columns.length) * 100}%`
             };
+
             const styleExtraColumn = {
                 padding: getObjectPropSafely(() => column.values.padding),
                 backgroundColor: getObjectPropSafely(() => column.values.backgroundColor),
