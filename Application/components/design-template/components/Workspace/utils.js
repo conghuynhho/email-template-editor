@@ -432,13 +432,6 @@ export const convertShortHandCSS = (shortHand) => {
     return result;
 };
 
-export const findAlignment = (list) => {
-    if (!Array.isArray(list)) {return}
-    const alignment = list.find(element => (getObjectPropSafely(() => element.type)) === 'ALIGNMENT');
-    const result = getObjectPropSafely(()=>alignment.defaultValue);
-
-    return result; 
-};
 export const validURL = (str) => {
     let pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
@@ -455,6 +448,29 @@ export const getFontFamily = (string) => {
     const result = array[0].replace(/'|"/g, '');
 
     return result;
+};
+    // convert action string to action code
+export const getActionType = (actionName) =>{
+    switch (actionName) {
+        case 'web':
+            return 1;
+        
+        default: 
+            return 1;
+    }
+};
+    // convert target string to target code
+export const getTarget = (target) => {
+    switch (target) {
+        case '_blank':
+            return 1;
+        default:
+            return 1;
+    }
+};
+export const getTypeOfImage = (imageLink) => {
+    if (validURL(imageLink)) {return 'imageUrl'}
+    return 'uploadImage';
 };
 
 // export const useDebounce = (fnToDebounce, durationInMs = 200) => {

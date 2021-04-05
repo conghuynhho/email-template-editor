@@ -3,11 +3,14 @@ import React, {useState} from 'react';
 import {Nav, NavLink, NavItem, TabContent, TabPane} from 'reactstrap';
 import classnames from 'classnames';
 import Loadable from 'react-loadable';
-import {removePercentPattern, convertShortHandCSS} from 'Components/design-template/components/Workspace/utils';
+import {removePercentPattern, convertShortHandCSS, getActionType, getTarget} from 'Components/design-template/components/Workspace/utils';
+import {DATA_TYPE} from 'Components/design-template/components/SidePanel/constants';
 
 // Styles
 import {getObjectPropSafely} from 'Utils/index.ts';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
+import produce from 'immer';
+import {getUnitAndValue} from '../../../Workspace/utils';
 
 // Components
 const TabStyle = Loadable({
@@ -28,102 +31,123 @@ const Button = props => {
     } = props;
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
 
-    const mapButtonDataToConfig = (data, config) => {
-        const configClone = {...config};
+    console.log(activeElementValues, 'activeElementValues');
     
-        // set background color
-        if (configClone.resource.style[0].elements[0].defaultValue) {
-            configClone.resource.style[0].elements[0].defaultValue = getObjectPropSafely(() => data.values.buttonColors.backgroundColor);
-        }
-        // set textColorButton
-        if (configClone.resource.style[0].elements[1].defaultValue) {
-            configClone.resource.style[0].elements[1].defaultValue = getObjectPropSafely(() => data.values.buttonColors.color);
-        }
-        // set text-input width
-        if (configClone.resource.style[0].elements[2].defaultValue) {
-            configClone.resource.style[0].elements[2].defaultValue = removePercentPattern(getObjectPropSafely(() => data.values.size.width));
-        }
-        // set width to auto 
-        if (configClone.resource.style[0].elements[3].defaultValue) {
-            configClone.resource.style[0].elements[3].defaultValue = (getObjectPropSafely(() => data.values.size.autoWidth));
-        }
-        // set alignment
-        if (configClone.resource.style[0].elements[4].defaultValue) {
-            configClone.resource.style[0].elements[4].defaultValue = (getObjectPropSafely(() => data.values.textAlign));
-        }
-        // set lineHeight
-        if (configClone.resource.style[0].elements[5].defaultValue) {
-            configClone.resource.style[0].elements[5].defaultValue = removePercentPattern(getObjectPropSafely(() => data.values.lineHeight));
-        }
-        // switch more option for button padding
-        // 
-        // set padding when is on moreOptions
-        if (configClone.resource.style[0].elements[8].elementChild) {
-            const elementChild = configClone.resource.style[0].elements[8].elementChild;
-            const paddingArray = (getObjectPropSafely(()=>data.values.padding)).split(' ');
-
-            if (paddingArray.length === 1) {
-                if (configClone.resource.style[0].elements[7].defaultValue) {
-                    configClone.resource.style[0].elements[7].defaultValue = false;
+    const mapButtonDataToConfig = (data, config) => {
+        const general = getObjectPropSafely(()=>config.resource.general);
+        const style = getObjectPropSafely(()=>config.resource.style);
+        const newGeneral = produce(general, draft => {
+            draft.forEach(generalChild => {
+                if (generalChild.id === 'action') {
+                    generalChild.elements.forEach(element => {
+                        switch (element.id) {
+                            case DATA_TYPE.ACTION_TYPE:
+                                element.defaultValue = getActionType(getObjectPropSafely(()=>data.values.href.name));
+                                break;
+                            case DATA_TYPE.URL: 
+                                element.defaultValue = getObjectPropSafely(() => data.values.href.values.href);
+                                break;
+                            case DATA_TYPE.TARGET: 
+                                element.defaultValue = getTarget(getObjectPropSafely(() => data.values.href.values.target));
+                                break;
+                            default:
+                                break;
+                        }
+                    });
                 }
-            }
-            else {
-                if (configClone.resource.style[0].elements[7].defaultValue) {
-                    configClone.resource.style[0].elements[7].defaultValue = true;
+            });
+        });
+        const newStyle = produce(style, draft => {
+            draft.forEach(styleChild => {
+                if (styleChild.id === DATA_TYPE.BUTTON) {
+                    styleChild.elements.forEach(element => {
+                        switch (element.id) {
+                            case DATA_TYPE.BACKGROUND_COLOR_BUTTON:
+                                element.defaultValue =  getObjectPropSafely(() => data.values.buttonColors.backgroundColor);
+                                break;
+                            case DATA_TYPE.TEXT_COLOR_BUTTON: 
+                                element.defaultValue = getObjectPropSafely(() => data.values.buttonColors.color);
+                                break;
+                            case DATA_TYPE.WIDTH: 
+                                const unitAndValue = getUnitAndValue(getObjectPropSafely(() => data.values.size.width));
+
+                                element = {
+                                    ...element,
+                                    ...unitAndValue
+                                };                         
+                                break;
+                            case DATA_TYPE.AUTO_WIDTH:
+                                element.defaultValue = getObjectPropSafely(() => data.values.size.autoWidth);
+                                break;
+                            case DATA_TYPE.ALIGNMENTS:
+                                element.defaultValue = getObjectPropSafely(() => data.values.textAlign);
+                                break;
+                            case DATA_TYPE.LINE_HEIGHT:
+                                const unitValueLineHeight = getUnitAndValue(getObjectPropSafely(()=>data.values.lineHeight));
+
+                                element = {
+                                    ...element,
+                                    ...unitValueLineHeight
+                                };
+                                break;
+                            case DATA_TYPE.MORE_OPTIONS_BUTTON_PADDING:
+                                element.defaultValue = ((getObjectPropSafely(() => data.values.padding).split(' ').length) > 1);
+                                break;
+                            case DATA_TYPE.CHILD_BUTTON_PADDING:
+                                const paddingValues = convertShortHandCSS(getObjectPropSafely(()=>data.values.padding));
+
+                                element.elementChild[0] = {...getObjectPropSafely(()=>element.elementChild[0]),...paddingValues.top}; 
+                                element.elementChild[1] = {...getObjectPropSafely(()=>element.elementChild[1]),...paddingValues.right}; 
+                                element.elementChild[2] = {...getObjectPropSafely(()=>element.elementChild[2]),...paddingValues.bottom}; 
+                                element.elementChild[3] = {...getObjectPropSafely(()=>element.elementChild[3]),...paddingValues.left}; 
+                                break;
+                            case DATA_TYPE.ROUNDED_BORDER:
+                                element.defaultValue = getObjectPropSafely(()=> data.values.borderRadius);
+                                break;
+                                // case DATA_TYPE.ROUNDED_BORDER:
+                                //     element.defaultValue = getObjectPropSafely(()=> data.values.borderRadius);
+                                //     break;
+                                // case DATA_TYPE.MORE_OPTIONS_BORDER:
+                                //     element.defaultValue = getObjectPropSafely(()=> data.values.borderRadius);
+                                //     break;
+                                // case DATA_TYPE.CHILD_BORDER:
+                                //     element.defaultValue = getObjectPropSafely(()=> data.values.borderRadius);
+                                //     break;
+                                // case DATA_TYPE.CONTAINER_PADDING:
+                                //     element.defaultValue = getObjectPropSafely(()=> data.values.borderRadius);
+                                //     break;
+                                // case DATA_TYPE.MORE_OPTIONS_PADDING_CONTAINER:
+                                //     element.defaultValue = getObjectPropSafely(()=> data.values.borderRadius);
+                                //     break;
+                            default:
+                                break;
+                        }
+                    });
                 }
-            }
-            const values = convertShortHandCSS((getObjectPropSafely(()=> data.values.padding)));
+                if (styleChild.id === DATA_TYPE.RESPONSIVE_DESIGN) {
+                    styleChild.elements.forEach(element => {
+                        switch (element.id) {
+                            case DATA_TYPE.RESPONSIVE:
+                                element.defaultValue = getObjectPropSafely(() => data.values.hideOnDesktop);
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                    });
+                }
+            });
+        });
 
-            configClone.resource.style[0].elements[8].elementChild[0] = {
-                ...elementChild[0],
-                ...getObjectPropSafely(() =>values.top)
-            };
-            configClone.resource.style[0].elements[8].elementChild[1] = {
-                ...elementChild[1],
-                ...getObjectPropSafely(() =>values.right)
-            };
-            configClone.resource.style[0].elements[8].elementChild[2] = {
-                ...elementChild[2],
-                ...getObjectPropSafely(() =>values.bottom)
-            };
-            configClone.resource.style[0].elements[8].elementChild[3] = {
-                ...elementChild[3],
-                ...getObjectPropSafely(() =>values.left)
-            };
-        }
-        // set roundBorder
-        if (configClone.resource.style[0].elements[9].defaultValue) {
-            configClone.resource.style[0].elements[9].defaultValue = getObjectPropSafely(()=> data.values.borderRadius);
-        }
-        // switch true/false moreOptions Border
+        const saveData = produce(config, draft => {
+            draft.resource.general = newGeneral;
+            draft.resource.style = newStyle;
+        });
 
-        // set border when is on moreOption border mode
-        // getObjectPropSafely(() => config.resource.style[0].elements[9]);
-        // TODO: DO IT LATER
-
-        // set container padding
-        if (configClone.resource.style[0].elements[13].defaultValue) {
-            const values = convertShortHandCSS((getObjectPropSafely(()=> data.values.containerPadding)));
-
-            configClone.resource.style[0].elements[13].defaultValue = getObjectPropSafely(()=> (values.top.defaultValue));
-        }
-        // switch more option for container padding
-        // getObjectPropSafely(() => config.resource.style[0].elements[11]);
-
-        // switch mode hide on destop
-        if (configClone.resource.style[1].elements[0].defaultValue) {
-            configClone.resource.style[1].elements[0].defaultValue = getObjectPropSafely(() => data.values.hideOnDesktop);
-        }
-        // GENERAL  *** setLink of button
-        if (configClone.resource.general[0].elements[1].defaultValue) {
-            configClone.resource.general[0].elements[0].defaultValue = getObjectPropSafely(() => data.values.href.values.href);
-        }   
-        return configClone;
+        return saveData;
     };
 
-    // console.log(configure, 'configSamples');
-    // console.log(activeElementValues, 'activeElement');
-    const configConverted = mapButtonDataToConfig(activeElementValues.content, config);
+    const configConverted = mapButtonDataToConfig(activeElementValues, config);
 
     const toggleTab = (tab) => {
         if (activeTab !== tab) {
