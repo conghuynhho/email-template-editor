@@ -28,7 +28,7 @@ const Menu = (props) => {
     } = props;
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
 
-    // console.log('config', config);
+    console.log('config', config);
     // console.log('content', content);
     // Lấy data style của Menu đổ vào sidePanel
     config.resource.style[0].elements.forEach((element) => {
@@ -49,7 +49,7 @@ const Menu = (props) => {
                 element.defaultValue = getObjectPropSafely(() =>content.values.align);
                 break;
             case 'layout': 
-                element.defaultValue = getObjectPropSafely(() => content.values.layout == 'Vertical' ? 1 : 2);
+                element.defaultValue = getObjectPropSafely(() => content.values.layout.toLowerCase() == 'vertical' ? 1 : 2);
                 break;
             case 'moreOptionsMenuPadding': 
                 element.defaultValue = getObjectPropSafely(() => content.values.padding.split(' ')).length > 1 ? true : false;
