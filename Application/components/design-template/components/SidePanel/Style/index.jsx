@@ -105,8 +105,9 @@ const Style = props => {
                     case 'textColorMenu':
                         draft.textColor = values;
                         break;
+                        // Menu + Button
                     case 'textColorButton':
-                        draft.linkColor = values;
+                        (draft.linkColor) ? draft.linkColor = values : draft.buttonColors.color = values;
                         break;
                         // chưa biết url, value trong fontFamily
                     case 'fontFamily':
@@ -115,10 +116,14 @@ const Style = props => {
                     case 'layout':
                         draft.layout = (values == 1 ? 'vertical' : 'horizontal');
                         break;
+                        // Menu + Button
                     case 'alignments':
-                        draft.align = values;
+                        (draft.align) ? draft.align = values : draft.textAlign = values;
                         break;
-                    
+                    // Button
+                    case 'backgroundColorButton':
+                        draft.buttonColors.backgroundColor = values;
+                        break;
                     // textAlign, width(Line), fontSize(Menu)
                     default: 
                         draft[idChild] = values;

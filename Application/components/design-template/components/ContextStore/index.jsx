@@ -79,7 +79,6 @@ const reducer = (state, action) => {
                 if (draft[id]) {
                     draft[id] = {...draft[id], ...values};
                 }
-                // console.log('draft', draft[id]);
             });
             const newState = {
                 ...state,
