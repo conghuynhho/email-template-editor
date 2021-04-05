@@ -5,6 +5,7 @@ import {StoreContext} from 'Components/design-template/components/ContextStore';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import {getObjectPropSafely} from 'Utils';
 import {getContentIDFromHTMLID} from 'Components/design-template/components/Workspace/utils';
+import produce from 'immer';
 
 const Button = (props) => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
@@ -34,12 +35,17 @@ const Button = (props) => {
     const text = getObjectPropSafely(() => data.values.text);
     const target = getObjectPropSafely(() => data.values.href.values.target);
     const handleEditorChange = (content) => {
+
         const contentID = getContentIDFromHTMLID(store,id);
+        const values = produce(getObjectPropSafely(()=>store.contents[contentID]), draft => {
+            draft.values.text = getObjectPropSafely(()=>content.level.content);
+        });
         const payload = {
             id: contentID,
-            values: content
-        }
-;
+            values: {
+                ...values
+            }
+        };
 
         if (contentID) {
             dispatchStore({
