@@ -60,3 +60,23 @@ export const CONSTANTS = {
         RIGHT: 'right'
     }
 };
+
+export const typeDnD = {
+    WORKSPACE: {
+        ROW: 'ROW',
+        CONTENT: 'CONTENT'
+    },
+    SIDE_PANEL: {
+        COLUMN: 'COLUMN',
+        TEXT: 'TEXT',
+        MENU: 'MENU',
+        DIVIDER: 'DIVIDER',
+        IMAGE: 'IMAGE',
+        HTML: 'HTML',
+        BUTTON: 'BUTTON'
+    },
+    DROP_AREA: {
+        ABOVE: 'ABOVE',
+        BELOW: 'BELOW'
+    }
+};
