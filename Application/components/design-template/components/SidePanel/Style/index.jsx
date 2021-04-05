@@ -70,6 +70,7 @@ const Style = props => {
 
     const updateComponent = (idParent, idChild, values) => {
         try {
+            console.log(idChild);
             if (idChild) {
                 dispatch({
                     type: actionType.UPDATE_CONTENT,

@@ -23,7 +23,7 @@ const TabGeneral = Loadable({
     loading: () => { return null }
 });
 
-const Button = props => {
+const Button = props => { 
     const {
         config = {},
         activeElementValues,
@@ -31,7 +31,7 @@ const Button = props => {
     } = props;
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
 
-    console.log(activeElementValues, 'activeElementValues');
+    // console.log(activeElementValues, 'activeElementValues');
     
     const mapButtonDataToConfig = (data, config) => {
         const general = getObjectPropSafely(()=>config.resource.general);
