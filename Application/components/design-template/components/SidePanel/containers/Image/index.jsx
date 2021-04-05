@@ -8,7 +8,8 @@ import _ from 'lodash';
 // Styles
 import {getObjectPropSafely} from 'Utils/index.ts';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
-import {convertShortHandCSS, validURL, getUnitAndValue} from '../../../Workspace/utils';
+import {convertShortHandCSS, getActionType, getTarget, getTypeOfImage} from '../../../Workspace/utils';
+import produce from 'immer';
 
 // Components
 const TabStyle = Loadable({
@@ -27,206 +28,88 @@ const Image = props => {
         activeElementValues,
         translate = (lal) => lal
     } = props;
-
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
-
     const toggleTab = (tab) => {
         if (activeTab !== tab) {
             setActiveTab(tab);
         }
     };
-    // convert action string to action code
-    const getActionType = (actionName) =>{
-        switch (actionName) {
-            case 'web':
-                return 1;
-        
-            default: 
-                return 1;
-        }
-    };
-    // convert target string to target code
-    const getTarget = (target) => {
-        switch (target) {
-            case '_blank':
-                return 1;
-            default:
-                return 1;
-        }
-    };
-    const getTypeOfImage = (imageLink) => {
-        if (validURL(imageLink)) {return 'imageUrl'}
-        return 'uploadImage';
-    };
     const mapMenuDataToSidePanel = (data, config) => {
-        let general = getObjectPropSafely(()=>config.resource.general);
-        let style = getObjectPropSafely(()=>config.resource.style);
+        const general = getObjectPropSafely(()=> config.resource.general);
+        const style = getObjectPropSafely(()=> config.resource.style);
         // general
-        let uploadImage = {};
-        let action = {};
-
-        general.forEach((gen) => {
-            switch (getObjectPropSafely(()=>gen.id)) {
-                case 'uploadImage': {
-                    const selectRadioImage = {
-                        ...getObjectPropSafely(()=>gen.elements[0]),
-                        defaultValue: getTypeOfImage(getObjectPropSafely(()=>data.content.values.src.url))
-                    };
-                    const imageUpload = {
-                        ...getObjectPropSafely(()=>gen.elements[1])
-                    };
-                    const alternalText = {
-                        ... getObjectPropSafely(()=>gen.elements[2]),
-                        defaultValue: getObjectPropSafely(()=>data.content.values.altText)
-                    };
-
-                    uploadImage = {
-                        ...gen,
-                        elements: [
-                            selectRadioImage,
-                            imageUpload,
-                            alternalText
-                        ]
-                    };
+        const newGeneral = produce(general, draft => {
+            draft.forEach(generalChild => {
+                if (generalChild.id === 'uploadImage') {
+                    generalChild.elements.forEach(element => {
+                        if (element.id === 'selectRadioImage') {
+                            element.defaultValue = getTypeOfImage(getObjectPropSafely(()=>data.values.src.url));
+                        }
+                        if (element.id === 'alternalText') {
+                            element.defaultValue = getObjectPropSafely(()=>data.values.altText);
+                        }
+                    });
                 }
-                    break;
-                case 'action': {
-                    const actionType = {
-                        ...getObjectPropSafely(()=>gen.elements[0]),
-                        defaultValue: getActionType(getObjectPropSafely(()=>data.content.values.action.name))
-                    };
-                    const urlImage3d = {
-                        ...getObjectPropSafely(()=>gen.elements[1]),
-                        defaultValue: getObjectPropSafely(()=>data.content.values.action.values.href)
-                    };
-                    const target = {
-                        ...getObjectPropSafely(()=>gen.elements[2]),
-                        defaultValue: getTarget(getObjectPropSafely(()=>data.content.values.action.values.target))
-                    };
-
-                    action = {
-                        ...gen,
-                        elements: [
-                            actionType,
-                            urlImage3d,
-                            target
-                        ]
-                    };
+                if (generalChild.id === 'action') {
+                    generalChild.elements.forEach(element => {
+                        if (element.id === 'actionType') {
+                            element.defaultValue = getActionType(getObjectPropSafely(()=>data.values.action.name));
+                        }
+                        if (element.id.indexOf('urlImage') >= 0) {
+                            element.defaultValue = getObjectPropSafely(()=>data.values.action.values.href);
+                        }
+                        if (element.id === 'target') {
+                            element.defaultValue =  getTarget(getObjectPropSafely(()=>data.values.action.values.target));
+                        }
+                    });
                 }
-                    break;
-                default:
-                    break;
-            }
+            });
         });
-        if (!_.isEmpty(uploadImage) && !_.isEmpty(action))
-        {general = [
-            uploadImage,
-            action
-        ];}
+        const newStyle = produce(style, draft => {
+            draft.forEach(styleChild => {
+                if (styleChild.id === 'image') {
+                    styleChild.elements.forEach(element => {
+                        if (element.id === 'width') {
+                            element.defaultValue = getObjectPropSafely(()=>data.values.src.width);
+                            element.unit = 'px';
+                        }
+                        if (element.id === 'autoWidth') {
+                            element.defaultValue = getObjectPropSafely(()=>data.values.src.autoWidth);
+                        }
+                        if (element.id === 'alignments') {
+                            element.defaultValue = getObjectPropSafely(()=>data.values.textAlign);
+                        }
+                        if (element.id === 'imageMoreOptions') {
+                            element.defaultValue = ((getObjectPropSafely(()=>data.values.containerPadding)).split(' ').length > 1);
+                        }
+                        if (element.id === 'childImagePadding') {
+                            const paddingValues = convertShortHandCSS(getObjectPropSafely(()=>data.values.containerPadding));
 
-        // styles
-        let image = {};
-        let responsiveDesign = {};
-
-        style.forEach(sty => {
-            switch (getObjectPropSafely(()=>sty.id)) {
-                case 'image': {
-                    let maxWidth = '100%';
-
-                    if (getObjectPropSafely(()=>data.content.values.src.maxWidth)) {
-                        maxWidth = getObjectPropSafely(()=> data.content.values.src.maxWidth);
-                    }
-                    const width = {
-                        ...getObjectPropSafely(()=>sty.elements[0]),
-                        ...getUnitAndValue(maxWidth)
-                    };
-                    const autoWidth = {
-                        ...getObjectPropSafely(()=>sty.elements[1]),
-                        defaultValue: getObjectPropSafely(()=>data.content.values.src.autoWidth)
-                    };
-                    const alignment = {
-                        ...getObjectPropSafely(()=>sty.elements[2]),
-                        defaultValue: getObjectPropSafely(()=>data.content.values.textAlign)
-                    };
-                    const label = {
-                        ...getObjectPropSafely(()=>sty.elements[3])
-                    };
-                    // padding:
-                    // check is moreOption on
-                    const paddingArray = (getObjectPropSafely(()=>data.content.values.containerPadding).split(' '));
-                    let switchValue = false;
-
-                    if (paddingArray.length > 1) {
-                        switchValue = true;
-                    }
-                    const imageMoreOptions = {
-                        ...getObjectPropSafely(()=>sty.elements[4]),
-                        default: switchValue
-                    };
-                    const paddingValues = convertShortHandCSS(getObjectPropSafely(()=>data.content.values.containerPadding));
-                    const top = {
-                        ...getObjectPropSafely(()=>sty.elements[5].elementChild[0]),
-                        ...paddingValues.top
-                    };
-                    const right = {
-                        ...getObjectPropSafely(()=>sty.elements[5].elementChild[1]),
-                        ...paddingValues.right
-                    };
-                    const bottom = {
-                        ...getObjectPropSafely(()=>sty.elements[5].elementChild[2]),
-                        ...paddingValues.bottom
-                    };
-                    const left = {
-                        ...getObjectPropSafely(()=>sty.elements[5].elementChild[3]),
-                        ...paddingValues.left
-                    };
-                    const elementChild = [
-                        top,right,bottom,left
-                    ];
-                    const padding = {
-                        ...getObjectPropSafely(()=>sty.elements[5]),
-                        elementChild: elementChild
-                    };
-
-                    // combine data to image
-                    image = {
-                        ...sty,
-                        elements: [
-                            width,autoWidth,alignment,label,imageMoreOptions,padding
-                        ]
-                    };
+                            element.elementChild[0] = {...getObjectPropSafely(()=>element.elementChild[0]),...paddingValues.top}; 
+                            element.elementChild[1] = {...getObjectPropSafely(()=>element.elementChild[1]),...paddingValues.right}; 
+                            element.elementChild[2] = {...getObjectPropSafely(()=>element.elementChild[2]),...paddingValues.bottom}; 
+                            element.elementChild[3] = {...getObjectPropSafely(()=>element.elementChild[3]),...paddingValues.left}; 
+                        }
+                    });
                 }
-                    break;
-                case 'responsiveDesign': {
-                    const responsive = {
-                        ...getObjectPropSafely(()=>sty.elements[0]),
-                        defaultValue: getObjectPropSafely(()=>data.values.hideDesktop)
-                    };
-
-                    responsiveDesign = {
-                        ...sty,
-                        elements: [responsive]
-                    };
+                if (styleChild.id === 'responsiveDesign') {
+                    styleChild.elements.forEach(element => {
+                        if (element.id === 'responsive') {
+                            element.defaultValue = getObjectPropSafely(()=>data.values.hideDesktop);
+                        }
+                    });
                 }
-                    break;
-                default:
-                    break;
-            }
+            });
         });
-        if (!_.isEmpty(image) && !_.isEmpty(responsiveDesign)) {
-            style = [image, responsiveDesign];
-        }
-        const saveData = {
-            ...config,
-            resource: {
-                general: general,
-                style: style
-            }
-        };
+        const saveData = produce(config, draft => {
+            draft.resource.general = newGeneral;
+            draft.resource.style = newStyle;
+        });
 
         return saveData;
     };
     const convertedConfig = mapMenuDataToSidePanel(activeElementValues,config);
+
     const renderHtml = () => {
         try {
             const style = getObjectPropSafely(() => convertedConfig.resource.style) || [];
