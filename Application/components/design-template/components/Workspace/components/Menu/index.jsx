@@ -24,7 +24,7 @@ const Menu = (props) => {
                 padding: getObjectPropSafely(() => data.values.padding), 
                 fontSize: getObjectPropSafely(() => data.values.fontSize), 
                 fontFamily: getObjectPropSafely(() => data.values.fontFamily.value), 
-                color: getObjectPropSafely(() => data.values.fontFamily.textColor), 
+                color: getObjectPropSafely(() => data.values.textColor), 
                 display: 'inline-block', 
                 textDecoration: 'none'
             };

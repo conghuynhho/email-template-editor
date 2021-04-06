@@ -35,8 +35,6 @@ const Text = (props) => {
             id: getContentIDFromHtmlID(store, getObjectPropSafely(() => store.activeElement))
         };
 
-        // console.log('dispatch', payload);
-        // dispatch.values.text = content;
         dispatchStore({
             type: actionType.UPDATE_CONTENT,
             payload: payload
@@ -52,7 +50,6 @@ const Text = (props) => {
             className={styles[classTitle]}
             // style={{...style}}
         >           
-            
             {isEditing && activeElement === id ? (
                 <Editor
                     apiKey={'pj3be4r7csm282qh8gsssq1cywkvjh2j7iic281901rof8aw'}
