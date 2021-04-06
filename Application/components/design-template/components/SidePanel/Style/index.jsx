@@ -90,7 +90,7 @@ const Style = props => {
     };
 
     console.log('values', values);
-    const updateComponent = (idParent, idChild, values) => {
+    const updateComponent = (idParent, idChild, values, font) => {
         const id = getContentIDFromHtmlID(store, activeElement);
         const value = store.contents[id].values;
 
@@ -131,7 +131,10 @@ const Style = props => {
                         break;
                         // chưa biết url, value trong fontFamily
                     case 'fontFamily':
+                        console.log('option', font);
                         draft.fontFamily.label = values;
+                        draft.fontFamily.url = font.url;
+                        draft.fontFamily.value = font.name;
                         break;
                     case 'layout':
                         draft.layout = (values == 1 ? 'vertical' : 'horizontal');
@@ -171,9 +174,6 @@ const Style = props => {
     const updateComponentChild = (key, idChild, value) => {
         try {
             const valueStore = getObjectPropSafely(() => eval(`content.values.${key}`) || '');
-
-            console.log('valueStore', config);
-            console.log('idChild', idChild);
 
             // if (idChild) {
             //     switch (idChild) {
@@ -220,14 +220,12 @@ const Style = props => {
                     isShowMessageRight = false
                 } = element;
 
-                let value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
+                const value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
 
                 // console.log((idParent + '.' || '') + (type ? key : idChild));
                 // console.log('hello', value);
 
-                (typeof value === 'object' ? value = value.label : value);
-
-                const valueStyle = typeof value === 'boolean' ? value : value.replace(new RegExp(`${unit}`,'gi'), '');
+                const valueStyle = typeof value === 'boolean' ? value : (typeof value === 'object' ? value.label : value.replace(new RegExp(`${unit}`,'gi'), ''));
 
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
@@ -396,7 +394,7 @@ const Style = props => {
                                 label={label || null}
                                 tooltipName={label || tooltip}
                                 default={findValue(valueStyle || defaultValue, options)}
-                                onSelectOption={(option) => updateComponent(idParent, idChild, option.name || '')}
+                                onSelectOption={(option) => updateComponent(idParent, idChild, option.name, option || '')}
                                 translate={translate}
                             />
                         );

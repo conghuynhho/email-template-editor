@@ -2638,15 +2638,18 @@ const sidePanelConfig = [
                             options: [
                                 {
                                     name: 'arial',
-                                    label: 'Arial'
+                                    label: 'Arial',
+                                    url: ''
                                 },
                                 {
                                     name: 'boogaloo',
-                                    label: 'Boogaloo'
+                                    label: 'Boogaloo',
+                                    url: 'https://fonts.googleapis.com/css2?family=Boogaloo&display=swap'
                                 },
                                 {
                                     name: 'bubblegumSans',
-                                    label: 'Bubblegum Sans'
+                                    label: 'Bubblegum Sans',
+                                    url: 'https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap'
                                 },
                                 {
                                     name: 'calibri',
@@ -2654,7 +2657,8 @@ const sidePanelConfig = [
                                 },
                                 {
                                     name: 'chewy',
-                                    label: 'Chewy'
+                                    label: 'Chewy',
+                                    url: 'https://fonts.googleapis.com/css2?family=Chewy&display=swap'
                                 },
                                 {
                                     name: 'comicSansMS',
@@ -2662,11 +2666,13 @@ const sidePanelConfig = [
                                 },
                                 {
                                     name: 'comingSoon',
-                                    label: 'Coming Soon'
+                                    label: 'Coming Soon',
+                                    url: 'https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap'
                                 },
                                 {
                                     name: 'cormorantUnicase',
-                                    label: 'Cormorant Unicase'
+                                    label: 'Cormorant Unicase',
+                                    url: 'https://fonts.googleapis.com/css2?family=Cormorant+Unicase&display=swap'
                                 },
                                 {
                                     name: 'corsiva',
@@ -2686,7 +2692,8 @@ const sidePanelConfig = [
                                 },
                                 {
                                     name: 'eater',
-                                    label: 'Eater'
+                                    label: 'Eater',
+                                    url: 'https://fonts.googleapis.com/css2?family=Eater&display=swap'
                                 },
                                 {
                                     name: 'georgia',
@@ -2694,7 +2701,8 @@ const sidePanelConfig = [
                                 },
                                 {
                                     name: 'greatVibes',
-                                    label: 'Great Vibes'
+                                    label: 'Great Vibes',
+                                    url: 'https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap'
                                 },
                                 {
                                     name: 'impact',
@@ -2702,27 +2710,33 @@ const sidePanelConfig = [
                                 },
                                 {
                                     name: 'indieFlower',
-                                    label: 'Indie Flower'
+                                    label: 'Indie Flower',
+                                    url: 'https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap'
                                 },
                                 {
                                     name: 'lato',
-                                    label: 'Lato'
+                                    label: 'Lato',
+                                    url: 'https://fonts.googleapis.com/css2?family=Lato&display=swap'
                                 },
                                 {
                                     name: 'lora',
-                                    label: 'Lora'
+                                    label: 'Lora',
+                                    url: 'https://fonts.googleapis.com/css2?family=Lora&display=swap'
                                 },
                                 {
                                     name: 'montserrat',
-                                    label: 'Montserrat'
+                                    label: 'Montserrat',
+                                    url: 'https://fonts.googleapis.com/css?family=Montserrat:400,700'
                                 },
                                 {
                                     name: 'oleoScript',
-                                    label: 'Oleo Script'
+                                    label: 'Oleo Script',
+                                    url: 'https://fonts.googleapis.com/css2?family=Oleo+Script&display=swap'
                                 },
                                 {
                                     name: 'openSans',
-                                    label: 'Open Sans'
+                                    label: 'Open Sans',
+                                    url: 'https://fonts.googleapis.com/css2?family=Open+Sans:ital@1&display=swap'
                                 },
                                 {
                                     name: 'orbitron',
@@ -2750,7 +2764,8 @@ const sidePanelConfig = [
                                 },
                                 {
                                     name: 'roboto',
-                                    label: 'Roboto'
+                                    label: 'Roboto',
+                                    url: 'https://fonts.googleapis.com/css2?family=Roboto&display=swap'
                                 },
                                 {
                                     name: 'robotoCondensed',
