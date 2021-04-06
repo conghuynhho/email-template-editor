@@ -31,5 +31,3 @@ export const DATA_TYPE = {
     CHILD_BUTTON_PADDING: 'childButtonPadding'
 
 };
-
-DATA_TYPE.BORDER;

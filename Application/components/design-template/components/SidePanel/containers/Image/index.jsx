@@ -34,6 +34,7 @@ const Image = props => {
             setActiveTab(tab);
         }
     };
+
     const mapMenuDataToSidePanel = (data, config) => {
         const general = getObjectPropSafely(()=> config.resource.general);
         const style = getObjectPropSafely(()=> config.resource.style);
@@ -112,8 +113,8 @@ const Image = props => {
 
     const renderHtml = () => {
         try {
-            const style = getObjectPropSafely(() => convertedConfig.resource.style) || [];
-            const general = getObjectPropSafely(() => convertedConfig.resource.general) || [];
+            const style = getObjectPropSafely(() => config.resource.style) || [];
+            const general = getObjectPropSafely(() => config.resource.general) || [];
 
             return (
                 <>
@@ -141,10 +142,10 @@ const Image = props => {
                             </Nav>
                             <TabContent activeTab={activeTab} >
                                 <TabPane tabId="side-panel-general-tab">
-                                    <TabGeneral general={general} />
+                                    <TabGeneral general={general} content={activeElementValues} values={activeElementValues.values} />
                                 </TabPane>
                                 <TabPane tabId="side-panel-style-tab" className="h-100">
-                                    <TabStyle style={style} />
+                                    <TabStyle style={style} content={activeElementValues} values={activeElementValues.values} />
                                 </TabPane>
                             </TabContent>
                         </div>

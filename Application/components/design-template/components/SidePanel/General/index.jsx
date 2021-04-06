@@ -34,6 +34,7 @@ const PATH = 'Components/design-template/components/SidePanel/General/index.jsx'
 const Style = props => {
     const {
         general = [],
+        values = {},
         translate = (lal) => lal
     } = props;
     const [config, setConfig] = useState({});

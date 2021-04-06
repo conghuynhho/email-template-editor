@@ -2051,7 +2051,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'containerPadding',
                             label: '',
-                            keyShow: 'moreOptions',
+                            keyShow: 'containerPadding',
                             defaultValue: '10',
                             unit: 'px',
                             isShowUnit: true,
@@ -2067,7 +2067,7 @@ const sidePanelConfig = [
                         {
                             type: 'COMPONENT_CHILD',
                             id: 'containerPadding',
-                            keyShow: 'moreOptions',
+                            keyShow: 'containerPadding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',
@@ -2245,26 +2245,27 @@ const sidePanelConfig = [
                                 }
                             }
                         },
-                        // {
-                        //     type: 'TEXT_INPUT',
-                        //     id: 'textContainerPaddingText',
-                        //     label: '',
-                        //     defaultValue: '10',
-                        //     unit: 'px',
-                        //     isShowUnit: true,
-                        //     style: {
-                        //         styleParent: {
-                        //             width: '100%'
-                        //         },
-                        //         styleChild: {
-                        //             width: 40
-                        //         }
-                        //     }
-                        // }
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'containerPadding',
+                            label: '',
+                            defaultValue: '10',
+                            keyShow: 'containerPadding',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
                         {
                             type: 'COMPONENT_CHILD',
-                            id: 'childTextPadding',
-                            // keyShow: 'moreOptionsButtonPadding',
+                            id: 'containerPadding',
+                            keyShow: 'containerPadding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',
@@ -3213,9 +3214,11 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'TEXT_INPUT',
-                            id: 'width',
-                            label: 'Top',
+                            keyParent: 'src',
+                            id: 'maxWidth',
+                            label: 'Auto Width',
                             defaultValue: '100',
+                            keyShow: 'src.autoWidth',
                             unit: '%',
                             isShowUnit: true,
                             style: {
@@ -3229,6 +3232,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'SWITCH',
+                            keyParent: 'src',
                             id: 'autoWidth',
                             isShowMessageLeft: true,
                             message: 'Auto Width',
@@ -3241,7 +3245,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'ALIGNMENT',
-                            id: 'alignments',
+                            id: 'textAlign',
                             label: 'Alignments',
                             defaultValue: 'left',
                             style: {
@@ -3272,26 +3276,27 @@ const sidePanelConfig = [
                                 }
                             }
                         },
-                        // {
-                        //     type: 'TEXT_INPUT',
-                        //     id: 'imageContainerPaddingText',
-                        //     label: '',
-                        //     defaultValue: '10',
-                        //     unit: 'px',
-                        //     isShowUnit: true,
-                        //     style: {
-                        //         styleParent: {
-                        //             width: '100%'
-                        //         },
-                        //         styleChild: {
-                        //             width: 40
-                        //         }
-                        //     }
-                        // },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'containerPadding',
+                            label: '',
+                            keyShow: 'containerPadding',
+                            defaultValue: '10',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
                         {
                             type: 'COMPONENT_CHILD',
-                            id: 'childImagePadding',
-                            // keyShow: 'moreOptionsButtonPadding',
+                            id: 'containerPadding',
+                            keyShow: 'containerPadding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',

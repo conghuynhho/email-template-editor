@@ -156,8 +156,8 @@ const Button = props => {
     };
     const renderHtml = () => {
         try {
-            const style = getObjectPropSafely(() => configConverted.resource.style) || [];
-            const general = getObjectPropSafely(() => configConverted.resource.general) || [];
+            const style = getObjectPropSafely(() => config.resource.style) || [];
+            const general = getObjectPropSafely(() => config.resource.general) || [];
 
             return (
                 <>
@@ -185,10 +185,10 @@ const Button = props => {
                             </Nav>
                             <TabContent activeTab={activeTab} >
                                 <TabPane tabId="side-panel-general-tab">
-                                    <TabGeneral general={general} />
+                                    <TabGeneral general={general} values={activeElementValues.values} content={activeElementValues} />
                                 </TabPane>
                                 <TabPane tabId="side-panel-style-tab" className="h-100">
-                                    <TabStyle style={style} />
+                                    <TabStyle style={style} content={activeElementValues} values={activeElementValues.values} />
                                 </TabPane>
                             </TabContent>
                         </div>

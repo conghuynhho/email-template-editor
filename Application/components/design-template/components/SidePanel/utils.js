@@ -21,6 +21,13 @@ export const getPaddingChild = (padding) => {
             result.right = padding[1];
             result.bottom = padding[2];
             result.left = padding[3];
+
+            const [a,b,c,d] = padding || [];
+
+            result.top = a;
+            result.right = b || a;
+            result.bottom = c || a;
+            result.left = d || b || a;
     }
     return result;
 };

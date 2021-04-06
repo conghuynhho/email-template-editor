@@ -43,6 +43,8 @@ import produce from 'immer';
 import {
     getRowIDFromHtmlID
 } from 'Components/design-template/components/Workspace/utils';
+import {string} from 'prop-types';
+import {getPaddingChild} from '../utils';
 
 const PATH = 'Components/design-template/components/SidePanel/Style/index.jsx';
 
@@ -90,8 +92,8 @@ const Style = props => {
     };
 
     const updateComponent = (idParent, idChild, values) => {
-        const id = getContentIDFromHtmlID(state, getObjectPropSafely(() => state.activeElement));
-        const value = state.contents[id].values;
+        const id = getContentIDFromHtmlID(store, getObjectPropSafely(() => store.activeElement));
+        const value = store.contents[id].values;
 
         console.log('child', idChild);
         console.log('values', values);
@@ -151,7 +153,6 @@ const Style = props => {
         };
         
         try {
-            console.log(idChild);
             if (idChild) {
                 dispatchStore({
                     type: actionType.UPDATE_CONTENT,
@@ -218,8 +219,23 @@ const Style = props => {
                 } = element;
 
                 const value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
-
                 const valueStyle = typeof value === 'boolean' ? value : value.replace(new RegExp(`${unit}`,'gi'), '');
+                let newValueStyle = valueStyle;
+
+                if (key.toLowerCase().indexOf('padding') >= 0) {
+                    newValueStyle = getPaddingChild(valueStyle.split(' '));
+                }
+
+                // console.log(values, 'values');
+                // console.log(idParent, 'idParent');
+                // console.log(key, 'key');
+                // console.log(idChild, 'idChild');
+                // console.log(type, 'type');
+                // console.log(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}` || '');
+                // console.log(value, 'valueAfter');
+                // console.log(unit, 'unit'); 
+                // console.log(valueStyle, 'valueStyle');
+                // console.log(element.type, 'elementType');
 
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
@@ -398,13 +414,27 @@ const Style = props => {
                         );
                     }
                     case typeComponent.TEXT_INPUT: {
+                        // image: autoWidth, 
                         let isShow = true;
 
                         if (keyShow) {
-                            const isValid = getObjectPropSafely(() => content.values[keyShow]);
+                            const isValid = getObjectPropSafely(() => eval(`content.values.${keyShow}`));
 
-                            isShow = typeof isValid === 'boolean' ? !isValid : true;
+                            // console.log(isValid, 'isValid');
+                            // console.log(keyShow, 'keyShow');
+                            // console.log(content, 'content');
+                            if (typeof isValid === 'string') {isShow = isValid.split(' ').length > 1 ? false : true}
+                            if (typeof isValid === 'boolean') {isShow = !isValid}
+                            if (typeof isValid === 'undefined') {isShow = false}
+                            console.log(isShow, 'isShow');
                         }
+                        let textStyleValue = valueStyle;
+
+                        if (idChild === 'top') {textStyleValue = newValueStyle.top}
+                        if (idChild === 'right') {textStyleValue = newValueStyle.right}
+                        if (idChild === 'bottom') {textStyleValue = newValueStyle.bottom}
+                        if (idChild === 'left') {textStyleValue = newValueStyle.left}
+                        // console.log(textStyleValue, 'textStyle');
 
                         const handleOnChange = (value) => {
                             try {
@@ -424,7 +454,7 @@ const Style = props => {
                                     label={label || null}
                                     styleLabel={{height: 30}}
                                     style={getObjectPropSafely(() => style.styleChild) || {width: 100}}
-                                    value={valueStyle}
+                                    value={textStyleValue || valueStyle}
                                     onChange={(value) => handleOnChange(value)}
                                 />
                                 {
@@ -555,9 +585,16 @@ const Style = props => {
                         let isShow = true;
 
                         if (keyShow) {
-                            const isValid = getObjectPropSafely(() => content.values[keyShow]);
+                            const isValid = getObjectPropSafely(() => eval(`content.values.${keyShow}`));
 
-                            isShow = typeof isValid === 'boolean' ? isValid : true;
+                            if (typeof isValid === 'string') {isShow = isValid.split(' ').length > 1 ? true : false}
+                            if (typeof isValid === 'boolean') {isShow = isValid}
+                            // console.log(isValid, 'isValid');
+                            // console.log(keyShow, 'keyShow');
+                            // console.log(content, 'content');
+                            // console.log(elementChild, 'elementChild');
+                            // console.log(isShow, 'isS');
+                            // isShow = typeof isValid === 'boolean' ? isValid : true;
                         }
 
                         return isShow ? (
@@ -762,6 +799,7 @@ const Style = props => {
     };
 
     const renderComponent = (elements, id, type = '') => {
+        
         try {
             if (elements && elements.length) {
                 return elements.map(item => {
