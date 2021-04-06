@@ -4,15 +4,14 @@ import {StoreContext} from 'Components/design-template/components/ContextStore';
 import Row from 'Components/design-template/components/Workspace/components/Row';
 import styles from 'Components/design-template/components/Workspace/styles.module.scss';
 import {CONSTANTS, typeDnD} from 'Components/design-template/constants';
-import {
-    hierarchyDesignData
-} from 'Components/design-template/components/Workspace/utils';
+import {hierarchyDesignData} from 'Components/design-template/components/Workspace/utils';
+import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
 import {Icon} from '@antscorp/components';
 import {getObjectPropSafely} from 'Utils';
 
 const Workspace = (props) => {
-    const {state: store = {}} = useContext(StoreContext);
+    const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
     const {viewMode, activeElement} = store;
     const nestedData = hierarchyDesignData(store);
     const {
@@ -152,10 +151,22 @@ const Workspace = (props) => {
         };
     };
 
+    const onClickWorkspace = () => {
+        dispatchStore({
+            type: actionType.ACTIVE_ELEMENT,
+            payload: {
+                activeElement: 'u_body',
+                isEditing: false
+            }
+        });
+    };
+
+    console.log('store', store);
+
     return (
         <div 
             className={classnames(styles['outer-content'])}
-            // onClick={onClickWorkspace}
+            onClick={onClickWorkspace}
         >
             <Droppable 
                 droppableId='droppable-rows' 
