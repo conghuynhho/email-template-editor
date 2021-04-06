@@ -89,19 +89,20 @@ const Style = props => {
         }
     };
 
+    console.log('values', values);
     const updateComponent = (idParent, idChild, values) => {
-        const id = getContentIDFromHtmlID(state, getObjectPropSafely(() => state.activeElement));
-        const value = state.contents[id].values;
+        const id = getContentIDFromHtmlID(store, activeElement);
+        const value = store.contents[id].values;
 
-        console.log('child', idChild);
-        console.log('values', values);
-        console.log('value edit', value);
+        // console.log('child', idChild);
+        // console.log('values', values);
+        // console.log('value edit', value);
         values = {
             values: produce(value, draft => {
                 switch (idChild) {
                     // Text
                     case 'textColor':
-                        draft.color = values;
+                        draft.color ? draft.color = values : draft.textColor = values;
                         break;
                     case 'lineStyle':
                         draft.linkStyle.inherit = values;
@@ -138,7 +139,6 @@ const Style = props => {
                         // Menu + Button
                     case 'alignments':
                         (draft.align) ? draft.align = values : draft.textAlign = values;
-                        console.log('align', draft.textAlign);
                         break;
                     // Button
                     case 'backgroundColorButton':
@@ -171,6 +171,9 @@ const Style = props => {
     const updateComponentChild = (key, idChild, value) => {
         try {
             const valueStore = getObjectPropSafely(() => eval(`content.values.${key}`) || '');
+
+            console.log('valueStore', config);
+            console.log('idChild', idChild);
 
             // if (idChild) {
             //     switch (idChild) {
@@ -217,7 +220,12 @@ const Style = props => {
                     isShowMessageRight = false
                 } = element;
 
-                const value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
+                let value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
+
+                // console.log((idParent + '.' || '') + (type ? key : idChild));
+                // console.log('hello', value);
+
+                (typeof value === 'object' ? value = value.label : value);
 
                 const valueStyle = typeof value === 'boolean' ? value : value.replace(new RegExp(`${unit}`,'gi'), '');
 
@@ -246,6 +254,18 @@ const Style = props => {
                         );
                     }
                     case typeComponent.SELECT_SINGLE: {
+                        let layout;
+
+                        switch (valueStyle) {
+                            case 'horizontal':
+                                layout = 2;
+                                break;
+                            case 'vertical':
+                                layout = 1;
+                                break;
+                            default:
+                                layout = valueStyle;
+                        }
                         return (
                             <SelectSingle
                                 style={{
@@ -255,7 +275,7 @@ const Style = props => {
                                 sources={options}
                                 label={label || null}
                                 tooltipName={label || tooltip}
-                                default={findValue(valueStyle || defaultValue, options)}
+                                default={findValue(layout || defaultValue, options)}
                                 onSelectOption={(option) => updateComponent(idParent, idChild, option.name || '')}
                                 translate={translate}
                             />

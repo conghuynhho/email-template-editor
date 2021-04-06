@@ -12,7 +12,7 @@ const defaultStyleGeneral = {
     contentWidth: '600px',
     contentAlign: 'center',
     fontFamily: {
-        label: 'Montserrat',
+        label: 'montserrat',
         value: '\'Montserrat\',sans-serif',
         url: 'https://fonts.googleapis.com/css?family=Montserrat:400,700',
         defaultFont: true
@@ -213,7 +213,7 @@ const defaultStyleContent = {
             ]
         },
         fontFamily: {
-            label: 'Montserrat',
+            label: 'montserrat',
             value: '\'Montserrat\',sans-serif',
             url: 'https://fonts.googleapis.com/css?family=Montserrat:400,700',
             defaultFont: true
@@ -250,7 +250,7 @@ const defaultStyleContent = {
         },
         hideDesktop: false,
         hideMobile: false,
-        text: '<p style="font-size: 14px; line-height: 140%;"><span style="font-family: Montserrat, sans-serif; font-size: 14px; line-height: 19.6px;"><strong><span style="font-size: 44px; line-height: 61.6px;">NEW ARRIVAL</span></strong></span></p>',
+        text: '<p style="font-size: 14px; line-height: 140%;"><span style="font-family: montserrat, sans-serif; font-size: 14px; line-height: 19.6px;"><strong><span style="font-size: 44px; line-height: 61.6px;">NEW ARRIVAL</span></strong></span></p>',
         _meta: {
             htmlID: 'u_content_text_1',
             htmlClassNames: 'u_content_text'

@@ -193,7 +193,7 @@ export const nestedData = {
                                         ]
                                     },
                                     'fontFamily': {
-                                        'label': 'Montserrat',
+                                        'label': 'montserrat',
                                         'value': '\'Montserrat\',sans-serif',
                                         'url': 'https://fonts.googleapis.com/css?family=Montserrat:400,700',
                                         'defaultFont': true
@@ -1402,7 +1402,7 @@ export const nestedData = {
             'contentWidth': '600px',
             'contentAlign': 'center',
             'fontFamily': {
-                'label': 'Montserrat',
+                'label': 'montserrat',
                 'value': '\'Montserrat\',sans-serif',
                 'url': 'https://fonts.googleapis.com/css?family=Montserrat:400,700',
                 'defaultFont': true
@@ -1516,7 +1516,7 @@ export const designData = {
                         ]
                     },
                     'fontFamily': {
-                        'label': 'Montserrat',
+                        'label': 'montserrat',
                         'value': '\'Montserrat\',sans-serif',
                         'url': 'https://fonts.googleapis.com/css?family=Montserrat:400,700',
                         'defaultFont': true
@@ -1619,7 +1619,7 @@ export const designData = {
                         ]
                     },
                     'fontFamily': {
-                        'label': 'Montserrat',
+                        'label': 'montserrat',
                         'value': '\'Montserrat\',sans-serif',
                         'url': 'https://fonts.googleapis.com/css?family=Montserrat:400,700',
                         'defaultFont': true
@@ -3023,7 +3023,7 @@ export const designData = {
                     'contentWidth': '600px',
                     'contentAlign': 'center',
                     'fontFamily': {
-                        'label': 'Montserrat',
+                        'label': 'montserrat',
                         'value': '\'Montserrat\',sans-serif',
                         'url': 'https://fonts.googleapis.com/css?family=Montserrat:400,700',
                         'defaultFont': true

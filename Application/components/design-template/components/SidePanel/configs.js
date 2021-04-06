@@ -2174,7 +2174,7 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'FILL_COLOR',
-                            id: 'textColor',
+                            id: 'color',
                             label: 'Text color',
                             defaultValue: '#889199',
                             style: {
@@ -2212,7 +2212,8 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'SWITCH',
-                            id: 'lineStyle',
+                            id: 'inherit',
+                            keyParent: 'linkStyle',
                             isShowMessageRight: true,
                             label: 'Line style',
                             message: 'Inherit body styles',
@@ -2871,7 +2872,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'FILL_COLOR',
-                            id: 'textColorMenu',
+                            id: 'textColor',
                             label: 'Text color',
                             defaultValue: '#ff2500',
                             style: {
@@ -2882,7 +2883,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'FILL_COLOR',
-                            id: 'textColorButton',
+                            id: 'linkColor',
                             label: 'Link color',
                             defaultValue: '#FFFFFF',
                             style: {
@@ -2893,7 +2894,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'ALIGNMENT',
-                            id: 'alignments',
+                            id: 'align',
                             label: 'Alignments',
                             defaultValue: 'left',
                             style: {
