@@ -24,7 +24,6 @@ const SidePanel = props => {
             const activeElementID = store.activeElement;
             const element = getActiveElement(store, activeElementID);
             const config = sidePanelConfig.find(item => getObjectPropSafely(()=> item.type) === getObjectPropSafely(()=> element.type));
-            const type = (getObjectPropSafely(()=> element.type));
 
             switch (element.type) {
                 case typeElement.TEXT: {

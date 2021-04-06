@@ -119,6 +119,7 @@ const Style = props => {
                         // Menu + Button
                     case 'alignments':
                         (draft.align) ? draft.align = values : draft.textAlign = values;
+                        console.log('align', draft.textAlign);
                         break;
                     // Button
                     case 'backgroundColorButton':
