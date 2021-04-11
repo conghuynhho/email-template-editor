@@ -35,7 +35,6 @@ const Text = (props) => {
             id: getContentIDFromHtmlID(store, getObjectPropSafely(() => store.activeElement))
         };
 
-        // console.log('dispatch', payload);
         // dispatch.values.text = content;
         dispatchStore({
             type: actionType.UPDATE_CONTENT,

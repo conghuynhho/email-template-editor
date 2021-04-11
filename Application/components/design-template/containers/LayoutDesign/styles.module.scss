@@ -4,8 +4,8 @@
     grid-template-rows: auto auto;
     grid-template-areas: "workspace sidepanel";
     position: relative;
-    overflow-y: scroll;
-    height: 100vh;
+    // overflow-y: scroll;
+    // height: 100vh;
 
     &.side-panel-left {
         grid-template-columns: 338px auto;

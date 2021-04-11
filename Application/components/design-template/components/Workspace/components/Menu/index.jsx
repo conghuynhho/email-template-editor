@@ -1,6 +1,7 @@
 import React from 'react';
 import {getObjectPropSafely} from 'Utils';
 import styles from 'Components/design-template/components/Workspace/components/Menu/styles.module.scss';
+import {Icon} from '@antscorp/components';
 
 const Menu = (props) => {
     const {data} = props; 
@@ -16,7 +17,7 @@ const Menu = (props) => {
     const renderMenu = () => {
         const menus = getObjectPropSafely(() => data.values.menu.items) || [];
 
-        return menus.map((menu, index) => {
+        return menus.length ? menus.map((menu, index) => {
             const href = getObjectPropSafely(() => menu.link.values.href);
             const target = getObjectPropSafely(() => menu.link.values.target);
             const text = getObjectPropSafely(() => menu.text);
@@ -24,8 +25,8 @@ const Menu = (props) => {
                 padding: getObjectPropSafely(() => data.values.padding), 
                 fontSize: getObjectPropSafely(() => data.values.fontSize), 
                 fontFamily: getObjectPropSafely(() => data.values.fontFamily.value), 
-                color: getObjectPropSafely(() => data.values.fontFamily.textColor), 
-                display: 'inline-block', 
+                color: getObjectPropSafely(() => data.values.textColor), 
+                display: getObjectPropSafely(() => data.values.layout) === 'horizontal' ? 'inline-block' : 'block', 
                 textDecoration: 'none'
             };
 
@@ -40,7 +41,12 @@ const Menu = (props) => {
                     {text}
                 </a>
             );
-        });
+        }) : (
+            <div style={{color: '#ccc'}}>
+                <Icon type='icon-ants-bars' style={{color: '#ccc'}} />
+                <div>Menu</div>
+            </div>
+        );
     };
 
     return (

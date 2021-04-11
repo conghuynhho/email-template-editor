@@ -1,15 +1,17 @@
 // Libraries
-import React, {useState, memo} from 'react';
+import React, {useState, useContext, memo} from 'react';
 import classnames from 'classnames';
 import {Nav, NavLink, NavItem, TabContent, TabPane} from 'reactstrap';
 import Loadable from 'react-loadable';
-import {DragDropContext} from 'react-beautiful-dnd';
 import _ from 'lodash';
 
 // Utils
 import {getObjectPropSafely} from 'Utils/index.ts';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
 import {getFontFamily, getUnitAndValue} from '../../../Workspace/utils';
+
+// Context
+import {StoreContext} from 'Components/design-template/components/ContextStore';
 
 // Components
 const TabStyle = Loadable({
@@ -23,11 +25,20 @@ const TabGeneral = Loadable({
 });
 
 const General = props => {
+    const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
+    const {
+        activeElement,
+        rows
+    } = store;
     const {
         config = {},
         translate = (lal) => lal,
         content = {}
     } = props;
+
+    const bodyId = activeElement.includes('body') ? Object.keys(getObjectPropSafely(() => store.bodies))[0] : '';
+    const values = getObjectPropSafely(() => store.bodies[bodyId].values);
+
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
 
     const toggleTab = (tab) => {
@@ -151,7 +162,7 @@ const General = props => {
                         </Nav>
                         <TabContent activeTab={activeTab} >
                             <TabPane tabId="side-panel-general-tab">
-                                <TabGeneral general={general} />
+                                <TabGeneral general={general} values={values} />
                             </TabPane>
                             <TabPane tabId="side-panel-style-tab" className="h-100">
                                 <TabStyle style={style} />

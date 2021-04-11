@@ -1,6 +1,7 @@
 // Libraries
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext, memo} from 'react';
 import classnames from 'classnames';
+import produce from 'immer';
 
 // Components
 import {
@@ -25,17 +26,37 @@ import Alignment from 'Components/design-template/components/SidePanel/Style/com
 import Upload from 'Components/design-template/components/SidePanel/Style/components/Upload';
 
 // Assets
-import {getObjectPropSafely} from 'Utils/index.ts';
 import {typeComponent} from 'Components/design-template/constants';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
+
+// Context
+import {StoreContext} from 'Components/design-template/components/ContextStore';
+import {actionType} from 'Components/design-template/components/ContextStore/constants';
+
+// utils
+import {getObjectPropSafely, random} from 'Utils/index.ts';
+import {
+    getContentIDFromHtmlID
+} from 'Components/design-template/components/Workspace/utils';
 
 const PATH = 'Components/design-template/components/SidePanel/General/index.jsx';
 
 const Style = props => {
+    const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
     const {
+        activeElement,
+        rows,
+        bodies
+    } = store;
+    const {
+        values = {},
         general = [],
         translate = (lal) => lal
     } = props;
+    const bodyId = activeElement.includes('body') ? Object.keys(getObjectPropSafely(() => store.bodies))[0] : '';
+    const contentId = activeElement.includes('content') ? getContentIDFromHtmlID(store, activeElement) : '';
+    const content = getObjectPropSafely(() => store.contents[contentId]) || {};
+    const menuItems = activeElement.includes('menu') ? getObjectPropSafely(() => values.menu.items) : [];
     const [config, setConfig] = useState({});
 
     useEffect(() => {
@@ -60,28 +81,221 @@ const Style = props => {
         }
     };
 
-    const updateComponent = (idParent, idChild, value) => {
-        try {
-            // if (idChild && idParent) {
-            //     if (typeof props.updateComponent === 'function') {
-            //         props.updateComponent({
-            //             id: props.id,
-            //             style: {
-            //                 ...props.style,
-            //                 [idParent]: {
-            //                     ...props.style[idParent],
-            //                     [idChild]: value
-            //                 }
-            //             }
-            //         });
-            //     }
-            // }
-        } catch (error) {
-            //
+    const updateComponent = (idParent, idChild, receivedValues, itemIndex = 0) => {
+        let newBodies = bodies;
+
+        switch (idChild) {
+            case 'contentWidth': {
+                if (receivedValues && receivedValues !== 'px') {
+                    newBodies = produce(newBodies, draft => {
+                        draft[bodyId].values[idChild] = receivedValues;
+                    });
+                }
+                dispatchStore({
+                    type: actionType.UPDATE_BODY,
+                    payload: {
+                        bodies: newBodies
+                    }
+                });
+                break;
+            }
+            case 'backgroundColorGeneral': {
+                if (receivedValues) {
+                    newBodies = produce(newBodies, draft => {
+                        draft[bodyId].values.backgroundColor = receivedValues;
+                    });
+                }
+                dispatchStore({
+                    type: actionType.UPDATE_BODY,
+                    payload: {
+                        bodies: newBodies
+                    }
+                });
+                break;
+            }
+            case 'fontFamily': {
+                if (receivedValues.name) {
+                    newBodies = produce(newBodies, draft => {
+                        draft[bodyId].values[idChild] = {
+                            label: receivedValues.label,
+                            value: receivedValues.value,
+                            url: '',
+                            defaultFont: receivedValues.defaultFont
+                        };  
+                    });
+                }
+                dispatchStore({
+                    type: actionType.UPDATE_BODY,
+                    payload: {
+                        bodies: newBodies
+                    }
+                });
+                break;
+            }
+            case 'preheaderText': {
+                if (receivedValues) {
+                    newBodies = produce(newBodies, draft => {
+                        draft[bodyId].values[idChild] = receivedValues;
+                    });
+                }
+                dispatchStore({
+                    type: actionType.UPDATE_BODY,
+                    payload: {
+                        bodies: newBodies
+                    }
+                });
+                break;
+            }
+            case 'linkColor': {
+                if (receivedValues) {
+                    newBodies = produce(newBodies, draft => {
+                        draft[bodyId].values.linkStyle[idChild] = receivedValues;
+                    });
+                }
+                dispatchStore({
+                    type: actionType.UPDATE_BODY,
+                    payload: {
+                        bodies: newBodies
+                    }
+                });
+                break;
+            }
+            case 'linkUnderline': {
+                if (receivedValues) {
+                    newBodies = produce(newBodies, draft => {
+                        draft[bodyId].values.linkStyle[idChild] = receivedValues === 'underline' ? true : false;
+                    });
+                }
+                dispatchStore({
+                    type: actionType.UPDATE_BODY,
+                    payload: {
+                        bodies: newBodies
+                    }
+                });
+                break;
+            }
+            case `actionType${itemIndex}`: {
+                const actionTypeMenu = getObjectPropSafely(() => content.values.menu.items[itemIndex].actionType) || '';
+
+                if (receivedValues && receivedValues !== actionTypeMenu) {
+                    const newContent = produce(content, draft => {
+                        draft.values.menu.items[itemIndex].actionType = receivedValues;
+                    });
+
+                    dispatchStore({
+                        type: actionType.UPDATE_CONTENT,
+                        payload: {
+                            id: contentId,
+                            values: newContent
+                        }
+                    });
+                }
+                break;
+            }
+            case `menuText${itemIndex}`: {
+                const text = getObjectPropSafely(() => content.values.menu.items[itemIndex].text) || '';
+
+                if (receivedValues && receivedValues !== text) {
+                    const newContent = produce(content, draft => {
+                        draft.values.menu.items[itemIndex].text = receivedValues;
+                    });
+
+                    dispatchStore({
+                        type: actionType.UPDATE_CONTENT,
+                        payload: {
+                            id: contentId,
+                            values: newContent
+                        }
+                    });
+                } 
+                break;
+            }
+            case `url${itemIndex}` : {
+                const url = getObjectPropSafely(() => content.values.menu.items[itemIndex].link.values.href) || '';
+
+                if (receivedValues && receivedValues !== url) {
+                    const newContent = produce(content, draft => {
+                        draft.values.menu.items[itemIndex].link.values.href = receivedValues;
+                    });
+
+                    dispatchStore({
+                        type: actionType.UPDATE_CONTENT,
+                        payload: {
+                            id: contentId,
+                            values: newContent
+                        }
+                    });
+                }
+                break;
+            }
+            case `mailTo${itemIndex}`:
+            case `subject${itemIndex}`:
+            case `body${itemIndex}`: {
+                const newIdChild = idChild.replace(itemIndex + '', '');
+
+                const existValue = getObjectPropSafely(() => content.values.menu.items[itemIndex].mail[newIdChild]) || '';
+
+                if (receivedValues && receivedValues !== existValue) {
+                    const newContent = produce(content, draft => {
+                        draft.values.menu.items[itemIndex].mail = {
+                            ...draft.values.menu.items[itemIndex].mail,
+                            [newIdChild]: receivedValues
+                        };
+                    });
+
+                    dispatchStore({
+                        type: actionType.UPDATE_CONTENT,
+                        payload: {
+                            id: contentId,
+                            values: newContent
+                        }
+                    });
+                }
+                break;
+            }
+            case `phoneCall${itemIndex}`:
+            case `phoneSendSMS${itemIndex}`: {
+                const phoneNumber = getObjectPropSafely(() => content.values.menu.items[itemIndex].phone.number) || '';
+                
+                if (receivedValues && receivedValues !== phoneNumber) {
+                    const newContent = produce(content, draft => {
+                        draft.values.menu.items[itemIndex].phone = {
+                            number: receivedValues
+                        };
+                    });
+
+                    dispatchStore({
+                        type: actionType.UPDATE_CONTENT,
+                        payload: {
+                            id: contentId,
+                            values: newContent
+                        }
+                    });
+                }
+                break;
+            }
+            case `target${itemIndex}`: {
+                const target = getObjectPropSafely(() => content.values.menu.items[itemIndex].phone.target) || '';
+
+                if (receivedValues && receivedValues !== target) {
+                    const newContent = produce(content, draft => {
+                        draft.values.menu.items[itemIndex].link.values.target = receivedValues;
+                    });
+
+                    dispatchStore({
+                        type: actionType.UPDATE_CONTENT,
+                        payload: {
+                            id: contentId,
+                            values: newContent
+                        }
+                    });
+                }
+                break;
+            }
         }
     };
 
-    const switchCaseComponent = (element, idParent) => {
+    const switchCaseComponent = (element, idParent, numberOfMenu = 0, itemIndex = 0) => {
         try {
             if (element && Object.values(element).length) {
                 const {
@@ -103,8 +317,70 @@ const Style = props => {
                     isShowMessageLeft = false,
                     isShowMessageRight = false
                 } = element;
-                const valueStyle = '';
-                // const valueStyle = getObjectPropSafely(() => props.style[idParent][idChild]) || '';
+
+                let value = '';
+                let actionTypeMenu = '';
+
+                switch (idChild) {
+                    case 'contentWidth': value = getObjectPropSafely(() => values.contentWidth); break;
+                    case 'backgroundColorGeneral': value = getObjectPropSafely(() => values.backgroundColor); break;
+                    case 'fontFamily': value = getObjectPropSafely(() => values.fontFamily.label); break;
+                    case 'preheaderText': value = getObjectPropSafely(() => values.preheaderText); break;
+                    case 'linkColor': value = getObjectPropSafely(() => values.linkStyle.linkColor); break;
+                    case 'linkUnderline': value = getObjectPropSafely(() => values.linkStyle.linkUnderline) ? 'underline' : 'none'; break;
+                    default:
+                        value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${idChild}`) || '');
+                        break;
+                }
+
+                if (numberOfMenu > 0) {
+                    for (let i = 0; i < numberOfMenu; ++i) {
+
+                        switch (idChild) {
+                            case `menuText${i}`: {
+                                value = getObjectPropSafely(() => menuItems[i].text) || ''; 
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
+                                break;
+                            }
+                            case `actionType${i}`: {
+                                value = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite'; 
+                                break;
+                            }
+                            case `url${i}`: {
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
+                                value = getObjectPropSafely(() => menuItems[i].link.values.href) || ''; 
+                                break;
+                            }
+                            case `mailTo${i}`: {
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
+                                value = getObjectPropSafely(() =>  menuItems[i].mail.mailTo) || '';
+                                break;
+                            }
+                            case `subject${i}`: {
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
+                                value = getObjectPropSafely(() => menuItems[i].mail.subject) || ''; 
+                                break;
+                            }
+                            case `body${i}`: {
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
+                                value = getObjectPropSafely(() => menuItems[i].mail.body) || ''; 
+                                break;
+                            }
+                            case `phoneCall${i}`:
+                            case `phoneSendSMS${i}`: {
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
+                                value = getObjectPropSafely(() => menuItems[i].phone.number) || ''; 
+                                break;
+                            }
+                            case `target${i}`: {
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
+                                value = getObjectPropSafely(() => menuItems[i].link.values.target) || '';
+                            }
+                        } 
+                    }
+                }
+   
+                const valueStyle = typeof value === 'boolean' ? value : value.replace(new RegExp(`${unit}`,'gi'), '');
 
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
@@ -130,7 +406,13 @@ const Style = props => {
                         );
                     }
                     case typeComponent.SELECT_SINGLE: {
-                        return (
+                        let isShow = true;
+
+                        if (keyShow) {
+                            isShow = keyShow === actionTypeMenu ? true : false;
+                        }
+
+                        return isShow ? (
                             <SelectSingle
                                 style={{
                                     toggle: {minWidth: 70, width: 290, fontSize: 12, ...getObjectPropSafely(() => style.styleChild)},
@@ -138,12 +420,12 @@ const Style = props => {
                                 }}
                                 sources={options}
                                 label={label || null}
-                                tooltipName={label || tooltip}
+                                // tooltipName={label || tooltip}
                                 default={findValue(valueStyle || defaultValue, options)}
-                                onSelectOption={(option) => updateComponent(idParent, idChild, option.name || '')}
+                                onSelectOption={(option) => updateComponent(idParent, idChild, option.name || '', itemIndex)}
                                 translate={translate}
                             />
-                        );
+                        ) : null;
                     }
                     case typeComponent.SELECT_RADIO: {
                         return (
@@ -162,8 +444,8 @@ const Style = props => {
                                 label={label || null}
                                 styleLabel={{marginBottom: 6}}
                                 tooltipName={label || tooltip}
-                                // selectColor={(color) => updateComponent(idParent, idChild, color)}
-                                color={defaultValue}
+                                selectColor={(color) => updateComponent(idParent, idChild, color)}
+                                color={valueStyle || defaultValue}
                                 translate={translate}
                             />
                         );
@@ -260,7 +542,7 @@ const Style = props => {
                                 label={label || null}
                                 tooltipName={label || tooltip}
                                 default={findValue(valueStyle || defaultValue, options)}
-                                onSelectOption={(option) => updateComponent(idParent, idChild, option.name || '')}
+                                onSelectOption={(option) => updateComponent(idParent, idChild, option || {})}
                                 translate={translate}
                             />
                         );
@@ -284,11 +566,24 @@ const Style = props => {
                     case typeComponent.TEXT_INPUT: {
                         let isShow = true;
 
-                        if (keyShow) {
-                            const type = getObjectPropSafely(() => props.style[idParent][keyShow]);
+                        // if (keyShow) {
+                        //     const type = getObjectPropSafely(() => props.style[idParent][keyShow]);
 
-                            isShow = type === 'imageUrl' ? true : false;
+                        //     isShow = type === 'imageUrl' ? true : false;
+                        // }
+
+                        if (keyShow) {
+                            switch (keyShow) {
+                                case 'openWebsite': isShow = keyShow === actionTypeMenu ? true : false; break;
+                                case 'sendEmail': isShow = keyShow === actionTypeMenu ? true : false; break;
+                                case 'callPhoneNumber': isShow = keyShow === actionTypeMenu ? true : false; break;
+                                case 'sendSMS': isShow = keyShow === actionTypeMenu ? true : false; break;
+                            }
                         }
+
+                        const handleOnChange = (value) => {       
+                            updateComponent(idParent, idChild, `${value}${unit}`, itemIndex);
+                        };
 
                         return isShow ? (
                             <>
@@ -297,7 +592,7 @@ const Style = props => {
                                     styleLabel={{height: 30}}
                                     style={getObjectPropSafely(() => style.styleChild) || {width: 100}}
                                     value={valueStyle || defaultValue}
-                                // onChange={handleOnChange}
+                                    onChange={handleOnChange}
                                 />
                                 {
                                     isShowUnit ? (
@@ -480,6 +775,63 @@ const Style = props => {
                             </div>
                         );
                     }
+                    case typeComponent.DELETE_BUTTON: {
+                        const onClickDelete = () => {
+                            if (typeof itemIndex === 'number') {
+                                const newContent = produce(content, draft => {
+                                    draft.values.menu.items.splice(itemIndex, 1);
+                                });
+
+                                dispatchStore({
+                                    type: actionType.UPDATE_CONTENT,
+                                    payload: {
+                                        id: contentId,
+                                        values: newContent
+                                    }
+                                });
+                            }
+                        };
+
+                        return (
+                            <div style={{display: 'flex', justifyContent: 'flex-end', padding: '0 6px 0 0'}}>
+                                <span style={{cursor: 'pointer'}} onClick={onClickDelete}>
+                                    <Icon type='icon-ants-trash' style={{color: '#ccc'}} />
+                                </span>
+                            </div>
+                        );
+                    }
+                    case typeComponent.ADD_MENU: {
+                        const onClickAddMenu = () => {
+                            const newContent = produce(content, draft => {
+                                draft.values.menu.items.push({
+                                    key: random(13),
+                                    actionType: 'openWebsite',
+                                    link: {
+                                        name: 'web',
+                                        values: {
+                                            href: '',
+                                            target: '_self'
+                                        }
+                                    },
+                                    text: 'PAGE'
+                                });
+                            });
+
+                            dispatchStore({
+                                type: actionType.UPDATE_CONTENT,
+                                payload: {
+                                    id: contentId,
+                                    values: newContent
+                                }
+                            });
+                        };
+
+                        return (
+                            <div className={classnames(styles['add-menu'])} onClick={onClickAddMenu}>
+                                <Icon type='icon-ants-add' style={{color: '#ccc'}} />
+                            </div>
+                        );
+                    }
                 }
             }
         } catch (error) {
@@ -491,13 +843,20 @@ const Style = props => {
         }
     };
 
-    const renderComponent = (elements, id) => {
+    const renderComponent = (elements, id, numberOfMenu = 0, itemIndex = 0) => {
         try {
             if (elements && elements.length) {
                 return elements.map(item => {
                     return (
-                        <div key={item.id} className={classnames(styles[`${item.className}`], `mb-15 ${item.className}`)} style={{marginBottom: 15, ...getObjectPropSafely(() => item.style.styleParent)}}>
-                            {switchCaseComponent(item, id)}
+                        <div 
+                            key={item.id} 
+                            className={classnames(styles[`${item.className}`], `mb-15 ${item.className}`)} 
+                            style={{
+                                marginBottom: activeElement.includes('menu') && item.keyShow && item.keyShow !== menuItems[itemIndex].actionType ? 0 : 15, 
+                                ...getObjectPropSafely(() => item.style.styleParent)
+                            }}
+                        >
+                            {switchCaseComponent(item, id, numberOfMenu, itemIndex)}
                         </div>
                     );
                 });
@@ -510,13 +869,38 @@ const Style = props => {
     const renderHtml = () => {
         try {
             if (config && config.length) {
-                return config.map(item => {
+                let newConfig = config;
+
+                if (activeElement.includes('menu')) {
+                    for (let i = 0; i < menuItems.length; i++) {
+                        if (menuItems.length) {
+                            newConfig = produce(newConfig, draft => {
+                                draft.splice(i + 1, 0, {
+                                    ...draft[0],
+                                    id: `menu${i}`,
+                                    elements: draft[0].elements.map((elem, index) => ({
+                                        ...draft[0].elements[index],
+                                        id: `${draft[0].elements[index].id}${i}`
+                                    })),
+                                    itemIndex: i
+                                });
+                            });
+                        }
+                    }
+
+                    newConfig = produce(newConfig, draft => {
+                        if (newConfig.length > 1) {
+                            draft.splice(0, 1);
+                        }
+                    });
+                }
+                return newConfig.map(item => {
                     return (
                         <div key={item.id}>
                             <div className="section" style={{...item.style}}>
                                 <div className={classnames(styles['section-label'])}>{translate(item.label, item.label)}</div>
                                 <div className='section-container pl-15 mb-15' style={{display: 'flex', flexWrap: 'wrap', marginLeft: 10, justifyContent: 'space-between'}}>
-                                    {renderComponent(item.elements, item.id)}
+                                    {renderComponent(item.elements, item.id, menuItems.length, item.itemIndex)}
                                 </div>
                             </div>
                             <hr style={{marginTop: 5, marginBottom: 5}} />
@@ -540,4 +924,4 @@ const Style = props => {
     }
 };
 
-export default Style;
+export default memo(Style);

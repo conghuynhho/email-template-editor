@@ -20,7 +20,9 @@ export const typeComponent = {
     UPLOAD: 'UPLOAD',
     BLOCK_COLUMNS: 'BLOCK_COLUMNS',
     TAB_COLUMN: 'TAB_COLUMN',
-    LIST_COMPONENTS: 'LIST_COMPONENTS'
+    LIST_COMPONENTS: 'LIST_COMPONENTS',
+    DELETE_BUTTON: 'DELETE_BUTTON',
+    ADD_MENU: 'ADD_MENU'
 };
 
 export const typeElement = {

@@ -11,7 +11,7 @@ import {Icon} from '@antscorp/components';
 import {getObjectPropSafely} from 'Utils';
 
 const Workspace = (props) => {
-    const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
+    const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
     const {viewMode, activeElement} = store;
     const nestedData = hierarchyDesignData(store);
     const {
@@ -160,8 +160,6 @@ const Workspace = (props) => {
             }
         });
     };
-
-    console.log('store', store);
 
     return (
         <div 
