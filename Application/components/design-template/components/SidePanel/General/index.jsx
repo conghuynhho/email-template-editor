@@ -51,6 +51,7 @@ const Style = props => {
     const {
         values = {},
         general = [],
+        values = {},
         translate = (lal) => lal
     } = props;
     const bodyId = activeElement.includes('body') ? Object.keys(getObjectPropSafely(() => store.bodies))[0] : '';

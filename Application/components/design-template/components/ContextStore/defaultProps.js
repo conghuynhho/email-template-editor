@@ -164,6 +164,7 @@ const defaultStyleContent = {
             width: 626,
             height: 418
         },
+        // moreOptionsPaddingImage: false,
         textAlign: 'center',
         altText: 'Image',
         action: {
