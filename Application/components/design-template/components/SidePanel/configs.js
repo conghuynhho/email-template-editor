@@ -3861,11 +3861,11 @@ const sidePanelConfig = [
         resource: {
             style: [
                 {
-                    id: 'html',
+                    id: 'htmlContent',
                     elements: [
                         {
                             type: 'TEXT_AREA',
-                            id: 'htmlContent',
+                            id: 'html',
                             label: 'HTML Content',
                             defaultValue: '',
                             style: {
@@ -3900,30 +3900,33 @@ const sidePanelConfig = [
                                 }
                             }
                         },
-                        // {
-                        //     type: 'TEXT_INPUT',
-                        //     id: 'htmlContainerPaddingText',
-                        //     label: '',
-                        //     defaultValue: '10',
-                        //     unit: 'px',
-                        //     isShowUnit: true,
-                        //     style: {
-                        //         styleParent: {
-                        //             width: '100%'
-                        //         },
-                        //         styleChild: {
-                        //             width: 40
-                        //         }
-                        //     }
-                        // },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'containerPadding',
+                            label: '',
+                            keyShow: 'containerPadding',
+                            defaultValue: '10',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
                         {
                             type: 'COMPONENT_CHILD',
-                            id: 'childHtmlPadding',
+                            id: 'containerPadding',
+                            keyShow: 'containerPadding',
                             // keyShow: 'moreOptionsButtonPadding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',
                                     id: 'top',
+                                    upLineKey: 'containerPaddings',
                                     label: 'Top',
                                     defaultValue: '10',
                                     unit: 'px',
@@ -3944,6 +3947,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3960,6 +3964,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3976,6 +3981,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -4000,7 +4006,7 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'SWITCH',
-                            id: 'responsive',
+                            id: 'hideOnDesktop',
                             isShowMessageRight: true,
                             message: 'Hide on desktop',
                             defaultValue: false,

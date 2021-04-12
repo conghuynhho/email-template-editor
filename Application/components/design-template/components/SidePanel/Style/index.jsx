@@ -661,15 +661,15 @@ const Style = props => {
 
                 const valueStyle = typeof value === 'boolean' ? value : (typeof value === 'string' ? value.replace(new RegExp(`${unit}`, 'gi'), '') : value);
                 
-                // console.log(values, 'values');
-                // console.log(value, 'valueAfter');
-                // console.log(idParent, 'idParent');
-                // console.log(key, 'key');
-                // console.log(idChild, 'idChild');
-                // console.log(type, 'type');
-                // console.log(unit, 'unit'); 
-                // console.log(valueStyle, 'valueStyle');
-                // console.log(element.type, 'elementType');
+                console.log(values, 'values');
+                console.log(value, 'valueAfter');
+                console.log(idParent, 'idParent');
+                console.log(key, 'key');
+                console.log(idChild, 'idChild');
+                console.log(type, 'type');
+                console.log(unit, 'unit'); 
+                console.log(valueStyle, 'valueStyle');
+                console.log(element.type, 'elementType');
 
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
@@ -1009,7 +1009,7 @@ const Style = props => {
                                     }
                                     <Switch
                                         style={{marginLeft: 0}}
-                                        default={isActive}
+                                        default={valueStyle || isActive}
                                         backgroundColor='#9cce24'
                                         size='12'
                                         onClick={(isShow) => updateComponent(idParent, idChild, isShow)}

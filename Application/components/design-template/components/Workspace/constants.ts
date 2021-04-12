@@ -1651,6 +1651,26 @@ export const designData = {
                     'id': '12'
                 }
             },
+            '13': {
+                'location': {
+                    'collection': 'contents',
+                    'id': '12'
+                },
+                'type': 'html',
+                'values': {
+                    'html': '<strong>Hello, world!</strong>',
+                    'containerPadding': '10px',
+                    'hideOnDesktop': true,
+                    '_meta': {
+                        'htmlID': 'u_content_html_1',
+                        'htmlClassNames': 'u_content_html'
+                    },
+                    'selectable': true,
+                    'draggable': true,
+                    'duplicatable': true,
+                    'deletable': true
+                }
+            },
             '15': {
                 'type': 'divider',
                 'values': {
@@ -2467,6 +2487,7 @@ export const designData = {
             },
             '14': {
                 'contents': [
+                    '13',
                     '15',
                     '16',
                     '17'
