@@ -31,3 +31,18 @@ export const getPaddingChild = (padding) => {
     }
     return result;
 };
+
+export const defaultBorder = {
+    'borderBottomColor': '#CCCCCC',
+    'borderBottomStyle': 'solid',
+    'borderBottomWidth': '0px',
+    'borderLeftColor': '#CCCCCC',
+    'borderLeftStyle': 'solid',
+    'borderLeftWidth': '0px',
+    'borderRightColor': '#CCCCCC',
+    'borderRightStyle': 'solid',
+    'borderRightWidth': '0px',
+    'borderTopColor': '#CCCCCC',
+    'borderTopStyle': 'solid',
+    'borderTopWidth': '0px'
+};

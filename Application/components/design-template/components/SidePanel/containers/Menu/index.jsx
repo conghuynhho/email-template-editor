@@ -129,7 +129,7 @@ const Menu = (props) => {
                                     <TabGeneral general={general} />
                                 </TabPane>
                                 <TabPane tabId="side-panel-style-tab" className="h-100">
-                                    <TabStyle style={style} />
+                                    <TabStyle style={style} values={content.values} />
                                 </TabPane>
                             </TabContent>
                         </div>

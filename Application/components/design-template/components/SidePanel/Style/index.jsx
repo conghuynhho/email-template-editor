@@ -44,7 +44,7 @@ import {
     getRowIDFromHtmlID
 } from 'Components/design-template/components/Workspace/utils';
 import {string} from 'prop-types';
-import {getPaddingChild} from '../utils';
+import {getPaddingChild, defaultBorder} from '../utils';
 
 const PATH = 'Components/design-template/components/SidePanel/Style/index.jsx';
 
@@ -196,6 +196,7 @@ const Style = props => {
 
     const switchCaseComponent = (element, key, type) => {
         try {
+            console.log(element, 'element');
             if (element && Object.values(element).length) {
                 const {
                     options = [],
@@ -217,25 +218,32 @@ const Style = props => {
                     isShowMessageLeft = false,
                     isShowMessageRight = false
                 } = element;
+                
+                let value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
 
-                const value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
-                const valueStyle = typeof value === 'boolean' ? value : value.replace(new RegExp(`${unit}`,'gi'), '');
+                if (type && key === 'border') {
+                    value = Object.values(value).length ? getObjectPropSafely(()=>value[idChild]) : defaultBorder[idChild];
+                }
+                let valueStyle = value;
+                
+                if (typeof value !== 'object')
+                {valueStyle = typeof value === 'boolean' ? value : value.replace(new RegExp(`${unit}`,'gi'), '')}
+                
                 let newValueStyle = valueStyle;
-
+                
                 if (key.toLowerCase().indexOf('padding') >= 0) {
                     newValueStyle = getPaddingChild(valueStyle.split(' '));
                 }
-
-                // console.log(values, 'values');
-                // console.log(idParent, 'idParent');
-                // console.log(key, 'key');
-                // console.log(idChild, 'idChild');
-                // console.log(type, 'type');
-                // console.log(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}` || '');
-                // console.log(value, 'valueAfter');
-                // console.log(unit, 'unit'); 
-                // console.log(valueStyle, 'valueStyle');
-                // console.log(element.type, 'elementType');
+                
+                console.log(values, 'values');
+                console.log(value, 'valueAfter');
+                console.log(idParent, 'idParent');
+                console.log(key, 'key');
+                console.log(idChild, 'idChild');
+                console.log(type, 'type');
+                console.log(unit, 'unit'); 
+                console.log(valueStyle, 'valueStyle');
+                console.log(element.type, 'elementType');
 
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
@@ -420,7 +428,7 @@ const Style = props => {
                         if (keyShow) {
                             const isValid = getObjectPropSafely(() => eval(`content.values.${keyShow}`));
 
-                            // console.log(isValid, 'isValid');
+                            console.log(isValid, 'isValid');
                             // console.log(keyShow, 'keyShow');
                             // console.log(content, 'content');
                             if (typeof isValid === 'string') {isShow = isValid.split(' ').length > 1 ? false : true}
@@ -789,6 +797,7 @@ const Style = props => {
                     }
                 }
             }
+            
         } catch (error) {
             // handleError(error, {
             //     path: PATH,

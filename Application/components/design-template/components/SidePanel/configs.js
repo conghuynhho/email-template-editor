@@ -1261,8 +1261,9 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'FILL_COLOR',
-                            id: 'backgroundColorButton',
+                            id: 'backgroundColor',
                             label: 'Background color',
+                            keyParent: 'buttonColors',
                             defaultValue: '#F75F2D',
                             style: {
                                 styleParent: {
@@ -1272,8 +1273,9 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'FILL_COLOR',
-                            id: 'textColorButton',
+                            id: 'color',
                             label: 'Text color',
+                            keyParent: 'buttonColors',
                             defaultValue: '#FFFFFF',
                             style: {
                                 styleParent: {
@@ -1285,6 +1287,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'width',
                             label: 'Width',
+                            keyParent: 'size',
                             defaultValue: '100',
                             unit: '%',
                             isShowUnit: true,
@@ -1300,6 +1303,7 @@ const sidePanelConfig = [
                         {
                             type: 'SWITCH',
                             id: 'autoWidth',
+                            keyParent: 'size',
                             isShowMessageLeft: true,
                             message: 'Auto width',
                             defaultValue: true,
@@ -1311,7 +1315,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'ALIGNMENT',
-                            id: 'alignments',
+                            id: 'textAlign',
                             label: 'Alignments',
                             defaultValue: 'left',
                             style: {
@@ -1358,26 +1362,27 @@ const sidePanelConfig = [
                                 }
                             }
                         },
-                        // {
-                        //     type: 'TEXT_INPUT',
-                        //     id: 'buttonPaddingText',
-                        //     label: '',
-                        //     unit: 'px',
-                        //     isShowUnit: true,
-                        //     defaultValue: '10',
-                        //     style: {
-                        //         styleParent: {
-                        //             width: '100%'
-                        //         },
-                        //         styleChild: {
-                        //             width: 40
-                        //         }
-                        //     }
-                        // },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'padding',
+                            label: 'Button Padding',
+                            unit: 'px',
+                            keyShow: 'padding',
+                            isShowUnit: true,
+                            defaultValue: '10',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
                         {
                             type: 'COMPONENT_CHILD',
-                            id: 'childButtonPadding',
-                            // keyShow: 'moreOptionsButtonPadding',
+                            id: 'padding',
+                            keyShow: 'padding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',
@@ -1452,9 +1457,11 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'TEXT_INPUT',
-                            id: 'roundedBorder',
+                            id: 'borderRadius',
                             label: 'Rounded border',
                             defaultValue: '5',
+                            unit: 'px',
+                            isShowUnit: true,
                             style: {
                                 styleParent: {
                                     width: '100%'
@@ -1466,7 +1473,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'LABEL',
-                            id: 'border',
+                            id: 'borderLabel',
                             label: 'Border',
                             style: {
                                 styleParent: {
@@ -1485,7 +1492,7 @@ const sidePanelConfig = [
                                     width: '40%'
                                 }
                             }
-                        },
+                        },                       
                         // {
                         //     type: 'FILL_COLOR',
                         //     id: 'borderColorButton',
@@ -1535,8 +1542,8 @@ const sidePanelConfig = [
                         // },
                         {
                             type: 'COMPONENT_CHILD',
-                            id: 'childBorder',
-                            // keyShow: 'moreOptionsBorder',
+                            id: 'border',
+                            // keyShow: 'isMoreOptionBorder',
                             elementChild: [
                                 {
                                     type: 'LABEL',
@@ -1550,7 +1557,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderTop',
+                                    id: 'borderTopStyle',
                                     defaultValue: 'solid',
                                     tooltip: 'Border top',
                                     options: [
@@ -1593,7 +1600,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'inputBorderTop',
+                                    id: 'borderTopWidth',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -1608,7 +1615,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBorderTop',
+                                    id: 'borderTopColor',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -1628,7 +1635,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderRight',
+                                    id: 'borderRightStyle',
                                     defaultValue: 'solid',
                                     tooltip: 'Border right',
                                     options: [
@@ -1671,7 +1678,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'inputBorderRight',
+                                    id: 'borderRightWidth',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -1686,7 +1693,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBorderRight',
+                                    id: 'borderRightColor',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -1706,7 +1713,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderBottom',
+                                    id: 'borderBottomStyle',
                                     defaultValue: 'solid',
                                     tooltip: 'Border bottom',
                                     options: [
@@ -1749,7 +1756,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'input',
+                                    id: 'borderBottomWidth',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -1764,7 +1771,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBoderBottom',
+                                    id: 'borderBottomColor',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -1784,7 +1791,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderLeft',
+                                    id: 'borderLeftStyle',
                                     defaultValue: 'solid',
                                     tooltip: 'Border left',
                                     options: [
@@ -1827,7 +1834,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'inputBorderLeft',
+                                    id: 'borderLeftWidth',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -1842,7 +1849,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBorderLeft',
+                                    id: 'borderLeftColor',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -1858,15 +1865,38 @@ const sidePanelConfig = [
                             }
                         },
                         {
+                            type: 'LABEL',
+                            id: 'textContainerPaddingLabel',
+                            label: 'Container padding',
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'SWITCH',
+                            id: 'moreOptionsContainerPadding',
+                            isShowMessageLeft: true,
+                            message: 'More options',
+                            defaultValue: false,
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        },
+                        {
                             type: 'TEXT_INPUT',
                             id: 'containerPadding',
-                            label: 'Container padding',
+                            // label: 'Container padding',
+                            keyShow: 'containerPadding',
                             defaultValue: '10',
                             unit: 'px',
                             isShowUnit: true,
                             style: {
                                 styleParent: {
-                                    width: '50%'
+                                    width: '100%'
                                 },
                                 styleChild: {
                                     width: 40
@@ -1874,14 +1904,78 @@ const sidePanelConfig = [
                             }
                         },
                         {
-                            type: 'SWITCH',
-                            id: 'moreOptionsPaddingButton',
-                            isShowMessageLeft: true,
-                            message: 'More options',
-                            defaultValue: false,
+                            type: 'COMPONENT_CHILD',
+                            id: 'containerPadding',
+                            keyShow: 'containerPadding',
+                            elementChild: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'top',
+                                    label: 'Top',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'right',
+                                    label: 'Right',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'bottom',
+                                    label: 'Bottom',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'left',
+                                    label: 'Left',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                }
+                            ],
                             style: {
                                 styleParent: {
-                                    width: '50%'
+                                    width: '100%'
                                 }
                             }
                         }
