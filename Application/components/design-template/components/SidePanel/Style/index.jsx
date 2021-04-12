@@ -109,73 +109,11 @@ const Style = props => {
         }
     };
 
-    // console.log('values', values);
-    // const updateComponent = (idParent, idChild, values, font) => {
-    //     const id = getContentIDFromHtmlID(store, activeElement);
-    //     const value = store.contents[id].values;
-
-    //     // console.log('child', idChild);
-    //     // console.log('values', values);
-    //     // console.log('value edit', value);
-    //     values = {
-    //         values: produce(value, draft => {
-    //             switch (idChild) {
-    //                 // Text
-    //                 case 'textColor':
-    //                     draft.color ? draft.color = values : draft.textColor = values;
-    //                     break;
-    //                 case 'lineStyle':
-    //                     draft.linkStyle.inherit = values;
-    //                     break;
-    //                 case 'moreOptionsPaddingText':
-    //                     break;
-    //                 case 'responsive':
-    //                     break;
-    //                 // Line
-    //                 case 'borderTopStyle':
-    //                     draft.border.borderTopStyle = values;
-    //                     break;
-    //                 case 'borderTopWidth':
-    //                     draft.border.borderTopWidth = values;
-    //                     break;
-    //                 case 'borderTopColor':
-    //                     draft.border.borderTopColor = values;
-    //                     break;
-    //                 // Menu
-    //                 case 'textColorMenu':
-    //                     draft.textColor = values;
-    //                     break;
-    //                     // Menu + Button
-    //                 case 'textColorButton':
-    //                     (draft.linkColor) ? draft.linkColor = values : draft.buttonColors.color = values;
-    //                     break;
-    //                     // chưa biết url, value trong fontFamily
-    //                 case 'fontFamily':
-    //                     console.log('option', font);
-    //                     draft.fontFamily.label = values;
-    //                     draft.fontFamily.url = font.url;
-    //                     draft.fontFamily.value = font.name;
-    //                     break;
-    //                 case 'layout':
-    //                     draft.layout = (values == 1 ? 'vertical' : 'horizontal');
-    //                     break;
-    //                     // Menu + Button
-    //                 case 'alignments':
-    //                     (draft.align) ? draft.align = values : draft.textAlign = values;
-    //                     break;
-    //                 // Button
-    //                 case 'backgroundColorButton':
-    //                     draft.buttonColors.backgroundColor = values;
-    //                     break;
-    //                 // textAlign, width(Line), fontSize(Menu)
-    //                 default: 
-    //                     draft[idChild] = values;
     const updateComponent = (idParent, idChild, receivedValues) => {
-
         if (activeElement.includes('row')) {
             let newRow = {};
             let newColumn = {};
-                
+
             switch (idChild) {
                 case 'backgroundColor': {
                     newRow = produce(row, draft => {
@@ -394,6 +332,46 @@ const Style = props => {
                     }
                     break;
                 }
+                case 'borderTopStyle': {
+                    if (receivedValues) {
+                        newContent = produce(content, draft => {
+                            draft.values.border.borderTopStyle = receivedValues;
+                        });
+                    }
+                    break;
+                }
+                case 'borderTopWidth': {
+                    if (receivedValues && receivedValues !== 'px') {
+                        newContent = produce(content, draft => {
+                            draft.values.border.borderTopWidth = receivedValues;
+                        });
+                    }
+                    break;
+                }
+                case 'borderTopColor': {
+                    if (receivedValues) {
+                        newContent = produce(content, draft => {
+                            draft.values.border.borderTopColor = receivedValues;
+                        });
+                    }
+                    break;
+                }
+                case 'alignments': {
+                    if (receivedValues) {
+                        newContent = produce(content, draft => {
+                            draft.values.textAlign = receivedValues;
+                        });
+                    }
+                    break;
+                }
+                case 'backgroundColorButton': {
+                    if (receivedValues) {
+                        newContent = produce(content, draft => {
+                            draft.values.buttonColors.backgroundColor = receivedValues;
+                        });
+                    }
+                    break;
+                }
                 case 'moreOptionsMenuPadding': {
                     if (receivedValues) {
                         newContent = produce(content, draft => {
@@ -418,6 +396,13 @@ const Style = props => {
                     }
                     break;
                 }
+                default: {
+                    if (receivedValues && receivedValues !== '%') {
+                        newContent = produce(content, draft => {
+                            draft.values[idChild] = receivedValues;
+                        });
+                    }
+                }
             }
 
             dispatchStore({
@@ -427,74 +412,7 @@ const Style = props => {
                     values: newContent
                 }
             });
-        }
-
-        // values = {
-        //     values: produce(value, draft => {
-        //         switch (idChild) {
-        //             // Text  
-        //             case 'textColor':
-        //                 draft.color = values;
-        //                 break;
-        //             case 'lineStyle':
-        //                 draft.linkStyle.inherit = values;
-        //                 break;
-        //             case 'moreOptionsPaddingText':
-        //                 break;
-        //             case 'responsive':
-        //                 break;
-        //             // Line
-        //             case 'borderTopStyle':
-        //                 draft.border.borderTopStyle = values;
-        //                 break;
-        //             case 'borderTopWidth':
-        //                 draft.border.borderTopWidth = values;
-        //                 break;
-        //             case 'borderTopColor':
-        //                 draft.border.borderTopColor = values;
-        //                 break;
-        //             // Menu
-        //             case 'textColorMenu':
-        //                 draft.textColor = values;
-        //                 break;
-        //                 // Menu + Button
-        //             case 'textColorButton':
-        //                 (draft.linkColor) ? draft.linkColor = values : draft.buttonColors.color = values;
-        //                 break;
-        //                 // chưa biết url, value trong fontFamily
-        //             case 'fontFamily':
-        //                 draft.fontFamily.label = values;
-        //                 break;
-        //             case 'layout':
-        //                 draft.layout = (values == 1 ? 'vertical' : 'horizontal');
-        //                 break;
-        //                 // Menu + Button
-        //             case 'alignments':
-        //                 (draft.align) ? draft.align = values : draft.textAlign = values;
-        //                 break;
-        //             // Button
-        //             case 'backgroundColorButton':
-        //                 draft.buttonColors.backgroundColor = values;
-        //                 break;
-        //             // textAlign, width(Line), fontSize(Menu)
-        //             default: 
-        //                 draft[idChild] = values;
-        //         }
-        //     })
-        // };
-        
-        // if (idChild) {
-        //     dispatchStore({
-        //         type: actionType.UPDATE_CONTENT,
-        //         payload: {
-        //             id: id,
-        //             // keyParent: idParent,
-        //             // key: idChild,
-        //             values
-        //         }
-        //     });
-        // }
-        
+        }        
     };
 
     const updateComponentChild = (key, idChild, value) => {
@@ -746,18 +664,6 @@ const Style = props => {
                         );
                     }
                     case typeComponent.SELECT_SINGLE: {
-                        let layout;
-
-                        switch (valueStyle) {
-                            case 'horizontal':
-                                layout = 2;
-                                break;
-                            case 'vertical':
-                                layout = 1;
-                                break;
-                            default:
-                                layout = valueStyle;
-                        }
                         let isShow = true;
 
                         if (keyShow === 'borderStyle') {
@@ -773,7 +679,7 @@ const Style = props => {
                                 sources={options}
                                 label={label || null}
                                 tooltipName={label || tooltip}
-                                default={findValue(layout || defaultValue, options)}
+                                default={findValue(valueStyle || defaultValue, options)}
                                 onSelectOption={(option) => updateComponent(idParent, idChild, option.name || '')}
                                 translate={translate}
                             />

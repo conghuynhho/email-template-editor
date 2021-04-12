@@ -8,7 +8,6 @@ import {getPaddingChild} from '../../utils';
 // Styles
 import {getObjectPropSafely} from 'Utils/index.ts';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
-import {getContentIDFromHtmlID} from '../../../Workspace/utils';
 
 // Components
 const TabStyle = Loadable({
@@ -44,15 +43,6 @@ const Menu = (props) => {
     const menuId = activeElement.includes('menu') ? getContentIDFromHtmlID(store, activeElement) : '';
     const values = getObjectPropSafely(() => store.contents[menuId].values);
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
-
-    // const {state: store = {}} = useContext(StoreContext);
-    // const {
-    //     activeElement,  
-    //     contents
-    // } = store;
-
-    // const contentId = activeElement.includes('content') ? getContentIDFromHtmlID(store, activeElement) : '';
-    // const values = getObjectPropSafely(() => contents[contentId].values);
 
     const toggleTab = (tab) => {
         if (activeTab !== tab) {

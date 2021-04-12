@@ -13,6 +13,8 @@ import {getObjectPropSafely} from 'Utils';
 const Workspace = (props) => {
     const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
     const {viewMode, activeElement} = store;
+
+    console.log('store', store);
     const nestedData = hierarchyDesignData(store);
     const {
         typeDraggingWorkspace = '',
