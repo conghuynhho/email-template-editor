@@ -388,50 +388,16 @@ export const getUnitAndValue = (string) => {
 };
 
 export const convertShortHandCSS = (shortHand) => {
-    const list = shortHand.split(' ');
-    let result = {
-        top: {
-            unit: '',
-            defaultValue: ''
-        },
-        right: {
-            unit: '',
-            defaultValue: ''
-        },
-        bottom: {
-            unit: '',
-            defaultValue: ''
-        },
-        left: {
-            unit: '',
-            defaultValue: ''
-        }
-    };
+    const cleanShortHand = shortHand.remove(/\w/g);
+    const resultArray = cleanShortHand.split(' ');
 
-    if (!Array.isArray(list)) {return}
-    switch (list.length) {
-        case 1:
-            result.top = result.bottom = result.left = result.right = {...getUnitAndValue(list[0])};
-            break;
-        case 2:
-            result.top = result.bottom = {...getUnitAndValue(list[0])};
-            result.left = result.right = {...getUnitAndValue(list[1])};
-            break;
-        case 3: 
-            result.top = {...getUnitAndValue(list[0])};
-            result.left = result.right = {...getUnitAndValue(list[1])};
-            result.bottom = {...getUnitAndValue(list[2])};
-            break;
-        case 4: 
-            result.top = {...getUnitAndValue(list[0])};
-            result.right = {...getUnitAndValue(list[1])};
-            result.bottom = {...getUnitAndValue(list[2])};
-            result.left = {...getUnitAndValue(list[3])};
-            break;
-        default:
-            break;
-    }
+    const [a,b,c,d] = resultArray;
+    const result = {};
 
+    result.top = a;
+    result.right = b || a;
+    result.bottom = c || a;
+    result.left = d || b || a;
     return result;
 };
 

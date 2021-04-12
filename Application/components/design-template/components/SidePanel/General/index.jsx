@@ -38,6 +38,8 @@ import {getObjectPropSafely, random} from 'Utils/index.ts';
 import {
     getContentIDFromHtmlID
 } from 'Components/design-template/components/Workspace/utils';
+import {getActionType, getTarget, getTypeOfImage} from '../utils';
+import {values} from 'lodash';
 
 const PATH = 'Components/design-template/components/SidePanel/General/index.jsx';
 
@@ -51,7 +53,6 @@ const Style = props => {
     const {
         values = {},
         general = [],
-        values = {},
         translate = (lal) => lal
     } = props;
     const bodyId = activeElement.includes('body') ? Object.keys(getObjectPropSafely(() => store.bodies))[0] : '';
@@ -296,7 +297,7 @@ const Style = props => {
         }
     };
 
-    const switchCaseComponent = (element, idParent, numberOfMenu = 0, itemIndex = 0) => {
+    const switchCaseComponent = (element, key, numberOfMenu = 0, itemIndex = 0) => {
         try {
             if (element && Object.values(element).length) {
                 const {
@@ -305,6 +306,7 @@ const Style = props => {
                     tooltip = '',
                     defaultValue,
                     id: idChild = '',
+                    keyParent: idParent = '',
                     style = {},
                     message = '',
                     listBlock = [],
@@ -319,6 +321,12 @@ const Style = props => {
                     isShowMessageRight = false
                 } = element;
 
+                // console.log(values, 'values');
+                // console.log(idChild, 'idChild');
+                // console.log(idParent, 'idParent');
+                // console.log(key, 'key');
+                // console.log(element.type, 'elementType');
+
                 let value = '';
                 let actionTypeMenu = '';
 
@@ -329,10 +337,24 @@ const Style = props => {
                     case 'preheaderText': value = getObjectPropSafely(() => values.preheaderText); break;
                     case 'linkColor': value = getObjectPropSafely(() => values.linkStyle.linkColor); break;
                     case 'linkUnderline': value = getObjectPropSafely(() => values.linkStyle.linkUnderline) ? 'underline' : 'none'; break;
+                    case 'selectRadioImage': value = getTypeOfImage(getObjectPropSafely(()=>values.src.url), options); break;
                     default:
                         value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${idChild}`) || '');
                         break;
                 }
+
+                if (key === 'action') {
+                    switch (idChild) {
+                        case 'name':
+                            value = getActionType(value);
+                            break;
+                        case 'target': 
+                            value = getTarget(value);
+                            break;
+                        default:
+                            break;
+                    }
+                } 
 
                 if (numberOfMenu > 0) {
                     for (let i = 0; i < numberOfMenu; ++i) {
@@ -379,9 +401,8 @@ const Style = props => {
                             }
                         } 
                     }
-                }
-   
-                const valueStyle = typeof value === 'boolean' ? value : value.replace(new RegExp(`${unit}`,'gi'), '');
+                } 
+                const valueStyle = typeof value === 'boolean' ? value : (typeof value === 'string' ? value.replace(new RegExp(`${unit}`,'gi'), '') : value );
 
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
@@ -432,7 +453,7 @@ const Style = props => {
                         return (
                             <SelectRadio
                                 styleLabel={{height: 10}}
-                                defaultName={defaultValue}
+                                defaultName={valueStyle || defaultValue}
                                 sources={options}
                             // onChange={handleOnChange}
                             />

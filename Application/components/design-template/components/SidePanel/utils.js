@@ -1,3 +1,4 @@
+import {forEach} from 'lodash';
 
 export const getPaddingChild = (padding) => {
     const result = {};
@@ -45,4 +46,39 @@ export const defaultBorder = {
     'borderTopColor': '#CCCCCC',
     'borderTopStyle': 'solid',
     'borderTopWidth': '0px'
+};
+
+export const getActionType = (actionName) =>{
+    switch (actionName) {
+        case 'web':
+            return 1;
+        
+        default: 
+            return 1;
+    }
+};
+export const getTarget = (target) => {
+    switch (target) {
+        case '_blank':
+            return 1;
+        case '_self':
+            return 2;
+        default:
+            return 1;
+    }
+};
+const validURL = (str) => {
+    let pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+    return !!pattern.test(str);
+};
+
+export const getTypeOfImage = (imageLink, options) => {
+    if (validURL(imageLink)) {return 'imageUrl'}
+    return 'uploadImage';
 };

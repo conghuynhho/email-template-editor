@@ -1305,13 +1305,18 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'SELECT_SINGLE',
-                            id: 'actionType',
+                            id: 'name',
+                            keyParent: 'href',
                             label: 'Action type',
                             defaultValue: 1,
                             options: [
                                 {
                                     name: 1,
                                     label: 'Open website'
+                                },
+                                {
+                                    name: 2,
+                                    label: 'Same target'
                                 }
                             ],
                             style: {
@@ -1322,7 +1327,8 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'TEXT_INPUT',
-                            id: 'url',
+                            id: 'href',
+                            keyParent: 'href.values',
                             label: 'URL',
                             defaultValue: '',
                             style: {
@@ -1336,6 +1342,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'SELECT_SINGLE',
+                            keyParent: 'href.values',
                             id: 'target',
                             label: 'Target',
                             defaultValue: 1,
@@ -1490,6 +1497,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'buttonPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -1506,6 +1514,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'buttonPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -1522,6 +1531,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'buttonPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -1538,6 +1548,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'buttonPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2014,6 +2025,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2030,6 +2042,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2046,6 +2059,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2062,6 +2076,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2269,6 +2284,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2285,6 +2301,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2301,6 +2318,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2317,6 +2335,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2468,6 +2487,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2484,6 +2504,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2500,6 +2521,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2516,6 +2538,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3536,6 +3559,7 @@ const sidePanelConfig = [
                         {
                             type: 'SELECT_RADIO',
                             id: 'selectRadioImage',
+                            keyParent: 'src',
                             defaultValue: 'uploadImage',
                             options: [
                                 {
@@ -3565,7 +3589,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'TEXT_INPUT',
-                            id: 'alternalText',
+                            id: 'altText',
                             label: 'Alternal Text',
                             defaultValue: 'Banner',
                             style: {
@@ -3585,7 +3609,8 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'SELECT_SINGLE',
-                            id: 'actionType',
+                            id: 'name',
+                            keyParent: 'href',
                             label: 'Action Type',
                             defaultValue: 1,
                             options: [
@@ -3620,6 +3645,7 @@ const sidePanelConfig = [
                         {
                             type: 'SELECT_SINGLE',
                             id: 'target',
+                            keyParent: 'href',
                             label: 'Target',
                             defaultValue: 1,
                             options: [
@@ -3737,6 +3763,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3753,6 +3780,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3769,6 +3797,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3785,6 +3814,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
