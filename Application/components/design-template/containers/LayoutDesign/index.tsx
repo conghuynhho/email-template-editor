@@ -29,7 +29,7 @@ import {getObjectPropSafely, getOffset} from 'Utils';
 import produce from 'immer';
 
 const LayoutDesign = () => {
-    const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
+    const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
     const {
         sidePanelMode, 
         toggleDeleteForm = {isDeleteFormOpening: false, type: ''}, 
@@ -37,7 +37,8 @@ const LayoutDesign = () => {
         rows, 
         columns, 
         usageCounters, 
-        contents
+        contents,
+        isEditing = false
     } = store;
 
     const [typeDraggingWorkspace, setTypeDraggingWorkspace] = useState('');
@@ -163,7 +164,7 @@ const LayoutDesign = () => {
         });
 
         dispatchStore({
-            type: actionType.UPDATE_COLUMN,
+            type: actionType.UPDATE_COLUMNS,
             payload: {
                 id: 'u_body',
                 values: newColumns
@@ -209,7 +210,7 @@ const LayoutDesign = () => {
             });
 
             dispatchStore({
-                type: actionType.UPDATE_COLUMN,
+                type: actionType.UPDATE_COLUMNS,
                 payload: {
                     id: 'u_body',
                     values: newColumns
@@ -239,7 +240,7 @@ const LayoutDesign = () => {
             });
     
             dispatchStore({
-                type: actionType.UPDATE_COLUMN,
+                type: actionType.UPDATE_COLUMNS,
                 payload: {
                     id: 'u_body',
                     values: newColumns
@@ -250,13 +251,15 @@ const LayoutDesign = () => {
     };
 
     const getNewContentIndex = (index, area) => {
-        if (area === 'BELOW') {
-            return index + 1;
-        } 
-        if (area === 'ABOVE') {
-            return index;
-        }
-        return -1;
+        // if (area === 'BELOW') {
+        //     return index + 1;
+        // } 
+        // if (area === 'ABOVE') {
+        //     return index;
+        // }
+        // return -1;
+
+        return area ? (area === 'BELOW' ? index + 1 : index) : -1; 
     };
 
     const onMouseMoveItem = (e) => {
@@ -629,7 +632,8 @@ const LayoutDesign = () => {
                                                             target: '_self'
                                                         }
                                                     },
-                                                    text: 'MENU'
+                                                    text: 'MENU',
+                                                    actionType: 'openWebsite'
                                                 }
                                             ]
                                         },
@@ -758,6 +762,7 @@ const LayoutDesign = () => {
                 {[styles['side-panel-left']] : sidePanelMode === CONSTANTS.SIDE_PANEL_MODE.LEFT}
                
             )}
+            style={!isEditing ? {overflowY: 'scroll', height: '100vh'} : {}}
             onMouseMove={onMouseMoveItem}
             >
                 <div className={classnames(styles['grid-workspace'])}>

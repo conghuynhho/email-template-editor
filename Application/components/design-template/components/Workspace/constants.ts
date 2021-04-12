@@ -1500,7 +1500,16 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'text': 'NEWS'
+                                'phone': {
+                                    'number': '9707070707'
+                                },
+                                'mail': {
+                                    'mailTo': 'abc@xyz',
+                                    'subject': 'send email for',
+                                    'body': 'this is email content'
+                                },
+                                'text': 'NEWS',
+                                'actionType': 'callPhoneNumber'
                             },
                             {
                                 'key': '1606924033905',
@@ -1511,7 +1520,8 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'text': 'SERVICE'
+                                'text': 'SERVICE',
+                                'actionType': 'sendSMS'
                             }
                         ]
                     },
@@ -1603,7 +1613,8 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'text': 'ABOUT'
+                                'text': 'ABOUT',
+                                'actionType': 'openWebsite'
                             },
                             {
                                 'key': '1606924033905',
@@ -1614,7 +1625,8 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'text': 'CONTACT'
+                                'text': 'CONTACT',
+                                'actionType': 'sendEmail'
                             }
                         ]
                     },
@@ -3028,7 +3040,7 @@ export const designData = {
                         'url': 'https://fonts.googleapis.com/css?family=Montserrat:400,700',
                         'defaultFont': true
                     },
-                    'preheaderText': '',
+                    'preheaderText': 'preheaderText',
                     'linkStyle': {
                         'body': true,
                         'linkColor': '#0000ee',

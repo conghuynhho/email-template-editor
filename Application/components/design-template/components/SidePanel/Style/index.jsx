@@ -1,5 +1,5 @@
 // Libraries
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState, useContext, memo} from 'react';
 import classnames from 'classnames';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
 import isEqual from 'react-fast-compare';
@@ -35,14 +35,17 @@ import {actionType} from 'Components/design-template/components/ContextStore/con
 import {getObjectPropSafely} from 'Utils/index.ts';
 import {typeComponent} from 'Components/design-template/constants';
 import styles from 'Components/design-template/components/SidePanel/styles.module.scss';
-import {random} from 'Utils/index.ts';
-import {getContentIDFromHtmlID} from '../../Workspace/utils';
 import produce from 'immer';
 
 // utils
 import {
-    getRowIDFromHtmlID
+    getRowIDFromHtmlID,
+    getLastUsingId,
+    updateUsageCounters,
+    getContentIDFromHtmlID
 } from 'Components/design-template/components/Workspace/utils';
+
+// hooks
 
 const PATH = 'Components/design-template/components/SidePanel/Style/index.jsx';
 
@@ -50,11 +53,11 @@ const Style = props => {
     const {
         style = [],
         values = {},
-        content = [],
         translate = (lal) => lal
     } = props;
     const [config, setConfig] = useState({});
     const [activeColumn, setActiveColumn] = useState(0);
+
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
     const {
         activeElement,
@@ -63,9 +66,26 @@ const Style = props => {
     const rowId = getRowIDFromHtmlID(store, activeElement);
     const row = getObjectPropSafely(() => rows[rowId]);
     const cells = getObjectPropSafely(() => row.cells);
+    const columns = getObjectPropSafely(() => store.columns);
+    const usageCounters = getObjectPropSafely(() => store.usageCounters);
 
     const columnId = getObjectPropSafely(() => row.columns[activeColumn]);
+    const column = getObjectPropSafely(() =>store.columns[columnId]);
     const columnValues = getObjectPropSafely(() =>store.columns[columnId].values);
+
+    const contentId = activeElement.includes('content') ? getContentIDFromHtmlID(store, activeElement) : '';
+    const content = contentId ? getObjectPropSafely(() => store.contents[contentId]) : {};
+    const menuItems = activeElement.includes('menu') ? getObjectPropSafely(() => values.menu.items) : [];
+
+    // properties
+    const listPaddings = getObjectPropSafely(() => row.values.padding.split(' '));
+    const columnPaddings = getObjectPropSafely(() => column.values.padding.split(' '));
+    const columnBorder = getObjectPropSafely(() => column.values.border);
+    const columnBorderWidth = getObjectPropSafely(() => column.values.border.borderWidth.split(' ')) || [];
+    const columnBorderColor = getObjectPropSafely(() => column.values.border.borderColor.split(' '));
+    const columnBorderStyle = getObjectPropSafely(() => column.values.border.borderStyle.split(' '));
+    const menuPaddings = getObjectPropSafely(() => values.padding.split(' '));
+    const containerPaddings = getObjectPropSafely(() => values.containerPadding.split(' '));
 
     useEffect(() => {
         try {
@@ -89,108 +109,511 @@ const Style = props => {
         }
     };
 
-    console.log('values', values);
-    const updateComponent = (idParent, idChild, values, font) => {
-        const id = getContentIDFromHtmlID(store, activeElement);
-        const value = store.contents[id].values;
+    // console.log('values', values);
+    // const updateComponent = (idParent, idChild, values, font) => {
+    //     const id = getContentIDFromHtmlID(store, activeElement);
+    //     const value = store.contents[id].values;
 
-        // console.log('child', idChild);
-        // console.log('values', values);
-        // console.log('value edit', value);
-        values = {
-            values: produce(value, draft => {
-                switch (idChild) {
-                    // Text
-                    case 'textColor':
-                        draft.color ? draft.color = values : draft.textColor = values;
-                        break;
-                    case 'lineStyle':
-                        draft.linkStyle.inherit = values;
-                        break;
-                    case 'moreOptionsPaddingText':
-                        break;
-                    case 'responsive':
-                        break;
-                    // Line
-                    case 'borderTopStyle':
-                        draft.border.borderTopStyle = values;
-                        break;
-                    case 'borderTopWidth':
-                        draft.border.borderTopWidth = values;
-                        break;
-                    case 'borderTopColor':
-                        draft.border.borderTopColor = values;
-                        break;
-                    // Menu
-                    case 'textColorMenu':
-                        draft.textColor = values;
-                        break;
-                        // Menu + Button
-                    case 'textColorButton':
-                        (draft.linkColor) ? draft.linkColor = values : draft.buttonColors.color = values;
-                        break;
-                        // chưa biết url, value trong fontFamily
-                    case 'fontFamily':
-                        console.log('option', font);
-                        draft.fontFamily.label = values;
-                        draft.fontFamily.url = font.url;
-                        draft.fontFamily.value = font.name;
-                        break;
-                    case 'layout':
-                        draft.layout = (values == 1 ? 'vertical' : 'horizontal');
-                        break;
-                        // Menu + Button
-                    case 'alignments':
-                        (draft.align) ? draft.align = values : draft.textAlign = values;
-                        break;
-                    // Button
-                    case 'backgroundColorButton':
-                        draft.buttonColors.backgroundColor = values;
-                        break;
-                    // textAlign, width(Line), fontSize(Menu)
-                    default: 
-                        draft[idChild] = values;
+    //     // console.log('child', idChild);
+    //     // console.log('values', values);
+    //     // console.log('value edit', value);
+    //     values = {
+    //         values: produce(value, draft => {
+    //             switch (idChild) {
+    //                 // Text
+    //                 case 'textColor':
+    //                     draft.color ? draft.color = values : draft.textColor = values;
+    //                     break;
+    //                 case 'lineStyle':
+    //                     draft.linkStyle.inherit = values;
+    //                     break;
+    //                 case 'moreOptionsPaddingText':
+    //                     break;
+    //                 case 'responsive':
+    //                     break;
+    //                 // Line
+    //                 case 'borderTopStyle':
+    //                     draft.border.borderTopStyle = values;
+    //                     break;
+    //                 case 'borderTopWidth':
+    //                     draft.border.borderTopWidth = values;
+    //                     break;
+    //                 case 'borderTopColor':
+    //                     draft.border.borderTopColor = values;
+    //                     break;
+    //                 // Menu
+    //                 case 'textColorMenu':
+    //                     draft.textColor = values;
+    //                     break;
+    //                     // Menu + Button
+    //                 case 'textColorButton':
+    //                     (draft.linkColor) ? draft.linkColor = values : draft.buttonColors.color = values;
+    //                     break;
+    //                     // chưa biết url, value trong fontFamily
+    //                 case 'fontFamily':
+    //                     console.log('option', font);
+    //                     draft.fontFamily.label = values;
+    //                     draft.fontFamily.url = font.url;
+    //                     draft.fontFamily.value = font.name;
+    //                     break;
+    //                 case 'layout':
+    //                     draft.layout = (values == 1 ? 'vertical' : 'horizontal');
+    //                     break;
+    //                     // Menu + Button
+    //                 case 'alignments':
+    //                     (draft.align) ? draft.align = values : draft.textAlign = values;
+    //                     break;
+    //                 // Button
+    //                 case 'backgroundColorButton':
+    //                     draft.buttonColors.backgroundColor = values;
+    //                     break;
+    //                 // textAlign, width(Line), fontSize(Menu)
+    //                 default: 
+    //                     draft[idChild] = values;
+    const updateComponent = (idParent, idChild, receivedValues) => {
+
+        if (activeElement.includes('row')) {
+            let newRow = {};
+            let newColumn = {};
+                
+            switch (idChild) {
+                case 'backgroundColor': {
+                    newRow = produce(row, draft => {
+                        draft.values.backgroundColor = receivedValues;
+                    });
+                    break;
                 }
-            })
-        };
-        
-        try {
-            if (idChild) {
-                dispatchStore({
-                    type: actionType.UPDATE_CONTENT,
-                    payload: {
-                        id: id,
-                        // keyParent: idParent,
-                        // key: idChild,
-                        values
+                case 'columnsBackgroundColor': {
+                    newRow = produce(row, draft => {
+                        draft.values.columnsBackgroundColor = receivedValues;
+                    });
+                    break;
+                }
+                case 'moreOptionsPadding': {
+                    const padding = getObjectPropSafely(() => row.values.padding);
+
+                    newRow = produce(row, draft => {
+                        draft.values.padding = receivedValues  ? `${padding} ${padding} ${padding} ${padding}` : padding.split(' ')[0];
+                    });
+                    break;
+                }
+                case 'padding': {
+                    newRow = produce(row, draft => {
+                        receivedValues === 'px' ? draft.values.padding = listPaddings[0] : draft.values.padding = receivedValues;
+                    });
+                    break;
+                }
+                case 'selectRadioImage': {
+                    newRow = produce(row, draft => {
+                        draft.values.backgroundImage = receivedValues === 'uploadImage' ?  {
+                            ...values.backgroundImage,
+                            url: '',
+                            tempUrl: {
+                                url: values.backgroundImage.url
+                            }
+                        } : {
+                            ...values.backgroundImage,
+                            url: values.backgroundImage.tempUrl.url,
+                            tempUrl: ''
+                        };
+                    });
+                    break;
+                }
+                case 'backgroundColorColumn': {
+                    newColumn = produce(column, draft => {
+                        draft.values.backgroundColor = receivedValues;
+                    });
+                    break;
+                }
+                case 'moreOptionsColumnPadding': {
+                    const padding = getObjectPropSafely(() => column.values.padding);
+
+                    newColumn = produce(column, draft => {
+                        draft.values.padding = receivedValues  ? `${padding} ${padding} ${padding} ${padding}` : padding.split(' ')[0];
+                    });
+                    break;
+                }
+                case 'paddingColumn': {
+                    newColumn = produce(column, draft => {
+                        receivedValues === 'px' ? draft.values.padding = columnPaddings[0] : draft.values.padding = receivedValues;
+                    });
+                    break;
+                }
+                case 'moreOptionsBorder': {
+                    const newColumnBorderColor = columnBorderColor.length ? [...columnBorderColor] : ['#000', '#000', '#000', '#000'];
+                    const newColumnBorderWidth = columnBorderWidth.length ? [...columnBorderWidth] : ['0px', '0px', '0px', '0px'];
+                    const newColumnBorderStyle = columnBorderStyle.length ? [...columnBorderStyle] : ['solid', 'solid','solid','solid'];
+
+                    if (receivedValues) {
+
+                        newColumn = produce(column, draft => {
+                            draft.values.border = {
+                                borderWidth: `${newColumnBorderWidth[0]} ${newColumnBorderWidth[0]} ${newColumnBorderWidth[0]} ${newColumnBorderWidth[0]}`,
+                                borderColor: `${newColumnBorderColor[0]} ${newColumnBorderColor[0]} ${newColumnBorderColor[0]} ${newColumnBorderColor[0]}`,
+                                borderStyle: `${newColumnBorderStyle[0]} ${newColumnBorderStyle[0]} ${newColumnBorderStyle[0]} ${newColumnBorderStyle[0]}`
+                            };
+                        });
+                    } else {
+                        newColumn = produce(column, draft => {
+                            draft.values.border = {
+                                borderWidth: newColumnBorderWidth[0],
+                                borderColor: newColumnBorderColor[0],
+                                borderStyle: newColumnBorderStyle[0]
+                            };
+                        });
                     }
-                });
+                    break;
+                }
+                case 'borderColorColumn': {
+                    if (receivedValues) {
+                        newColumn = produce(column, draft => {
+                            draft.values.border.borderColor = receivedValues;
+                        });
+                    }
+                    break;
+                }
+                case 'borderSelectSingle': {
+                    if (receivedValues) {
+                        newColumn = produce(column, draft => {
+                            draft.values.border.borderStyle = receivedValues;
+                        });
+                    }
+                    break;
+                }
+                case 'borderColumnWidth': {
+
+                    if (receivedValues && receivedValues !== 'px') {
+                        if (receivedValues === '0px' && !columnBorderWidth.length) {
+                            //
+                        } else {
+                            newColumn = produce(column, draft => {
+                                draft.values.border.borderWidth = receivedValues;
+                                if (!columnBorderStyle.length) {
+                                    draft.values.border.borderStyle = 'solid';
+                                }
+                            });
+
+                        }
+                    }
+                    break;
+                }
+                case 'columnBorderColorTop':
+                case 'columnBorderColorRight':
+                case 'columnBorderColorBottom':
+                case 'columnBorderColorLeft': {
+                    if (receivedValues) {
+                        const newColumnBorderColor = [...columnBorderColor];
+                        let index = 0;
+
+                        switch (idChild) {
+                            case 'columnBorderColorTop': index = 0; break;
+                            case 'columnBorderColorRight': index = 1; break;
+                            case 'columnBorderColorBottom': index = 2; break;
+                            case 'columnBorderColorLeft': index = 3; break;
+                        }
+                            
+                        newColumnBorderColor[index] = receivedValues;
+                        newColumn = produce(column, draft => {
+                            draft.values.border.borderColor = `${newColumnBorderColor[0]} ${newColumnBorderColor[1]} ${newColumnBorderColor[2]} ${newColumnBorderColor[3]}`;
+                        });
+                    }
+                    break;
+                }
+                case 'columnBorderStyleTop':
+                case 'columnBorderStyleRight':
+                case 'columnBorderStyleBottom':
+                case 'columnBorderStyleLeft': {
+                    if (receivedValues) {
+                        const newColumnBorderStyle = [...columnBorderStyle];
+                        let index = 0;
+
+                        switch (idChild) {
+                            case 'columnBorderStyleTop': index = 0; break;
+                            case 'columnBorderStyleRight': index = 1; break;
+                            case 'columnBorderStyleBottom': index = 2; break;
+                            case 'columnBorderStyleLeft': index = 3; break;
+                        }
+
+                        newColumnBorderStyle[index] = receivedValues;
+                        newColumn = produce(column, draft => {
+                            draft.values.border.borderStyle = `${newColumnBorderStyle[0]} ${newColumnBorderStyle[1]} ${newColumnBorderStyle[2]} ${newColumnBorderStyle[3]}`;
+                        });
+                    }
+                    break;
+                }
             }
-        } catch (error) {
-            //
+
+            dispatchStore({
+                type: actionType.UPDATE_ROW,
+                payload: {
+                    id: rowId,
+                    values: newRow
+                }
+            });
+
+            dispatchStore({
+                type: actionType.UPDATE_COLUMN,
+                payload: {
+                    id: columnId,
+                    values: newColumn
+                }
+            });
         }
+        if (activeElement.includes('content')) {
+            let newContent = {};
+
+            switch (idChild) {
+                case 'fontFamily': {
+                    const currentFont = getObjectPropSafely(() => values.fontFamily.label);
+
+                    if (receivedValues.name !== currentFont) {
+                        newContent = produce(content, draft => {
+                            draft.values[idChild] = {
+                                label: receivedValues.label,
+                                value: receivedValues.value,
+                                url: '',
+                                defaultFont: receivedValues.defaultFont
+                            };
+                        });
+                    }
+                    break;
+                }
+                case 'padding':
+                case 'containerPadding':
+                case 'layout':
+                case 'align':
+                case 'textColor':
+                case 'linkColor':
+                case 'fontSize': {
+                    const existValue = getObjectPropSafely(() => values[idChild]);
+
+                    if (receivedValues && receivedValues !== existValue && receivedValues !== 'px') {
+                        newContent = produce(content, draft => {
+                            draft.values[idChild] = receivedValues;
+                        });
+                    }
+                    break;
+                }
+                case 'moreOptionsMenuPadding': {
+                    if (receivedValues) {
+                        newContent = produce(content, draft => {
+                            draft.values.padding = `${menuPaddings[0]} ${menuPaddings[0]} ${menuPaddings[0]} ${menuPaddings[0]}`;
+                        });
+                    } else {
+                        newContent = produce(content, draft => {
+                            draft.values.padding = menuPaddings[0];
+                        });
+                    }
+                    break;
+                }
+                case 'moreOptionsContainerPadding': {
+                    if (receivedValues) {
+                        newContent = produce(content, draft => {
+                            draft.values.containerPadding = `${containerPaddings[0]} ${containerPaddings[0]} ${containerPaddings[0]} ${containerPaddings[0]}`;
+                        });
+                    } else {
+                        newContent = produce(content, draft => {
+                            draft.values.containerPadding = containerPaddings[0];
+                        });
+                    }
+                    break;
+                }
+            }
+
+            dispatchStore({
+                type: actionType.UPDATE_CONTENT,
+                payload: {
+                    id: contentId,
+                    values: newContent
+                }
+            });
+        }
+
+        // values = {
+        //     values: produce(value, draft => {
+        //         switch (idChild) {
+        //             // Text  
+        //             case 'textColor':
+        //                 draft.color = values;
+        //                 break;
+        //             case 'lineStyle':
+        //                 draft.linkStyle.inherit = values;
+        //                 break;
+        //             case 'moreOptionsPaddingText':
+        //                 break;
+        //             case 'responsive':
+        //                 break;
+        //             // Line
+        //             case 'borderTopStyle':
+        //                 draft.border.borderTopStyle = values;
+        //                 break;
+        //             case 'borderTopWidth':
+        //                 draft.border.borderTopWidth = values;
+        //                 break;
+        //             case 'borderTopColor':
+        //                 draft.border.borderTopColor = values;
+        //                 break;
+        //             // Menu
+        //             case 'textColorMenu':
+        //                 draft.textColor = values;
+        //                 break;
+        //                 // Menu + Button
+        //             case 'textColorButton':
+        //                 (draft.linkColor) ? draft.linkColor = values : draft.buttonColors.color = values;
+        //                 break;
+        //                 // chưa biết url, value trong fontFamily
+        //             case 'fontFamily':
+        //                 draft.fontFamily.label = values;
+        //                 break;
+        //             case 'layout':
+        //                 draft.layout = (values == 1 ? 'vertical' : 'horizontal');
+        //                 break;
+        //                 // Menu + Button
+        //             case 'alignments':
+        //                 (draft.align) ? draft.align = values : draft.textAlign = values;
+        //                 break;
+        //             // Button
+        //             case 'backgroundColorButton':
+        //                 draft.buttonColors.backgroundColor = values;
+        //                 break;
+        //             // textAlign, width(Line), fontSize(Menu)
+        //             default: 
+        //                 draft[idChild] = values;
+        //         }
+        //     })
+        // };
+        
+        // if (idChild) {
+        //     dispatchStore({
+        //         type: actionType.UPDATE_CONTENT,
+        //         payload: {
+        //             id: id,
+        //             // keyParent: idParent,
+        //             // key: idChild,
+        //             values
+        //         }
+        //     });
+        // }
+        
     };
 
     const updateComponentChild = (key, idChild, value) => {
         try {
-            const valueStore = getObjectPropSafely(() => eval(`content.values.${key}`) || '');
+            switch (key) {
+                case 'childPadding' : {
+                    const newListPaddings = [...listPaddings];
 
-            // if (idChild) {
-            //     switch (idChild) {
-            //         case 'top': {
+                    switch (idChild) {
+                        case 'top': newListPaddings[0] = value; break;
+                        case 'right': newListPaddings[1] = value; break;
+                        case 'bottom': newListPaddings[2] = value; break;
+                        case 'left': newListPaddings[3] = value; break;
+                    }
 
-            //         }
-            //         case 'right': {
+                    const newRow = produce(row, draft => {
+                        draft.values.padding = `${newListPaddings[0]} ${newListPaddings[1]} ${newListPaddings[2]} ${newListPaddings[3]}`;
+                    });
+        
+                    dispatchStore({
+                        type: actionType.UPDATE_ROW,
+                        payload: {
+                            id: rowId,
+                            values: newRow
+                        }
+                    });
+                    break;
+                }
+                case 'childColumnPadding': {
+                    const newColumnPaddings = [...columnPaddings];
 
-            //         }
-            //         case 'bottom': {
+                    switch (idChild) {
+                        case 'top': newColumnPaddings[0] = value; break;
+                        case 'right': newColumnPaddings[1] = value; break;
+                        case 'bottom': newColumnPaddings[2] = value; break;
+                        case 'left': newColumnPaddings[3] = value; break;
+                    }
 
-            //         }
-            //         case 'left': {
+                    const newColumn = produce(column, draft => {
+                        draft.values.padding = `${newColumnPaddings[0]} ${newColumnPaddings[1]} ${newColumnPaddings[2]} ${newColumnPaddings[3]}`;
+                    });
+        
+                    dispatchStore({
+                        type: actionType.UPDATE_COLUMN,
+                        payload: {
+                            id: columnId,
+                            values: newColumn
+                        }
+                    });
+                    break;
+                }
+                case 'childBorder': {
+                    const newColumnBorderWidth = [...columnBorderWidth];
 
-            //         }
-            //     }
-            // }
+                    switch (idChild) {
+                        case 'columnBorderWidthTop': newColumnBorderWidth[0] = value; break;
+                        case 'columnBorderWidthRight': newColumnBorderWidth[1] = value; break;
+                        case 'columnBorderWidthBottom': newColumnBorderWidth[2] = value; break;
+                        case 'columnBorderWidthLeft': newColumnBorderWidth[3] = value; break;
+                    }
+                    const newColumn = produce(column, draft => {
+                        draft.values.border.borderWidth = `${newColumnBorderWidth[0]} ${newColumnBorderWidth[1]} ${newColumnBorderWidth[2]} ${newColumnBorderWidth[3]}`;
+                    });
+
+                    dispatchStore({
+                        type: actionType.UPDATE_COLUMN,
+                        payload: {
+                            id: columnId,
+                            values: newColumn
+                        }
+                    });
+                    break;
+                }
+                case 'childMenuPadding': 
+                case 'childContainerPadding': {
+                    const newPaddings = key === 'childMenuPadding' ? [...menuPaddings] : [...containerPaddings];
+                    const convertPaddings = [newPaddings[0], newPaddings[1] || newPaddings[0], newPaddings[2] || newPaddings[0], newPaddings[3] || newPaddings[1] || newPaddings[0]];
+
+                    switch (idChild) {
+                        case 'top': {
+                            if (value && value !== convertPaddings[0]) {
+                                convertPaddings[0] = value;
+                            }
+                            break;
+                        }
+                        case 'right': {
+                            if (value && value !== convertPaddings[1]) {
+                                convertPaddings[1] = value;
+                            }
+                            break;
+                        }
+                        case 'bottom': {
+                            if (value && value !== convertPaddings[2]) {
+                                convertPaddings[2] = value;
+                            }
+                            break;
+                        }
+                        case 'left': {
+                            if (value && value !== convertPaddings[3]) {
+                                convertPaddings[3] = value;
+                            }
+                            break;
+                        }
+                    }
+
+                    const newContent = produce(content, draft => {
+                        draft.values[key === 'childMenuPadding' ? 'padding' : 'containerPadding'] = `${convertPaddings[0]} ${convertPaddings[1]} ${convertPaddings[2]} ${convertPaddings[3]}`;
+                    });
+
+                    dispatchStore({
+                        type: actionType.UPDATE_CONTENT,
+                        payload: {
+                            id: contentId,
+                            values: newContent
+                        }
+                    });
+                    break;
+                }
+            }
         } catch (error) {
             //
         }
@@ -217,10 +640,81 @@ const Style = props => {
                     elementChild = [],
                     keyShow = '',
                     isShowMessageLeft = false,
-                    isShowMessageRight = false
+                    isShowMessageRight = false,
+                    upLineKey = '',
+                    keySelected = '',
+                    keyActive = ''
                 } = element;
 
-                const value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
+                let value = '';
+                let selectedValue = '';
+
+                switch (idChild) {
+                    case 'backgroundColorColumn': {
+                        value = columnValues[keyActive]; 
+                        break;
+                    } 
+                    case 'selectRadioImage': {
+                        selectedValue = values[keySelected].url ? options[1].name : options[0].name;
+                        break;
+                    }
+                    case 'paddingColumn': {
+                        value = columnValues.padding;
+                        break;
+                    }
+                    case 'borderColorColumn': {
+                        value = columnBorderColor[0] || '#000';
+                        break;
+                    }
+                    case 'borderSelectSingle': {
+                        value = columnBorderStyle[0] || 'solid';
+                        break;
+                    }
+                    case 'borderColumnWidth': {
+                        value = columnBorderWidth[0] || '0px';
+                        break;
+                    }
+                    case 'fontFamily': {
+                        value = getObjectPropSafely(() => values.fontFamily.label);
+                        break;
+                    }
+                    default: {
+                        value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
+                        break;
+                    }
+                }
+
+                switch (upLineKey) {
+                    case 'listPaddings': 
+                    case 'columnPaddings': 
+                    case 'menuPaddings':
+                    case 'containerPaddings': {
+                        const [a, b, c, d] = eval(upLineKey) || [];
+
+                        switch (idChild) {
+                            case 'top': value = a; break;
+                            case 'right': value = b || a; break;
+                            case 'bottom': value = c || a; break;
+                            case 'left': value = d || b || a; break;
+                        }
+                        break;
+                    }
+                    case 'columnBorderWidth':
+                    case 'columnBorderStyle':
+                    case 'columnBorderColor': {
+                        const [top, right, bottom, left] = eval(upLineKey) || [];
+
+                        if (eval(upLineKey).length > 1) {
+                            switch (idChild) {
+                                case `${upLineKey}Top`: value = top; break;
+                                case `${upLineKey}Right`: value = right; break;
+                                case `${upLineKey}Bottom`: value = bottom; break;
+                                case `${upLineKey}Left`: value = left; break;
+                            }
+                        }
+                        break;
+                    }
+                }
 
                 // console.log((idParent + '.' || '') + (type ? key : idChild));
                 // console.log('hello', value);
@@ -264,7 +758,13 @@ const Style = props => {
                             default:
                                 layout = valueStyle;
                         }
-                        return (
+                        let isShow = true;
+
+                        if (keyShow === 'borderStyle') {
+                            isShow = Array.isArray(columnBorderStyle) && columnBorderStyle.length > 1 ? false : true;
+                        }
+
+                        return isShow ? (
                             <SelectSingle
                                 style={{
                                     toggle: {minWidth: 70, width: 290, fontSize: 12, ...getObjectPropSafely(() => style.styleChild)},
@@ -277,20 +777,33 @@ const Style = props => {
                                 onSelectOption={(option) => updateComponent(idParent, idChild, option.name || '')}
                                 translate={translate}
                             />
-                        );
+                        ) : null;
                     }
                     case typeComponent.SELECT_RADIO: {
+
+                        const handleOnChange = (value) => {
+                            if (value) {
+                                updateComponent(idParent, idChild, value);
+                            }
+                        };
+
                         return (
                             <SelectRadio
                                 styleLabel={{height: 10}}
-                                defaultName={defaultValue}
+                                defaultName={selectedValue || defaultValue}
                                 sources={options}
-                            // onChange={handleOnChange}
+                                onChange={handleOnChange}
                             />
                         );
                     }
                     case typeComponent.FILL_COLOR: {
-                        return (
+                        let isShow = true;
+
+                        if (keyShow === 'borderColor') {
+                            isShow = Array.isArray(columnBorderColor) && columnBorderColor.length > 1 ? false : true;
+                        }
+
+                        return isShow ? (
                             <FillColor
                                 styleCustom={getObjectPropSafely(() => style.styleChild) || {width: 44}}
                                 label={label || null}
@@ -300,7 +813,7 @@ const Style = props => {
                                 color={valueStyle || defaultValue}
                                 translate={translate}
                             />
-                        );
+                        ) : null;
                     }
                     case typeComponent.OPACITY: {
                         return (
@@ -394,7 +907,7 @@ const Style = props => {
                                 label={label || null}
                                 tooltipName={label || tooltip}
                                 default={findValue(valueStyle || defaultValue, options)}
-                                onSelectOption={(option) => updateComponent(idParent, idChild, option.name, option || '')}
+                                onSelectOption={(option) => updateComponent(idParent, idChild, option || {})}
                                 translate={translate}
                             />
                         );
@@ -418,21 +931,42 @@ const Style = props => {
                     case typeComponent.TEXT_INPUT: {
                         let isShow = true;
 
-                        if (keyShow) {
-                            const isValid = getObjectPropSafely(() => content.values[keyShow]);
+                        switch (keyShow) {
+                            case 'moreOptionsPadding': {
+                                isShow = listPaddings.length > 1 ? false : true;
+                                break;
+                            }
+                            case 'backgroundImage': {
+                                const url = getObjectPropSafely(() => values[keyShow].url) || '';
 
-                            isShow = typeof isValid === 'boolean' ? !isValid : true;
+                                isShow = url ? true : false;
+                                break;
+                            }
+                            case 'moreOptionsColumnPadding': {
+                                isShow = columnPaddings.length > 1 ? false : true;
+                                break;
+                            }
+                            case 'borderWidth': {
+                                isShow = Array.isArray(columnBorderWidth) && columnBorderWidth.length > 1 ? false : true;
+                                break;  
+                            }
+                            case 'moreOptionsMenuPadding': {
+                                isShow = menuPaddings.length > 1 ? false : true;
+                                break;
+                            }
+                            case 'moreOptionsContainerPadding': {
+                                isShow = containerPaddings.length > 1 ? false : true;
+                                break;
+                            }
                         }
 
                         const handleOnChange = (value) => {
-                            try {
-                                if (type === typeComponent.COMPONENT_CHILD) {
+                            if (type === typeComponent.COMPONENT_CHILD) {
+                                if (value) {
                                     updateComponentChild(key, idChild, `${value}${unit || ''}`, valueStyle);
-                                } else {
-                                    updateComponent(idParent, idChild, `${value}${unit || ''}`);
                                 }
-                            } catch (error) {
-                                //
+                            } else {
+                                updateComponent(idParent, idChild, `${value}${unit}`);
                             }
                         };
 
@@ -443,7 +977,7 @@ const Style = props => {
                                     styleLabel={{height: 30}}
                                     style={getObjectPropSafely(() => style.styleChild) || {width: 100}}
                                     value={valueStyle}
-                                    onChange={(value) => handleOnChange(value)}
+                                    onChange={handleOnChange}
                                 />
                                 {
                                     isShowUnit ? (
@@ -486,6 +1020,26 @@ const Style = props => {
                         );
                     }
                     case typeComponent.SWITCH: {
+                        let isActive = false;
+
+                        switch (idChild) {
+                            case 'moreOptionsPadding': {
+                                isActive = listPaddings.length > 1 ? true : false; break;
+                            }
+                            case 'moreOptionsColumnPadding': {
+                                isActive = columnPaddings.length > 1 ? true : false; break;
+                            }
+                            case 'moreOptionsBorder': {
+                                isActive = columnBorderWidth.length > 1 ? true : false; break;
+                            }
+                            case 'moreOptionsMenuPadding': {
+                                isActive = menuPaddings.length > 1 ? true : false; break;
+                            }
+                            case 'moreOptionsContainerPadding': {
+                                isActive = containerPaddings.length > 1 ? true : false; break;
+                            }
+                        }
+
                         return (
                             <>
                                 {
@@ -505,7 +1059,7 @@ const Style = props => {
                                     }
                                     <Switch
                                         style={{marginLeft: 0}}
-                                        default={valueStyle || defaultValue}
+                                        default={isActive}
                                         backgroundColor='#9cce24'
                                         size='12'
                                         onClick={(isShow) => updateComponent(idParent, idChild, isShow)}
@@ -541,12 +1095,12 @@ const Style = props => {
                     }
                     case typeComponent.UPLOAD: {
                         let isShow = true;
+                        
+                        if (keyShow) {
+                            const url = getObjectPropSafely(() => values[keyShow].url) || '';
 
-                        // if (keyShow) {
-                        //     const type = getObjectPropSafely(() => props.style[idParent][keyShow]);
-
-                        //     isShow = type === 'uploadImage' ? true : false;
-                        // }
+                            isShow = url ? false : true;
+                        }
 
                         return isShow ? (
                             <>
@@ -570,12 +1124,24 @@ const Style = props => {
                         ) : null;
                     }
                     case typeComponent.COMPONENT_CHILD: {
-                        let isShow = true;
+                        let isShow = false;
 
-                        if (keyShow) {
-                            const isValid = getObjectPropSafely(() => content.values[keyShow]);
-
-                            isShow = typeof isValid === 'boolean' ? isValid : true;
+                        switch (keyShow) {
+                            case 'moreOptionsPadding': {
+                                isShow = listPaddings.length > 1 ? true : false; break;
+                            }
+                            case 'moreOptionsColumnPadding': {
+                                isShow = columnPaddings.length > 1 ? true : false; break;
+                            }
+                            case 'moreOptionsBorder': {
+                                isShow = Array.isArray(columnBorderWidth) && columnBorderWidth.length > 1 ? true : false; break;
+                            }
+                            case 'moreOptionsMenuPadding': {
+                                isShow = menuPaddings.length > 1 ? true : false; break;
+                            }
+                            case 'moreOptionsContainerPadding': {
+                                isShow = containerPaddings.length > 1 ? true : false; break;
+                            }
                         }
 
                         return isShow ? (
@@ -600,20 +1166,86 @@ const Style = props => {
                         const onClickColumn = (e) => {
                             if (!isActive) {
                                 if (listWidth.length > listBlockWidth.length) {
+  
                                     dispatchStore({
                                         type: actionType.TOGGLE_DELETE_FORM,
                                         payload: {
                                             toggleDeleteForm : {
                                                 isDeleteFormOpening: true,
-                                                type: 'content',
+                                                type: 'column',
                                                 id: '',
                                                 rowID: rowId,
-                                                message: `You will lose ${listWidth.length - listBlockWidth.length} column. Are you sure?`
+                                                message: `You will lose ${listWidth.length - listBlockWidth.length} column. Are you sure?`,
+                                                numberOfColumns: listWidth.length - listBlockWidth.length
                                             }                                         
                                         }
                                     });
                                 } else {
-                                    console.log('add new columns');
+                                    const numberOfNewColumns = listBlockWidth.length - cells.length;
+                                    const newCells = [];
+
+                                    listBlockWidth.length && listBlockWidth.forEach(width => {
+                                        const charIndex = width.indexOf('%');
+                                        const widthFormat = width.slice(0, charIndex);
+
+                                        newCells.push(+widthFormat / 10);
+                                    });
+
+                                    if (numberOfNewColumns === 0) {
+                                        const newRows = produce(rows, draft => {
+                                            draft[rowId].cells = newCells;
+                                        });
+
+                                        dispatchStore({
+                                            type: actionType.HANDLE_ROW,
+                                            payload: {
+                                                rows: newRows              
+                                            }
+                                        });
+                                    } else {
+                                        let newRows = rows;
+                                        let newColumns = columns;
+                                        let newUsageCounters = {...usageCounters};
+
+                                        for (let i = 0; i < numberOfNewColumns; i++) {
+                                            const newColumnId = (parseInt(getLastUsingId(store), 0) + 1 + i) + '';
+
+                                            newUsageCounters = updateUsageCounters(newUsageCounters, 'column', 'add');
+
+                                            newRows = produce(newRows, draft => {
+                                                draft[rowId].cells = newCells;
+                                                draft[rowId].columns.push(newColumnId);
+                                            });
+
+                                            newColumns = produce(newColumns, draft => {
+                                                draft[newColumnId] = {
+                                                    contents: [],
+                                                    location: {
+                                                        colection: 'columns',
+                                                        id: newColumnId
+                                                    },
+                                                    values: {
+                                                        '_meta': {
+                                                            'htmlID': `u_column_${newUsageCounters.u_column}`,
+                                                            'htmlClassNames': 'u_column'
+                                                        },
+                                                        'border': {},
+                                                        'padding': '0px',
+                                                        'backgroundColor': ''
+                                                    }
+                                                };
+                                            });    
+                                        } 
+
+                                        dispatchStore({
+                                            type: actionType.HANDLE_ROW,
+                                            payload: {
+                                                rows: newRows,
+                                                columns: newColumns,
+                                                usageCounters: newUsageCounters                
+                                            }
+                                        });
+                                    }
                                 }
                                 
                             }
@@ -641,6 +1273,77 @@ const Style = props => {
                         );
                     }
                     case typeComponent.TAB_COLUMN: {
+
+                        const onClickAddColum = () => {
+                            if (row.cells.length < 8) {
+                                const newColumnId = (parseInt(getLastUsingId(store), 0) + 1) + '';
+                                const newUsageCounters = updateUsageCounters(usageCounters, 'column', 'add');
+                                const newCells = [];
+
+                                for (let i = 1; i <= row.cells.length + 1; i++) {
+                                    newCells.push(1);
+                                }
+
+                                const newRows = produce(rows, draft => {
+                                    draft[rowId].cells = [...newCells];
+                                    draft[rowId].columns = [...draft[rowId].columns, newColumnId];
+                                });
+                                
+                                const newColumns = produce(columns, draft => {
+                                    draft[newColumnId] = {
+                                        contents: [],
+                                        location: {
+                                            colection: 'columns',
+                                            id: newColumnId
+                                        },
+                                        values: {
+                                            '_meta': {
+                                                'htmlID': `u_column_${newUsageCounters.u_column}`,
+                                                'htmlClassNames': 'u_column'
+                                            },
+                                            'border': {},
+                                            'padding': '0px',
+                                            'backgroundColor': ''
+                                        }
+                                    };
+                                });
+    
+                                dispatchStore({
+                                    type: actionType.HANDLE_ROW,
+                                    payload: {
+                                        rows: newRows,
+                                        columns: newColumns,
+                                        usageCounters: newUsageCounters                
+                                    }
+                                });
+                            }
+                        };
+
+                        const onClickDeleteColumn = () => {
+                            if (row.cells.length > 1) {
+                                const newUsageCounters = updateUsageCounters(usageCounters, 'column', 'subtract');
+                                const deleteColumnId = getObjectPropSafely(() => row.columns[row.columns.length - 1]);
+
+                                const newRows = produce(rows, draft => {
+                                    draft[rowId].cells.pop();
+                                    draft[rowId].columns.pop();
+                                });
+
+                                const newColumns = produce(columns, draft => {
+                                    delete draft[deleteColumnId];
+                                });
+
+                                dispatchStore({
+                                    type: actionType.HANDLE_ROW,
+                                    payload: {
+                                        rows: newRows,
+                                        columns: newColumns,
+                                        usageCounters: newUsageCounters                
+                                    }
+                                });
+                            }
+                        };
+
                         const onClickChangeColumn = (index) => {
                             setActiveColumn(index);
                         };
@@ -660,10 +1363,10 @@ const Style = props => {
                                     {component}
                                 </div>
                                 <div style={{display: 'flex', alignItems: 'center', marginLeft: 5}}>
-                                    <div className={classnames(styles['add-column'])} style={{marginRight: 2}}>
+                                    <div className={classnames(styles['add-column'])} style={{marginRight: 2}} onClick={onClickAddColum}>
                                         <Icon type='icon-ants-add' />
                                     </div>
-                                    <div className={classnames(styles['add-column'])}>
+                                    <div className={classnames(styles['add-column'])} onClick={onClickDeleteColumn}>
                                         <Icon type='icon-ants-trash' />
                                     </div>
                                 </div>
@@ -782,9 +1485,9 @@ const Style = props => {
     const renderComponent = (elements, id, type = '') => {
         try {
             if (elements && elements.length) {
-                return elements.map(item => {
+                return elements.map((item,index) => {
                     return (
-                        <div key={`${item.id}${random(3)}`} className={classnames(styles[`${item.className}`], `mb-15 ${item.className}`)} style={{marginBottom: 15, ...getObjectPropSafely(() => item.style.styleParent)}}>
+                        <div key={`${item.id}-${index}`} className={classnames(styles[`${item.className}`], `mb-15 ${item.className}`)} style={{marginBottom: 15, ...getObjectPropSafely(() => item.style.styleParent)}}>
                             {switchCaseComponent(item, id, type)}
                         </div>
                     );
@@ -796,6 +1499,7 @@ const Style = props => {
     };
 
     const renderHtml = () => {
+
         try {
             if (config && config.length) {
                 return config.map(item => {
@@ -828,4 +1532,4 @@ const Style = props => {
     }
 };
 
-export default Style;
+export default memo(Style);

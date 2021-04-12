@@ -13,7 +13,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'contentWidth',
                             label: 'Content width',
-                            defaultValue: '600',
+                            defaultValue: '500',
                             unit: 'px',
                             isShowUnit: true,
                             style: {
@@ -41,156 +41,170 @@ const sidePanelConfig = [
                             id: 'fontFamily',
                             label: 'Font',
                             isShowIcon: true,
-                            defaultValue: 'roboto',
+                            defaultValue: 'arial',
                             tooltip: 'Font family',
                             options: [
                                 {
-                                    name: 'arial',
-                                    label: 'Arial'
+                                    name: 'Andale Mono',
+                                    label: 'Andale Mono',
+                                    value: '"andale mono", times',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'boogaloo',
-                                    label: 'Boogaloo'
+                                    name: 'Arial',
+                                    label: 'Arial',
+                                    value: 'arial, helvetica, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'bubblegumSans',
-                                    label: 'Bubblegum Sans'
+                                    name: 'Arial Black',
+                                    label: 'Arial Black',
+                                    value: '"arial black", "avant garde", arial',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'calibri',
-                                    label: 'Calibri'
+                                    name: 'Book Antiqua',
+                                    label: 'Book Antiqua',
+                                    value: '"book antiqua", palatino',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'chewy',
-                                    label: 'Chewy'
+                                    name: 'Cabin',
+                                    label: 'Cabin',
+                                    value: 'Cabin, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'comicSansMS',
-                                    label: 'Comic Sans MS'
+                                    name: 'Montserrat',
+                                    label: 'Montserrat',
+                                    value: 'Montserrat, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'comingSoon',
-                                    label: 'Coming Soon'
+                                    name: 'Commic Sans MS',
+                                    label: 'Commic Sans MS',
+                                    value: '"comic sans ms", sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'cormorantUnicase',
-                                    label: 'Cormorant Unicase'
+                                    name: 'Courier New',
+                                    label: 'Courier New',
+                                    value: 'courier new", courier',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'corsiva',
-                                    label: 'Corsiva'
+                                    name: 'Crimson Text',
+                                    label: 'Crimson Text',
+                                    value: '"Crimson Text", serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'courierNew',
-                                    label: 'Courier New'
+                                    name: 'Georgia',
+                                    label: 'Georgia',
+                                    value: 'georgia, palatino',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'droid',
-                                    label: 'Droid'
+                                    name: 'Helvetica',
+                                    label: 'Helvetica',
+                                    value: 'helvetica, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'droidSans',
-                                    label: 'Droid Sans'
+                                    name: 'Impact',
+                                    label: 'Impact',
+                                    value: 'impact, chicago',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'eater',
-                                    label: 'Eater'
+                                    name: 'Lato',
+                                    label: 'Lato',
+                                    value: 'Lato, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'georgia',
-                                    label: 'Georgia'
+                                    name: 'Lobster Two',
+                                    label: 'Lobster Two',
+                                    value: '"Lobster Two", cursive',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'greatVibes',
-                                    label: 'Great Vibes'
+                                    name: 'Old Standard TT',
+                                    label: 'Old Standard TT',
+                                    value: '"Old Standard TT", serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'impact',
-                                    label: 'Impact'
+                                    name: 'Open Sans',
+                                    label: 'Open Sans',
+                                    value: '"Open Sans", sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'indieFlower',
-                                    label: 'Indie Flower'
+                                    name: 'Pacifico',
+                                    label: 'Pacifico',
+                                    value: 'Pacifico, cursive',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'lato',
-                                    label: 'Lato'
+                                    name: 'Playfair Display',
+                                    label: 'Playfair Display',
+                                    value: '"Playfair Display", serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'lora',
-                                    label: 'Lora'
+                                    name: 'Raleway',
+                                    label: 'Raleway',
+                                    value: 'Raleway, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'montserrat',
-                                    label: 'Montserrat'
+                                    name: 'Rubik',
+                                    label: 'Rubik',
+                                    value: 'Rubik, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'oleoScript',
-                                    label: 'Oleo Script'
+                                    name: 'Source Sans Pro',
+                                    label: 'Source Sans Pro',
+                                    value: '"Source Sans Pro", sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'openSans',
-                                    label: 'Open Sans'
+                                    name: 'Symbol',
+                                    label: 'Symbol',
+                                    value: 'symbol',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'orbitron',
-                                    label: 'Orbitron'
+                                    name: 'Tahoma',
+                                    label: 'Tahoma',
+                                    value: 'tahoma, arial, helvetica, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'oswald',
-                                    label: 'Oswald'
+                                    name: 'Terminal',
+                                    label: 'Terminal',
+                                    value: 'terminal, monaco',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'permanentMarker',
-                                    label: 'Permanent Marker'
+                                    name: 'Times New Roman',
+                                    label: 'Times New Roman',
+                                    value: '"times new roman", times',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'quicksand',
-                                    label: 'Quicksand'
+                                    name: 'Trebuchet Ms',
+                                    label: 'Trebuchet Ms',
+                                    value: '"trebuchet ms", geneva',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'raleway',
-                                    label: 'Raleway'
-                                },
-                                {
-                                    name: 'reenieBeanie',
-                                    label: 'Reenie Beanie'
-                                },
-                                {
-                                    name: 'roboto',
-                                    label: 'Roboto'
-                                },
-                                {
-                                    name: 'robotoCondensed',
-                                    label: 'Roboto Condensed'
-                                },
-                                {
-                                    name: 'syncopate',
-                                    label: 'Syncopate'
-                                },
-                                {
-                                    name: 'tahoma',
-                                    label: 'Tahoma'
-                                },
-                                {
-                                    name: 'timesNewRoman',
-                                    label: 'Times New Roman'
-                                },
-                                {
-                                    name: 'trebuchet',
-                                    label: 'Trebuchet'
-                                },
-                                {
-                                    name: 'ubuntu',
-                                    label: 'Ubuntu'
-                                },
-                                {
-                                    name: 'ubuntuMono',
-                                    label: 'Ubuntu Mono'
-                                },
-                                {
-                                    name: 'verdana',
-                                    label: 'Verdana'
+                                    name: 'Verdana',
+                                    label: 'Verdana',
+                                    value: 'verdana, geneva',
+                                    defaultFont: true
                                 }
                             ]
                         }
@@ -224,7 +238,7 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'FONT_COLOR',
-                            id: 'fontColor',
+                            id: 'linkColor',
                             label: 'Font color',
                             defaultValue: '#333333',
                             tooltip: 'Font color',
@@ -236,13 +250,17 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'SELECT_SINGLE',
-                            id: 'underlineStyle',
+                            id: 'linkUnderline',
                             label: 'Underline style',
-                            defaultValue: 'None',
+                            defaultValue: 'none',
                             options: [
                                 {
-                                    name: 'None',
+                                    name: 'none',
                                     label: 'None'
+                                },
+                                {
+                                    name: 'underline',
+                                    label: 'Underline'
                                 }
                             ],
                             style: {
@@ -545,7 +563,8 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'FILL_COLOR',
-                            id: 'backgroundColor',
+                            id: 'backgroundColorColumn',
+                            keyActive: 'backgroundColor',
                             label: 'Background color',
                             defaultValue: '#707070',
                             style: {
@@ -566,7 +585,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'SWITCH',
-                            id: 'moreOptionsPaddingRow',
+                            id: 'moreOptionsColumnPadding',
                             isShowMessageLeft: true,
                             message: 'More options',
                             defaultValue: true,
@@ -576,31 +595,33 @@ const sidePanelConfig = [
                                 }
                             }
                         },
-                        // {
-                        //     type: 'TEXT_INPUT',
-                        //     id: 'paddingRowText',
-                        //     label: '',
-                        //     defaultValue: '10',
-                        //     unit: 'px',
-                        //     isShowUnit: true,
-                        //     style: {
-                        //         styleParent: {
-                        //             width: '100%'
-                        //         },
-                        //         styleChild: {
-                        //             width: 40
-                        //         }
-                        //     }
-                        // },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'paddingColumn',
+                            label: '',
+                            defaultValue: '10',
+                            unit: 'px',
+                            isShowUnit: true,
+                            keyShow: 'moreOptionsColumnPadding',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
                         {
                             type: 'COMPONENT_CHILD',
                             id: 'childColumnPadding',
-                            // keyShow: 'moreOptionsButtonPadding',
+                            keyShow: 'moreOptionsColumnPadding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',
                                     id: 'top',
                                     label: 'Top',
+                                    upLineKey: 'columnPaddings',
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -617,6 +638,7 @@ const sidePanelConfig = [
                                     type: 'TEXT_INPUT',
                                     id: 'right',
                                     label: 'Right',
+                                    upLineKey: 'columnPaddings',
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -633,6 +655,7 @@ const sidePanelConfig = [
                                     type: 'TEXT_INPUT',
                                     id: 'bottom',
                                     label: 'Bottom',
+                                    upLineKey: 'columnPaddings',
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -649,6 +672,7 @@ const sidePanelConfig = [
                                     type: 'TEXT_INPUT',
                                     id: 'left',
                                     label: 'Left',
+                                    upLineKey: 'columnPaddings',
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -667,7 +691,7 @@ const sidePanelConfig = [
                                     width: '100%'
                                 }
                             }
-                        },
+                        }, // work here
                         {
                             type: 'LABEL',
                             id: 'border',
@@ -694,7 +718,8 @@ const sidePanelConfig = [
                             type: 'FILL_COLOR',
                             id: 'borderColorColumn',
                             label: '',
-                            defaultValue: '#707070',
+                            defaultValue: '#fff',
+                            keyShow: 'borderColor',
                             style: {
                                 styleParent: {
                                     width: '20%'
@@ -705,11 +730,20 @@ const sidePanelConfig = [
                             type: 'SELECT_SINGLE',
                             id: 'borderSelectSingle',
                             label: '',
-                            defaultValue: 1,
+                            defaultValue: 'solid',
+                            keyShow: 'borderStyle',
                             options: [
                                 {
-                                    name: 1,
+                                    name: 'solid',
                                     label: 'Solid'
+                                },
+                                {
+                                    name: 'dotted',
+                                    label: 'Dotted'
+                                },
+                                {
+                                    name: 'dashed',
+                                    label: 'Dashed'
                                 }
                             ],
                             style: {
@@ -723,11 +757,12 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'TEXT_INPUT',
-                            id: 'borderColumnText',
+                            id: 'borderColumnWidth',
                             label: '',
                             defaultValue: '10',
                             unit: 'px',
                             isShowUnit: true,
+                            keyShow: 'borderWidth',
                             style: {
                                 styleParent: {
                                     width: '40%'
@@ -740,7 +775,7 @@ const sidePanelConfig = [
                         {
                             type: 'COMPONENT_CHILD',
                             id: 'childBorder',
-                            // keyShow: 'moreOptionsBorder',
+                            keyShow: 'moreOptionsBorder',
                             elementChild: [
                                 {
                                     type: 'LABEL',
@@ -754,16 +789,12 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderTop',
+                                    id: 'columnBorderStyleTop',
                                     defaultValue: 'solid',
                                     tooltip: 'Border top',
+                                    keyPosition: 'Top',
+                                    upLineKey: 'columnBorderStyle',
                                     options: [
-                                        {
-                                            name: 'none',
-                                            label: 'None',
-                                            textDecorationStyle: 'solid',
-                                            textDecorationLine: 'none'
-                                        },
                                         {
                                             name: 'solid',
                                             label: 'Solid',
@@ -781,12 +812,6 @@ const sidePanelConfig = [
                                             label: 'Dotted',
                                             textDecorationStyle: 'dotted',
                                             textDecorationLine: 'underline'
-                                        },
-                                        {
-                                            name: 'double',
-                                            label: 'Double',
-                                            textDecorationStyle: 'double',
-                                            textDecorationLine: 'underline'
                                         }
                                     ],
                                     style: {
@@ -797,9 +822,11 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'inputBorderTop',
+                                    id: 'columnBorderWidthTop',
                                     defaultValue: '1',
                                     unit: 'px',
+                                    keyPosition: 'Top',
+                                    upLineKey: 'columnBorderWidth',
                                     isShowUnit: true,
                                     style: {
                                         styleParent: {
@@ -812,8 +839,10 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBorderTop',
-                                    defaultValue: '#000000',
+                                    id: 'columnBorderColorTop',
+                                    upLineKey: 'columnBorderColor',
+                                    keyPosition: 'Top',
+                                    defaultValue: '#fff',
                                     style: {
                                         styleParent: {
                                             width: '33%'
@@ -832,16 +861,12 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderRight',
+                                    id: 'columnBorderStyleRight',
                                     defaultValue: 'solid',
+                                    keyPosition: 'Right',
+                                    upLineKey: 'columnBorderStyle',
                                     tooltip: 'Border right',
                                     options: [
-                                        {
-                                            name: 'none',
-                                            label: 'None',
-                                            textDecorationStyle: 'solid',
-                                            textDecorationLine: 'none'
-                                        },
                                         {
                                             name: 'solid',
                                             label: 'Solid',
@@ -859,12 +884,6 @@ const sidePanelConfig = [
                                             label: 'Dotted',
                                             textDecorationStyle: 'dotted',
                                             textDecorationLine: 'underline'
-                                        },
-                                        {
-                                            name: 'double',
-                                            label: 'Double',
-                                            textDecorationStyle: 'double',
-                                            textDecorationLine: 'underline'
                                         }
                                     ],
                                     style: {
@@ -875,9 +894,11 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'inputBorderRight',
+                                    id: 'columnBorderWidthRight',
                                     defaultValue: '1',
                                     unit: 'px',
+                                    keyPosition: 'Right',
+                                    upLineKey: 'columnBorderWidth',
                                     isShowUnit: true,
                                     style: {
                                         styleParent: {
@@ -890,8 +911,10 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBorderRight',
-                                    defaultValue: '#000000',
+                                    id: 'columnBorderColorRight',
+                                    defaultValue: '#fff',
+                                    keyPosition: 'Right',
+                                    upLineKey: 'columnBorderColor',
                                     style: {
                                         styleParent: {
                                             width: '33%'
@@ -910,16 +933,12 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderBottom',
+                                    id: 'columnBorderStyleBottom',
                                     defaultValue: 'solid',
+                                    keyPosition: 'Bottom',
+                                    upLineKey: 'columnBorderStyle',
                                     tooltip: 'Border bottom',
                                     options: [
-                                        {
-                                            name: 'none',
-                                            label: 'None',
-                                            textDecorationStyle: 'solid',
-                                            textDecorationLine: 'none'
-                                        },
                                         {
                                             name: 'solid',
                                             label: 'Solid',
@@ -937,12 +956,6 @@ const sidePanelConfig = [
                                             label: 'Dotted',
                                             textDecorationStyle: 'dotted',
                                             textDecorationLine: 'underline'
-                                        },
-                                        {
-                                            name: 'double',
-                                            label: 'Double',
-                                            textDecorationStyle: 'double',
-                                            textDecorationLine: 'underline'
                                         }
                                     ],
                                     style: {
@@ -953,9 +966,11 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'input',
+                                    id: 'columnBorderWidthBottom',
                                     defaultValue: '1',
                                     unit: 'px',
+                                    keyPosition: 'Bottom',
+                                    upLineKey: 'columnBorderWidth',
                                     isShowUnit: true,
                                     style: {
                                         styleParent: {
@@ -968,8 +983,10 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBoderBottom',
-                                    defaultValue: '#000000',
+                                    id: 'columnBorderColorBottom',
+                                    defaultValue: '#fff',
+                                    keyPosition: 'Bottom',
+                                    upLineKey: 'columnBorderColor',
                                     style: {
                                         styleParent: {
                                             width: '33%'
@@ -988,16 +1005,12 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderLeft',
+                                    id: 'columnBorderStyleLeft',
                                     defaultValue: 'solid',
+                                    keyPosition: 'Left',
+                                    upLineKey: 'columnBorderStyle',
                                     tooltip: 'Border left',
                                     options: [
-                                        {
-                                            name: 'none',
-                                            label: 'None',
-                                            textDecorationStyle: 'solid',
-                                            textDecorationLine: 'none'
-                                        },
                                         {
                                             name: 'solid',
                                             label: 'Solid',
@@ -1015,12 +1028,6 @@ const sidePanelConfig = [
                                             label: 'Dotted',
                                             textDecorationStyle: 'dotted',
                                             textDecorationLine: 'underline'
-                                        },
-                                        {
-                                            name: 'double',
-                                            label: 'Double',
-                                            textDecorationStyle: 'double',
-                                            textDecorationLine: 'underline'
                                         }
                                     ],
                                     style: {
@@ -1031,9 +1038,11 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'inputBorderLeft',
+                                    id: 'columnBorderWidthLeft',
                                     defaultValue: '1',
                                     unit: 'px',
+                                    keyPosition: 'Left',
+                                    upLineKey: 'columnBorderWidth',
                                     isShowUnit: true,
                                     style: {
                                         styleParent: {
@@ -1046,8 +1055,10 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBorderLeft',
-                                    defaultValue: '#000000',
+                                    id: 'columnBorderColorLeft',
+                                    defaultValue: '#fff',
+                                    keyPosition: 'Left',
+                                    upLineKey: 'columnBorderColor',
                                     style: {
                                         styleParent: {
                                             width: '33%'
@@ -1080,7 +1091,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'LABEL',
-                            id: 'backgroundImage',
+                            id: 'backgroundImageLabel',
                             label: 'Background image',
                             style: {
                                 styleParent: {
@@ -1091,6 +1102,7 @@ const sidePanelConfig = [
                         {
                             type: 'SELECT_RADIO',
                             id: 'selectRadioImage',
+                            keySelected: 'backgroundImage',
                             defaultValue: 'uploadImage',
                             options: [
                                 {
@@ -1111,7 +1123,7 @@ const sidePanelConfig = [
                         {
                             type: 'UPLOAD',
                             id: 'imageUpload',
-                            keyShow: 'selectRadioImage',
+                            keyShow: 'backgroundImage',
                             style: {
                                 styleParent: {
                                     width: '100%'
@@ -1120,8 +1132,9 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'TEXT_INPUT',
-                            id: 'inputUrl',
-                            keyShow: 'selectRadioImage',
+                            id: 'url',
+                            keyParent: 'backgroundImage',
+                            keyShow: 'backgroundImage',
                             defaultValue: '',
                             style: {
                                 styleParent: {
@@ -1134,7 +1147,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'FILL_COLOR',
-                            id: 'contentBackgroundColorRow',
+                            id: 'columnsBackgroundColor',
                             label: 'Content background color',
                             defaultValue: '#707070',
                             style: {
@@ -1144,15 +1157,33 @@ const sidePanelConfig = [
                             }
                         },
                         {
-                            type: 'TEXT_INPUT',
-                            id: 'paddingRow',
-                            label: 'Padding',
-                            defaultValue: '10',
-                            unit: 'px',
-                            isShowUnit: true,
+                            type: 'LABEL',
+                            id: 'labelRow',
+                            label: 'Padding'
+                        },
+                        {
+                            type: 'SWITCH',
+                            id: 'moreOptionsPadding',
+                            isShowMessageLeft: true,
+                            message: 'More options',
+                            defaultValue: false,
                             style: {
                                 styleParent: {
                                     width: '50%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'padding',
+                            label: '',
+                            defaultValue: '10',
+                            unit: 'px',
+                            isShowUnit: true,
+                            keyShow: 'moreOptionsPadding',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
                                 },
                                 styleChild: {
                                     width: 40
@@ -1160,14 +1191,82 @@ const sidePanelConfig = [
                             }
                         },
                         {
-                            type: 'SWITCH',
-                            id: 'moreOptionsPaddingRow',
-                            isShowMessageLeft: true,
-                            message: 'More options',
-                            defaultValue: false,
+                            type: 'COMPONENT_CHILD',
+                            id: 'childPadding',
+                            keyShow: 'moreOptionsPadding',
+                            elementChild: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'top',
+                                    upLineKey: 'listPaddings',
+                                    label: 'Top',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'right',
+                                    upLineKey: 'listPaddings',
+                                    label: 'Right',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'bottom',
+                                    upLineKey: 'listPaddings',
+                                    label: 'Bottom',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'left',
+                                    upLineKey: 'listPaddings',
+                                    label: 'Left',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                }
+                            ],
                             style: {
                                 styleParent: {
-                                    width: '50%'
+                                    width: '100%'
                                 }
                             }
                         }
@@ -2370,15 +2469,35 @@ const sidePanelConfig = [
                 {
                     id: 'menuOne',
                     style: {
-                        background: '#F0F8FA',
+                        background: 'rgb(216 233 237)',
                         paddingRight: 10
                     },
                     isShowIconTrash: true,
                     elements: [
                         {
-                            type: 'TEXT_INPUT',
-                            id: `text${random(3)}`,
+                            type: 'LABEL',
+                            id: 'labelMenu',
                             label: 'Text',
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'DELETE_BUTTON',
+                            id: 'deleteButton',
+                            icon: 'icon-ants-trash',
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'menuText',
+                            label: '',
                             defaultValue: 'Menu 1',
                             style: {
                                 styleParent: {
@@ -2391,13 +2510,25 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'SELECT_SINGLE',
-                            id: `actionType${random(3)}`,
+                            id: 'actionType',
                             label: 'Action type',
-                            defaultValue: 1,
+                            defaultValue: 'openWebsite',
                             options: [
                                 {
-                                    name: 1,
+                                    name: 'openWebsite',
                                     label: 'Open website'
+                                },
+                                {
+                                    name: 'sendEmail',
+                                    label: 'Send Email'
+                                },
+                                {
+                                    name: 'callPhoneNumber',
+                                    label: 'Call Phone Number'
+                                },
+                                {
+                                    name: 'sendSMS',
+                                    label: 'Send SMS'
                                 }
                             ],
                             style: {
@@ -2409,11 +2540,13 @@ const sidePanelConfig = [
                                 }
                             }
                         },
+                        // open website
                         {
                             type: 'TEXT_INPUT',
-                            id: `url${random(3)}`,
+                            id: 'url',
                             label: 'URL',
                             defaultValue: '',
+                            keyShow: 'openWebsite',
                             style: {
                                 styleParent: {
                                     width: '100%'
@@ -2427,63 +2560,34 @@ const sidePanelConfig = [
                             type: 'SELECT_SINGLE',
                             id: 'target',
                             label: 'Target',
-                            defaultValue: 1,
+                            keyShow: 'openWebsite',
+                            defaultValue: '_blank',
                             options: [
                                 {
-                                    name: 1,
+                                    name: '_blank',
                                     label: 'New Tab'
-                                }
-                            ],
-                            style: {
-                                styleParent: {
-                                    width: '100%'
                                 },
-                                styleChild: {
-                                    width: 150
-                                }
-                            }
-                        }
-                    ]
-                },
-                {
-                    id: 'menuTwo',
-                    elements: [
-                        {
-                            type: 'TEXT_INPUT',
-                            id: `text${random(3)}`,
-                            label: 'Text',
-                            defaultValue: 'Menu 1',
-                            style: {
-                                styleParent: {
-                                    width: '100%'
-                                },
-                                styleChild: {
-                                    width: '100%'
-                                }
-                            }
-                        },
-                        {
-                            type: 'SELECT_SINGLE',
-                            id: `actionType${random(3)}`,
-                            label: 'Action type',
-                            defaultValue: 1,
-                            options: [
                                 {
-                                    name: 1,
-                                    label: 'Send Email'
+                                    name: '_self',
+                                    label: 'Same Target'
                                 }
                             ],
                             style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
                                 styleChild: {
                                     width: 150
                                 }
                             }
                         },
-                        {  
+                        // send email
+                        {
                             type: 'TEXT_INPUT',
                             id: 'mailTo',
-                            label: 'Mail to',
+                            label: 'Mail To',
                             defaultValue: '',
+                            keyShow: 'sendEmail',
                             style: {
                                 styleParent: {
                                     width: '100%'
@@ -2497,6 +2601,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'subject',
                             label: 'Subject',
+                            keyShow: 'sendEmail',
                             defaultValue: '',
                             style: {
                                 styleParent: {
@@ -2508,9 +2613,42 @@ const sidePanelConfig = [
                             }
                         },
                         {
-                            type: 'TEXT_AREA',
+                            type: 'TEXT_INPUT',
                             id: 'body',
                             label: 'Body',
+                            keyShow: 'sendEmail',
+                            defaultValue: '',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        // call phone number
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'phoneCall',
+                            label: 'Phone',
+                            keyShow: 'callPhoneNumber',
+                            defaultValue: '',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        // send sms
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'phoneSendSMS',
+                            label: 'Phone',
+                            keyShow: 'sendSMS',
                             defaultValue: '',
                             style: {
                                 styleParent: {
@@ -2524,105 +2662,199 @@ const sidePanelConfig = [
                     ]
                 },
                 {
-                    id: 'menuThree',
+                    id: 'addMenuContainer',
                     elements: [
                         {
-                            type: 'TEXT_INPUT',
-                            id: `text${random(3)}`,
-                            label: 'Text',
-                            defaultValue: 'Menu 1',
+                            type: 'ADD_MENU',
+                            id: 'addButton',
+                            label: '',
+                            icon: 'icon-ants-add',
                             style: {
                                 styleParent: {
-                                    width: '100%'
-                                },
-                                styleChild: {
-                                    width: '100%'
-                                }
-                            }
-                        },
-                        {
-                            type: 'SELECT_SINGLE',
-                            id: `actionType${random(3)}`,
-                            label: 'Action type',
-                            defaultValue: 1,
-                            options: [
-                                {
-                                    name: 1,
-                                    label: 'Call Phone Number'
-                                }
-                            ],
-                            style: {
-                                styleChild: {
-                                    width: 150
-                                }
-                            }
-                        },
-                        {
-                            type: 'TEXT_INPUT',
-                            id: `phone${random(3)}`,
-                            label: 'Phone',
-                            defaultValue: '',
-                            style: {
-                                styleParent: {
-                                    width: '100%'
-                                },
-                                styleChild: {
-                                    width: '100%'
-                                }
-                            }
-                        }
-                    ]
-                },
-                {
-                    id: 'menuFour',
-                    elements: [
-                        {
-                            type: 'TEXT_INPUT',
-                            id: `text${random(3)}`,
-                            label: 'Text',
-                            defaultValue: 'Menu 1',
-                            style: {
-                                styleParent: {
-                                    width: '100%'
-                                },
-                                styleChild: {
-                                    width: '100%'
-                                }
-                            }
-                        },
-                        {
-                            type: 'SELECT_SINGLE',
-                            id: `actionType${random(3)}`,
-                            label: 'Action type',
-                            defaultValue: 1,
-                            options: [
-                                {
-                                    name: 1,
-                                    label: 'Call Phone Number'
-                                }
-                            ],
-                            style: {
-                                styleChild: {
-                                    width: 150
-                                }
-                            }
-                        },
-                        {
-                            type: 'TEXT_INPUT',
-                            id: `phone${random(3)}`,
-                            label: 'Phone',
-                            defaultValue: '',
-                            style: {
-                                styleParent: {
-                                    width: '100%'
-                                },
-                                styleChild: {
                                     width: '100%'
                                 }
                             }
                         }
                     ]
                 }
+                // {
+                //     id: 'menuTwo',
+                //     elements: [
+                //         {
+                //             type: 'TEXT_INPUT',
+                //             id: `text${random(3)}`,
+                //             label: 'Text',
+                //             defaultValue: 'Menu 1',
+                //             style: {
+                //                 styleParent: {
+                //                     width: '100%'
+                //                 },
+                //                 styleChild: {
+                //                     width: '100%'
+                //                 }
+                //             }
+                //         },
+                //         {
+                //             type: 'SELECT_SINGLE',
+                //             id: `actionType${random(3)}`,
+                //             label: 'Action type',
+                //             defaultValue: 1,
+                //             options: [
+                //                 {
+                //                     name: 1,
+                //                     label: 'Send Email'
+                //                 }
+                //             ],
+                //             style: {
+                //                 styleChild: {
+                //                     width: 150
+                //                 }
+                //             }
+                //         },
+                //         {  
+                //             type: 'TEXT_INPUT',
+                //             id: 'mailTo',
+                //             label: 'Mail to',
+                //             defaultValue: '',
+                //             style: {
+                //                 styleParent: {
+                //                     width: '100%'
+                //                 },
+                //                 styleChild: {
+                //                     width: '100%'
+                //                 }
+                //             }
+                //         },
+                //         {
+                //             type: 'TEXT_INPUT',
+                //             id: 'subject',
+                //             label: 'Subject',
+                //             defaultValue: '',
+                //             style: {
+                //                 styleParent: {
+                //                     width: '100%'
+                //                 },
+                //                 styleChild: {
+                //                     width: '100%'
+                //                 }
+                //             }
+                //         },
+                //         {
+                //             type: 'TEXT_AREA',
+                //             id: 'body',
+                //             label: 'Body',
+                //             defaultValue: '',
+                //             style: {
+                //                 styleParent: {
+                //                     width: '100%'
+                //                 },
+                //                 styleChild: {
+                //                     width: '100%'
+                //                 }
+                //             }
+                //         }
+                //     ]
+                // }
+                // {
+                //     id: 'menuThree',
+                //     elements: [
+                //         {
+                //             type: 'TEXT_INPUT',
+                //             id: `text${random(3)}`,
+                //             label: 'Text',
+                //             defaultValue: 'Menu 1',
+                //             style: {
+                //                 styleParent: {
+                //                     width: '100%'
+                //                 },
+                //                 styleChild: {
+                //                     width: '100%'
+                //                 }
+                //             }
+                //         },
+                //         {
+                //             type: 'SELECT_SINGLE',
+                //             id: `actionType${random(3)}`,
+                //             label: 'Action type',
+                //             defaultValue: 1,
+                //             options: [
+                //                 {
+                //                     name: 1,
+                //                     label: 'Call Phone Number'
+                //                 }
+                //             ],
+                //             style: {
+                //                 styleChild: {
+                //                     width: 150
+                //                 }
+                //             }
+                //         },
+                //         {
+                //             type: 'TEXT_INPUT',
+                //             id: `phone${random(3)}`,
+                //             label: 'Phone',
+                //             defaultValue: '',
+                //             style: {
+                //                 styleParent: {
+                //                     width: '100%'
+                //                 },
+                //                 styleChild: {
+                //                     width: '100%'
+                //                 }
+                //             }
+                //         }
+                //     ]
+                // },
+                // {
+                //     id: 'menuFour',
+                //     elements: [
+                //         {
+                //             type: 'TEXT_INPUT',
+                //             id: `text${random(3)}`,
+                //             label: 'Text',
+                //             defaultValue: 'Menu 1',
+                //             style: {
+                //                 styleParent: {
+                //                     width: '100%'
+                //                 },
+                //                 styleChild: {
+                //                     width: '100%'
+                //                 }
+                //             }
+                //         },
+                //         {
+                //             type: 'SELECT_SINGLE',
+                //             id: `actionType${random(3)}`,
+                //             label: 'Action type',
+                //             defaultValue: 1,
+                //             options: [
+                //                 {
+                //                     name: 1,
+                //                     label: 'Call Phone Number'
+                //                 }
+                //             ],
+                //             style: {
+                //                 styleChild: {
+                //                     width: 150
+                //                 }
+                //             }
+                //         },
+                //         {
+                //             type: 'TEXT_INPUT',
+                //             id: `phone${random(3)}`,
+                //             label: 'Phone',
+                //             defaultValue: '',
+                //             style: {
+                //                 styleParent: {
+                //                     width: '100%'
+                //                 },
+                //                 styleChild: {
+                //                     width: '100%'
+                //                 }
+                //             }
+                //         }
+                //     ]
+                // }
             ],
             style: [
                 {
@@ -2637,167 +2869,166 @@ const sidePanelConfig = [
                             tooltip: 'Font family',
                             options: [
                                 {
-                                    name: 'arial',
+                                    name: 'Andale Mono',
+                                    label: 'Andale Mono',
+                                    value: '"andale mono", times',
+                                    defaultFont: true
+                                },
+                                {
+                                    name: 'Arial',
                                     label: 'Arial',
-                                    url: ''
+                                    value: 'arial, helvetica, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'boogaloo',
-                                    label: 'Boogaloo',
-                                    url: 'https://fonts.googleapis.com/css2?family=Boogaloo&display=swap'
+                                    name: 'Arial Black',
+                                    label: 'Arial Black',
+                                    value: '"arial black", "avant garde", arial',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'bubblegumSans',
-                                    label: 'Bubblegum Sans',
-                                    url: 'https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap'
+                                    name: 'Book Antiqua',
+                                    label: 'Book Antiqua',
+                                    value: '"book antiqua", palatino',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'calibri',
-                                    label: 'Calibri'
+                                    name: 'Cabin',
+                                    label: 'Cabin',
+                                    value: 'Cabin, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'chewy',
-                                    label: 'Chewy',
-                                    url: 'https://fonts.googleapis.com/css2?family=Chewy&display=swap'
-                                },
-                                {
-                                    name: 'comicSansMS',
-                                    label: 'Comic Sans MS'
-                                },
-                                {
-                                    name: 'comingSoon',
-                                    label: 'Coming Soon',
-                                    url: 'https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap'
-                                },
-                                {
-                                    name: 'cormorantUnicase',
-                                    label: 'Cormorant Unicase',
-                                    url: 'https://fonts.googleapis.com/css2?family=Cormorant+Unicase&display=swap'
-                                },
-                                {
-                                    name: 'corsiva',
-                                    label: 'Corsiva'
-                                },
-                                {
-                                    name: 'courierNew',
-                                    label: 'Courier New'
-                                },
-                                {
-                                    name: 'droid',
-                                    label: 'Droid'
-                                },
-                                {
-                                    name: 'droidSans',
-                                    label: 'Droid Sans'
-                                },
-                                {
-                                    name: 'eater',
-                                    label: 'Eater',
-                                    url: 'https://fonts.googleapis.com/css2?family=Eater&display=swap'
-                                },
-                                {
-                                    name: 'georgia',
-                                    label: 'Georgia'
-                                },
-                                {
-                                    name: 'greatVibes',
-                                    label: 'Great Vibes',
-                                    url: 'https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap'
-                                },
-                                {
-                                    name: 'impact',
-                                    label: 'Impact'
-                                },
-                                {
-                                    name: 'indieFlower',
-                                    label: 'Indie Flower',
-                                    url: 'https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap'
-                                },
-                                {
-                                    name: 'lato',
-                                    label: 'Lato',
-                                    url: 'https://fonts.googleapis.com/css2?family=Lato&display=swap'
-                                },
-                                {
-                                    name: 'lora',
-                                    label: 'Lora',
-                                    url: 'https://fonts.googleapis.com/css2?family=Lora&display=swap'
-                                },
-                                {
-                                    name: 'montserrat',
+                                    name: 'Montserrat',
                                     label: 'Montserrat',
-                                    url: 'https://fonts.googleapis.com/css?family=Montserrat:400,700'
+                                    value: 'Montserrat, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'oleoScript',
-                                    label: 'Oleo Script',
-                                    url: 'https://fonts.googleapis.com/css2?family=Oleo+Script&display=swap'
+                                    name: 'Commic Sans MS',
+                                    label: 'Commic Sans MS',
+                                    value: '"comic sans ms", sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'openSans',
+                                    name: 'Courier New',
+                                    label: 'Courier New',
+                                    value: 'courier new", courier',
+                                    defaultFont: true
+                                },
+                                {
+                                    name: 'Crimson Text',
+                                    label: 'Crimson Text',
+                                    value: '"Crimson Text", serif',
+                                    defaultFont: true
+                                },
+                                {
+                                    name: 'Georgia',
+                                    label: 'Georgia',
+                                    value: 'georgia, palatino',
+                                    defaultFont: true
+                                },
+                                {
+                                    name: 'Helvetica',
+                                    label: 'Helvetica',
+                                    value: 'helvetica, sans-serif',
+                                    defaultFont: true
+                                },
+                                {
+                                    name: 'Impact',
+                                    label: 'Impact',
+                                    value: 'impact, chicago',
+                                    defaultFont: true
+                                },
+                                {
+                                    name: 'Lato',
+                                    label: 'Lato',
+                                    value: 'Lato, sans-serif',
+                                    defaultFont: true
+                                },
+                                {
+                                    name: 'Lobster Two',
+                                    label: 'Lobster Two',
+                                    value: '"Lobster Two", cursive',
+                                    defaultFont: true
+                                },
+                                {
+                                    name: 'Old Standard TT',
+                                    label: 'Old Standard TT',
+                                    value: '"Old Standard TT", serif',
+                                    defaultFont: true
+                                },
+                                {
+                                    name: 'Open Sans',
                                     label: 'Open Sans',
-                                    url: 'https://fonts.googleapis.com/css2?family=Open+Sans:ital@1&display=swap'
+                                    value: '"Open Sans", sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'orbitron',
-                                    label: 'Orbitron'
+                                    name: 'Pacifico',
+                                    label: 'Pacifico',
+                                    value: 'Pacifico, cursive',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'oswald',
-                                    label: 'Oswald'
+                                    name: 'Playfair Display',
+                                    label: 'Playfair Display',
+                                    value: '"Playfair Display", serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'permanentMarker',
-                                    label: 'Permanent Marker'
+                                    name: 'Raleway',
+                                    label: 'Raleway',
+                                    value: 'Raleway, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'quicksand',
-                                    label: 'Quicksand'
+                                    name: 'Rubik',
+                                    label: 'Rubik',
+                                    value: 'Rubik, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'raleway',
-                                    label: 'Raleway'
+                                    name: 'Source Sans Pro',
+                                    label: 'Source Sans Pro',
+                                    value: '"Source Sans Pro", sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'reenieBeanie',
-                                    label: 'Reenie Beanie'
+                                    name: 'Symbol',
+                                    label: 'Symbol',
+                                    value: 'symbol',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'roboto',
-                                    label: 'Roboto',
-                                    url: 'https://fonts.googleapis.com/css2?family=Roboto&display=swap'
+                                    name: 'Tahoma',
+                                    label: 'Tahoma',
+                                    value: 'tahoma, arial, helvetica, sans-serif',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'robotoCondensed',
-                                    label: 'Roboto Condensed'
+                                    name: 'Terminal',
+                                    label: 'Terminal',
+                                    value: 'terminal, monaco',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'syncopate',
-                                    label: 'Syncopate'
+                                    name: 'Times New Roman',
+                                    label: 'Times New Roman',
+                                    value: '"times new roman", times',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'tahoma',
-                                    label: 'Tahoma'
+                                    name: 'Trebuchet Ms',
+                                    label: 'Trebuchet Ms',
+                                    value: '"trebuchet ms", geneva',
+                                    defaultFont: true
                                 },
                                 {
-                                    name: 'timesNewRoman',
-                                    label: 'Times New Roman'
-                                },
-                                {
-                                    name: 'trebuchet',
-                                    label: 'Trebuchet'
-                                },
-                                {
-                                    name: 'ubuntu',
-                                    label: 'Ubuntu'
-                                },
-                                {
-                                    name: 'ubuntuMono',
-                                    label: 'Ubuntu Mono'
-                                },
-                                {
-                                    name: 'verdana',
-                                    label: 'Verdana'
+                                    name: 'Verdana',
+                                    label: 'Verdana',
+                                    value: 'verdana, geneva',
+                                    defaultFont: true
                                 }
                             ]
                         },
@@ -2922,14 +3153,14 @@ const sidePanelConfig = [
                             type: 'SELECT_SINGLE',
                             id: 'layout',
                             label: 'Layout',
-                            defaultValue: 1,
+                            defaultValue: 'horizontal',
                             options: [
                                 {
-                                    name: 1,
+                                    name: 'vertical',
                                     label: 'Vertical'
                                 },
                                 {
-                                    name: 2,
+                                    name: 'horizontal',
                                     label: 'Horizontal'
                                 }
                             ],
@@ -2964,31 +3195,33 @@ const sidePanelConfig = [
                                 }
                             }
                         },
-                        // {
-                        //     type: 'TEXT_INPUT',
-                        //     id: 'menuContainerPaddingText',
-                        //     label: '',
-                        //     defaultValue: '10',
-                        //     unit: 'px',
-                        //     isShowUnit: true,
-                        //     style: {
-                        //         styleParent: {
-                        //             width: '100%'
-                        //         },
-                        //         styleChild: {
-                        //             width: 40
-                        //         }
-                        //     }
-                        // },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'padding',
+                            label: '',
+                            defaultValue: '10',
+                            keyShow: 'moreOptionsMenuPadding',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
                         {
                             type: 'COMPONENT_CHILD',
                             id: 'childMenuPadding',
-                            // keyShow: 'moreOptionsButtonPadding',
+                            keyShow: 'moreOptionsMenuPadding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',
                                     id: 'top',
                                     label: 'Top',
+                                    upLineKey: 'menuPaddings',
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -3006,6 +3239,7 @@ const sidePanelConfig = [
                                     id: 'right',
                                     label: 'Right',
                                     defaultValue: '10',
+                                    upLineKey: 'menuPaddings',
                                     unit: 'px',
                                     isShowUnit: true,
                                     style: {
@@ -3022,6 +3256,7 @@ const sidePanelConfig = [
                                     id: 'bottom',
                                     label: 'Bottom',
                                     defaultValue: '10',
+                                    upLineKey: 'menuPaddings',
                                     unit: 'px',
                                     isShowUnit: true,
                                     style: {
@@ -3038,6 +3273,7 @@ const sidePanelConfig = [
                                     id: 'left',
                                     label: 'Left',
                                     defaultValue: '10',
+                                    upLineKey: 'menuPaddings',
                                     unit: 'px',
                                     isShowUnit: true,
                                     style: {
@@ -3056,12 +3292,30 @@ const sidePanelConfig = [
                                 }
                             }
                         },
+                        {   
+                            type: 'LABEL',
+                            id: 'containerPaddingLabel',
+                            label: 'Container Padding'
+                        },
+                        {
+                            type: 'SWITCH',
+                            id: 'moreOptionsContainerPadding',
+                            isShowMessageLeft: true,
+                            message: 'More options',
+                            defaultValue: false,
+                            style: {
+                                styleParent: {
+                                    width: '40%'
+                                }
+                            }
+                        },
                         {
                             type: 'TEXT_INPUT',
                             id: 'containerPadding',
-                            label: 'Container padding',
+                            label: '',
                             defaultValue: '10',
                             unit: 'px',
+                            keyShow: 'moreOptionsContainerPadding',
                             isShowUnit: true,
                             style: {
                                 styleParent: {
@@ -3073,14 +3327,82 @@ const sidePanelConfig = [
                             }
                         },
                         {
-                            type: 'SWITCH',
-                            id: 'moreOptionsPaddingMenu',
-                            isShowMessageLeft: true,
-                            message: 'More options',
-                            defaultValue: false,
+                            type: 'COMPONENT_CHILD',
+                            id: 'childContainerPadding',
+                            keyShow: 'moreOptionsContainerPadding',
+                            elementChild: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'top',
+                                    label: 'Top',
+                                    defaultValue: '10',
+                                    upLineKey: 'containerPaddings',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'right',
+                                    label: 'Right',
+                                    defaultValue: '10',
+                                    upLineKey: 'containerPaddings',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'bottom',
+                                    label: 'Bottom',
+                                    defaultValue: '10',
+                                    upLineKey: 'containerPaddings',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'left',
+                                    label: 'Left',
+                                    defaultValue: '10',
+                                    upLineKey: 'containerPaddings',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                }
+                            ],
                             style: {
                                 styleParent: {
-                                    width: '40%'
+                                    width: '100%'
                                 }
                             }
                         }

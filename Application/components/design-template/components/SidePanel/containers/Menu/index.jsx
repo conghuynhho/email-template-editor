@@ -1,5 +1,5 @@
 // Libraries
-import React, {useContext, useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {Nav, NavLink, NavItem, TabContent, TabPane} from 'reactstrap';
 import classnames from 'classnames';
 import Loadable from 'react-loadable';
@@ -19,27 +19,40 @@ const TabStyle = Loadable({
 // Context
 import {StoreContext} from 'Components/design-template/components/ContextStore';
 
+// utils
+import {
+    getContentIDFromHtmlID
+} from 'Components/design-template/components/Workspace/utils';
+
 const TabGeneral = Loadable({
     loader: () => import('Components/design-template/components/SidePanel/General'),
     loading: () => { return null }
 });
 
 const Menu = (props) => {
+    const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
+    const {
+        activeElement,
+        rows
+    } = store;
     const {
         config = {},
         content,
         translate = (lal) => lal
     } = props;
+
+    const menuId = activeElement.includes('menu') ? getContentIDFromHtmlID(store, activeElement) : '';
+    const values = getObjectPropSafely(() => store.contents[menuId].values);
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
 
-    const {state: store = {}} = useContext(StoreContext);
-    const {
-        activeElement,  
-        contents
-    } = store;
+    // const {state: store = {}} = useContext(StoreContext);
+    // const {
+    //     activeElement,  
+    //     contents
+    // } = store;
 
-    const contentId = activeElement.includes('content') ? getContentIDFromHtmlID(store, activeElement) : '';
-    const values = getObjectPropSafely(() => contents[contentId].values);
+    // const contentId = activeElement.includes('content') ? getContentIDFromHtmlID(store, activeElement) : '';
+    // const values = getObjectPropSafely(() => contents[contentId].values);
 
     const toggleTab = (tab) => {
         if (activeTab !== tab) {
@@ -78,7 +91,7 @@ const Menu = (props) => {
                             </Nav>
                             <TabContent activeTab={activeTab} >
                                 <TabPane tabId="side-panel-general-tab">
-                                    <TabGeneral general={general} />
+                                    <TabGeneral general={general} values={values} />
                                 </TabPane>
                                 <TabPane tabId="side-panel-style-tab" className="h-100">
                                     <TabStyle style={style} values={values} />

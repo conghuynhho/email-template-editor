@@ -40,7 +40,7 @@ const Row = (props) => {
         rows, 
         usageCounters, 
         contents, 
-        confirmDelete = {type: '', willBeDelete: false, id: ''}
+        confirmDelete = {type: '', willBeDelete: false, id: '', numberOfColumns: 0}
     } = store;
     const {
         data, 
@@ -62,9 +62,10 @@ const Row = (props) => {
     } = props;
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => data.values._meta.htmlClassNames);
+
     const styleBackgroundImage = {
         backgroundImage: `url(${getObjectPropSafely(() => {
-            return data.values.backgroundImage.url;
+            return getObjectPropSafely(() => data.values.backgroundImage.url) || getObjectPropSafely(() => data.values.backgroundImage.tempUrl.url) || '';
         })})`,
         backgroundRepeat: getObjectPropSafely(() => {
             return data.values.backgroundImage.repeat ? 'repeat' : 'no-repeat';
@@ -79,6 +80,7 @@ const Row = (props) => {
         backgroundColor: getObjectPropSafely(() => data.values.backgroundColor),
         ...(fullWidth ? styleBackgroundImage : {})
     };
+
     const styleContainer = {
         maxWidth: getObjectPropSafely(() => generalStyle.contentWidth),
         backgroundColor: getObjectPropSafely(() => data.values.columnsBackgroundColor),
@@ -96,7 +98,64 @@ const Row = (props) => {
 
     useEffect(() => {
         switch (confirmDelete.type) {
-            case 'content':
+            case 'column': {
+                const {rowID, numberOfColumns} = confirmDelete;
+                const rows = getObjectPropSafely(() => store.rows);
+                const columns = getObjectPropSafely(() => store.columns);
+                let newRows = rows;
+                let newColumns = columns;
+                let newUsageCounters = {...usageCounters};
+
+                for (let i = 0; i < numberOfColumns; i++) {
+                    let deleteColumnId = '';
+
+                    newUsageCounters = updateUsageCounters(newUsageCounters, 'column', 'subtract');
+
+                    newRows = produce(newRows, draft => {
+                        draft[rowID].cells.splice(draft[rowID].cells.length - 1, 1);
+                        [deleteColumnId] = draft[rowID].columns.splice(draft[rowID].columns.length - 1, 1);
+
+                    });
+                    newColumns = produce(newColumns, draft => {
+                        delete draft[deleteColumnId];
+                    });    
+                }
+
+                dispatchStore({
+                    type: actionType.HANDLE_ROW,
+                    payload: {
+                        rows: newRows,
+                        columns: newColumns,
+                        usageCounters: newUsageCounters
+                    }
+                });
+
+                dispatchStore({
+                    type: actionType.TOGGLE_DELETE_FORM,
+                    payload: {
+                        toggleDeleteForm: {
+                            isDeleteFormOpening: false,
+                            type: '',
+                            id: '',
+                            rowID: ''
+                        }
+                    }
+                });
+
+                dispatchStore({
+                    type: actionType.CONFIRM_DELETE,
+                    payload: {
+                        confirmDelete: {
+                            type: '',
+                            willBeDelete: false,
+                            id: ''
+                        }
+                    }
+                });
+
+                break;
+            }
+            case 'content': {
                 if (confirmDelete.rowID === id) {                                      
                     // delete at columns
                     const columns = getObjectPropSafely(() => store.columns);
@@ -165,7 +224,8 @@ const Row = (props) => {
                     });
                 }
                 break;
-            default:
+            }
+            case 'row': {
                 if (confirmDelete.willBeDelete && activeElement === id) {
                             
                     // delete at bodies 
@@ -243,6 +303,7 @@ const Row = (props) => {
                     });
                 }
                 break;
+            }
         }
     },[confirmDelete]);
 
@@ -325,6 +386,7 @@ const Row = (props) => {
                         'center': true,
                         'cover': false
                     },
+                    'border': {},
                     'padding': '0px',
                     'hideDesktop': false,
                     'hideMobile': false,
@@ -869,39 +931,30 @@ const Row = (props) => {
 
     const renderColumns = () => {
         const columns = getObjectPropSafely(() => data.columns);
+        const cells = getObjectPropSafely(() => data.cells);
+
+        const totalCells = cells.reduce((acc, cur) => acc + cur, 0);
 
         return columns.map((column, index) => {
             const contents = getObjectPropSafely(() => column.contents);
             const id = getObjectPropSafely(() => column.values._meta.htmlID);
             const classTitle = getObjectPropSafely(() => column.values._meta.htmlClassNames);
             const styleColumn = {
-                width: column.width ? column.width : `${(1 / columns.length) * 100}%`
+                width: `${(cells[index] / totalCells) * 100}%`
             };
+
+            const borderWidths = getObjectPropSafely(() => column.values.border.borderWidth.split(' '));
+            const borderStyles = getObjectPropSafely(() => column.values.border.borderStyle.split(' '));
+            const borderColors = getObjectPropSafely(() => column.values.border.borderColor.split(' '));
 
             const styleExtraColumn = {
                 padding: getObjectPropSafely(() => column.values.padding),
                 backgroundColor: getObjectPropSafely(() => column.values.backgroundColor),
-                borderWidth: `
-                    ${getObjectPropSafely(() => column.values.border.borderTopWidth)} 
-                    ${getObjectPropSafely(() => column.values.border.borderRightWidth)} 
-                    ${getObjectPropSafely(() => column.values.border.borderBottomWidth)}
-                    ${getObjectPropSafely(() => column.values.border.borderLeftWidth)}
-                `,
-                borderStyle: `
-                    ${getObjectPropSafely(() => column.values.border.borderTopStyle)} 
-                    ${getObjectPropSafely(() => column.values.border.borderRightStyle)} 
-                    ${getObjectPropSafely(() => column.values.border.borderBottomStyle)}
-                    ${getObjectPropSafely(() => column.values.border.borderLeftStyle)}
-                `,
-                borderColor: `
-                    ${getObjectPropSafely(() => column.values.border.borderTopColor)} 
-                    ${getObjectPropSafely(() => column.values.border.borderRightColor)} 
-                    ${getObjectPropSafely(() => column.values.border.borderBottomColor)}
-                    ${getObjectPropSafely(() => column.values.border.borderLeftColor)}
-                `
-                
+                borderWidth: Array.isArray(borderWidths) && borderWidths.length > 1 ? `${borderWidths[0]} ${borderWidths[1]} ${borderWidths[2]} ${borderWidths[3]}` : borderWidths[0],
+                borderStyle: Array.isArray(borderStyles) && borderWidths.length > 1 ? `${borderStyles[0]} ${borderStyles[1]} ${borderStyles[2]} ${borderStyles[3]}` : borderStyles[0],
+                borderColor: Array.isArray(borderColors) && borderWidths.length > 1 ? `${borderColors[0]} ${borderColors[1]} ${borderColors[2]} ${borderColors[3]}` : borderColors[0]
             };
-        
+
             return (
                 <div 
                     key={index}

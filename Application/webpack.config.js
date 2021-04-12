@@ -22,7 +22,8 @@ module.exports = {
             Assets: path.resolve(__dirname, 'assets/'),
             Components: path.resolve(__dirname, 'components/'),
             Hooks: path.resolve(__dirname, 'hooks/'),
-            Utils: path.resolve(__dirname, 'utils/')
+            Utils: path.resolve(__dirname, 'utils/'),
+            react: require.resolve('react')
         }
     },
     module: {

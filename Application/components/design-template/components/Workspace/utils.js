@@ -296,6 +296,9 @@ export const getActiveElement = (data, activeElement) => {
         case activeElement.indexOf('image') > -1:
             type = 'image';
             break;
+        case activeElement.indexOf('html') > -1:
+            type = 'html';
+            break;
         case activeElement.indexOf('row') > -1:
             type = 'columns';
             break;

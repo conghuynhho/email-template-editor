@@ -1,7 +1,6 @@
 import moment from 'moment';
 import configs from './constant';
 import localforage from 'localforage';
-import {any, string} from 'prop-types';
 
 export const isNil = value => typeof value === 'object' && value !== null;
 

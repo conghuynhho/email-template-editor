@@ -17,7 +17,7 @@ import sidePanelConfig from 'Components/design-template/components/SidePanel/con
 import {getActiveElement} from 'Components/design-template/components/Workspace/utils';
 import {getObjectPropSafely} from 'Utils';
 
-const SidePanel = props => {
+const SidePanel = () => {
     const {state: store = {activeElement: {}, bodies: {}}} = useContext(StoreContext);
     const renderHtml = () => {
         try {

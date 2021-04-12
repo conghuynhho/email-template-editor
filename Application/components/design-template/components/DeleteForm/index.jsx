@@ -6,8 +6,8 @@ import {actionType} from 'Components/design-template/components/ContextStore/con
 
 const DeleteForm = () => {
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
-    const {toggleDeleteForm = {type: '', isDeleteFormOpening: false, id: '', rowID: '', message: ''}} = store;
-    const {type, id, rowID, message} = toggleDeleteForm;
+    const {toggleDeleteForm = {type: '', isDeleteFormOpening: false, id: '', rowID: '', message: '', numberOfColumns: 0}} = store;
+    const {type, id, rowID, message, numberOfColumns} = toggleDeleteForm;
     const onClickCancel = () => {
         dispatchStore({
             type: actionType.TOGGLE_DELETE_FORM,
@@ -30,7 +30,8 @@ const DeleteForm = () => {
                     type: type,
                     willBeDelete: true,
                     id: id, 
-                    rowID: rowID
+                    rowID: rowID,
+                    numberOfColumns: numberOfColumns
                 }
             }
         });

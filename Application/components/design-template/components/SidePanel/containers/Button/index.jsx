@@ -30,7 +30,7 @@ const Button = props => {
         translate = (lal) => lal
     } = props;
     const [activeTab, setActiveTab] = useState('side-panel-general-tab');
-
+    
     const mapButtonDataToConfig = (data, config) => {
         const general = getObjectPropSafely(()=>config.resource.general);
         const style = getObjectPropSafely(()=>config.resource.style);
