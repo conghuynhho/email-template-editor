@@ -1402,7 +1402,7 @@ export const nestedData = {
             'contentWidth': '600px',
             'contentAlign': 'center',
             'fontFamily': {
-                'label': 'montserrat',
+                'label': 'Montserrat',
                 'value': '\'Montserrat\',sans-serif',
                 'url': 'https://fonts.googleapis.com/css?family=Montserrat:400,700',
                 'defaultFont': true
@@ -3035,7 +3035,7 @@ export const designData = {
                     'contentWidth': '600px',
                     'contentAlign': 'center',
                     'fontFamily': {
-                        'label': 'montserrat',
+                        'label': 'Montserrat',
                         'value': '\'Montserrat\',sans-serif',
                         'url': 'https://fonts.googleapis.com/css?family=Montserrat:400,700',
                         'defaultFont': true

@@ -4,7 +4,7 @@ import {StoreContext} from 'Components/design-template/components/ContextStore';
 import Row from 'Components/design-template/components/Workspace/components/Row';
 import styles from 'Components/design-template/components/Workspace/styles.module.scss';
 import {CONSTANTS, typeDnD} from 'Components/design-template/constants';
-import {hierarchyDesignData} from 'Components/design-template/components/Workspace/utils';
+import {hierarchyDesignData, exportHtml} from 'Components/design-template/components/Workspace/utils';
 import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
 import {Icon} from '@antscorp/components';
@@ -13,9 +13,9 @@ import {getObjectPropSafely} from 'Utils';
 const Workspace = (props) => {
     const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
     const {viewMode, activeElement} = store;
-
-    console.log('store', store);
     const nestedData = hierarchyDesignData(store);
+
+    console.log('html',exportHtml(store));
     const {
         typeDraggingWorkspace = '',
         getSourceIndexes,

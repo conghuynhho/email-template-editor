@@ -634,9 +634,6 @@ const Style = props => {
                     }
                 }
 
-                // console.log((idParent + '.' || '') + (type ? key : idChild));
-                // console.log('hello', value);
-
                 const valueStyle = typeof value === 'boolean' ? value : (typeof value === 'object' ? value.label : value.replace(new RegExp(`${unit}`,'gi'), ''));
 
                 switch (element.type) {

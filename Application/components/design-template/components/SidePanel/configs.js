@@ -2871,25 +2871,25 @@ const sidePanelConfig = [
                                 {
                                     name: 'Andale Mono',
                                     label: 'Andale Mono',
-                                    value: '"andale mono", times',
+                                    value: '"Andale mono", times',
                                     defaultFont: true
                                 },
                                 {
                                     name: 'Arial',
                                     label: 'Arial',
-                                    value: 'arial, helvetica, sans-serif',
+                                    value: 'Arial, helvetica, sans-serif',
                                     defaultFont: true
                                 },
                                 {
                                     name: 'Arial Black',
                                     label: 'Arial Black',
-                                    value: '"arial black", "avant garde", arial',
+                                    value: '"Arial black", "avant garde", arial',
                                     defaultFont: true
                                 },
                                 {
                                     name: 'Book Antiqua',
                                     label: 'Book Antiqua',
-                                    value: '"book antiqua", palatino',
+                                    value: '"Book antiqua", palatino',
                                     defaultFont: true
                                 },
                                 {
@@ -2907,13 +2907,13 @@ const sidePanelConfig = [
                                 {
                                     name: 'Commic Sans MS',
                                     label: 'Commic Sans MS',
-                                    value: '"comic sans ms", sans-serif',
+                                    value: '"Comic sans ms", sans-serif',
                                     defaultFont: true
                                 },
                                 {
                                     name: 'Courier New',
                                     label: 'Courier New',
-                                    value: 'courier new", courier',
+                                    value: 'Courier new", courier',
                                     defaultFont: true
                                 },
                                 {
@@ -2925,13 +2925,13 @@ const sidePanelConfig = [
                                 {
                                     name: 'Georgia',
                                     label: 'Georgia',
-                                    value: 'georgia, palatino',
+                                    value: 'Georgia, palatino',
                                     defaultFont: true
                                 },
                                 {
                                     name: 'Helvetica',
                                     label: 'Helvetica',
-                                    value: 'helvetica, sans-serif',
+                                    value: 'Helvetica, sans-serif',
                                     defaultFont: true
                                 },
                                 {
@@ -2997,37 +2997,37 @@ const sidePanelConfig = [
                                 {
                                     name: 'Symbol',
                                     label: 'Symbol',
-                                    value: 'symbol',
+                                    value: 'Symbol',
                                     defaultFont: true
                                 },
                                 {
                                     name: 'Tahoma',
                                     label: 'Tahoma',
-                                    value: 'tahoma, arial, helvetica, sans-serif',
+                                    value: 'Tahoma, arial, helvetica, sans-serif',
                                     defaultFont: true
                                 },
                                 {
                                     name: 'Terminal',
                                     label: 'Terminal',
-                                    value: 'terminal, monaco',
+                                    value: 'Terminal, monaco',
                                     defaultFont: true
                                 },
                                 {
                                     name: 'Times New Roman',
                                     label: 'Times New Roman',
-                                    value: '"times new roman", times',
+                                    value: '"Times new roman", times',
                                     defaultFont: true
                                 },
                                 {
                                     name: 'Trebuchet Ms',
                                     label: 'Trebuchet Ms',
-                                    value: '"trebuchet ms", geneva',
+                                    value: '"Trebuchet ms", geneva',
                                     defaultFont: true
                                 },
                                 {
                                     name: 'Verdana',
                                     label: 'Verdana',
-                                    value: 'verdana, geneva',
+                                    value: 'Verdana, geneva',
                                     defaultFont: true
                                 }
                             ]
