@@ -388,8 +388,7 @@ export const getUnitAndValue = (string) => {
 };
 
 export const convertShortHandCSS = (shortHand) => {
-    const cleanShortHand = shortHand.remove(/\w/g);
-    const resultArray = cleanShortHand.split(' ');
+    const resultArray = shortHand.replace(/[^.0-9\s]/g,'').split(' ');
 
     const [a,b,c,d] = resultArray;
     const result = {};

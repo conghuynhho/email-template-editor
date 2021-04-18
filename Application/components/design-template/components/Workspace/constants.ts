@@ -1748,6 +1748,17 @@ export const designData = {
                             'href': '',
                             'target': '_blank'
                         }
+                        
+                        // 'name': 'email',
+                        // 'attrs': {
+                        //     'href': 'mailto:{{email}}?subject={{subject}}&body={{body}}'
+                        // },
+                        // 'values': {
+                        //     'email': 'conghuynhho12@gmail.com',
+                        //     'subject': 'HELLO',
+                        //     'body': 'HAHHAHAH'
+                        // }
+
                     },
                     'buttonColors': {
                         'color': '#463a41',
