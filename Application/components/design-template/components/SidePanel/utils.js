@@ -203,14 +203,14 @@ export const exportHTML = (nestedData) => {
 
                 return `
                     <div class="v-text-align" align=${btnTextAlign || 'center'}>
-                        <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:'Montserrat',sans-serif;"><tr><td class="v-text-align" style="font-family:'Montserrat',sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:${btnCalculatedHeight ?? '40px'}; v-text-anchor:middle; width:${btnCalculatedWidth ?? '134px'};" arcsize="0%" stroke="f" fillcolor=${btnBGColor || '#ffffff'}><w:anchorlock/><center style="color:${btnColor || '#000000'};font-family:'Montserrat',sans-serif;"><![endif]-->
+                        <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:${fontFamily?.value || '"Montserrat", sans-serif'};"><tr><td class="v-text-align" style="font-family:${fontFamily?.value || '"Montserrat", sans-serif'};" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:${btnCalculatedHeight ?? '40px'}; v-text-anchor:middle; width:${btnCalculatedWidth ?? '134px'};" arcsize="0%" stroke="f" fillcolor=${btnBGColor || '#ffffff'}><w:anchorlock/><center style="color:${btnColor || '#000000'};font-family:${fontFamily?.value || '"Montserrat", sans-serif'};"><![endif]-->
                         <a
                         href=${getHrefButton(btnHref) || '""'}
                         target=${btnTarget ?? '_blank'}
                         style="
                             box-sizing: border-box;
                             display: inline-block;
-                            font-family: 'Montserrat', sans-serif;
+                            font-family: ${fontFamily?.value || '"Montserrat", sans-serif'};
                             text-decoration: none;
                             -webkit-text-size-adjust: none;
                             text-align: center;
@@ -334,10 +334,10 @@ export const exportHTML = (nestedData) => {
                 const html = getObjectPropSafely(()=>content.values.html);
 
                 return `
-                    <table style="font-family:'Montserrat',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                    <table style="font-family:${fontFamily?.value || '"Montserrat", sans-serif'};" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
                         <tbody>
                             <tr>
-                                <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Montserrat',sans-serif;" align="left">
+                                <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:${fontFamily?.value || '"Montserrat", sans-serif'};" align="left">
                                     
                                     <div>
                                         ${html ?? ''}
@@ -494,7 +494,7 @@ export const exportHTML = (nestedData) => {
                         <table
                             ${imageID && imageID.indexOf('image') > 0 && `id:${imageID}`}
                             ${hideDesktop ? 'class: "hide-desktop"' : ''}
-                            style="${hideDesktop ? 'display:none; mso-hide: all;' : ''} font-family: 'Montserrat', sans-serif"
+                            style="${hideDesktop ? 'display:none; mso-hide: all;' : ''} font-family: ${fontFamily?.value || '"Montserrat", sans-serif'}"
                             role="presentation"
                             cellpadding="0"
                             cellspacing="0"
@@ -508,7 +508,7 @@ export const exportHTML = (nestedData) => {
                                         overflow-wrap: break-word;
                                         word-break: break-word;
                                         padding: ${containerPadding || '0px'};
-                                        font-family: 'Montserrat', sans-serif;
+                                        font-family: ${fontFamily?.value || '"Montserrat", sans-serif'};
                                         "
                                         align="left"
                                     >
