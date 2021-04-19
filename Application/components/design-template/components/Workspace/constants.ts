@@ -1500,16 +1500,7 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'phone': {
-                                    'number': '9707070707'
-                                },
-                                'mail': {
-                                    'mailTo': 'abc@xyz',
-                                    'subject': 'send email for',
-                                    'body': 'this is email content'
-                                },
-                                'text': 'NEWS',
-                                'actionType': 'callPhoneNumber'
+                                'text': 'NEWS'
                             },
                             {
                                 'key': '1606924033905',
@@ -1520,8 +1511,7 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'text': 'SERVICE',
-                                'actionType': 'sendSMS'
+                                'text': 'SERVICE'
                             }
                         ]
                     },
@@ -1613,8 +1603,7 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'text': 'ABOUT',
-                                'actionType': 'openWebsite'
+                                'text': 'ABOUT'
                             },
                             {
                                 'key': '1606924033905',
@@ -1625,8 +1614,7 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'text': 'CONTACT',
-                                'actionType': 'sendEmail'
+                                'text': 'CONTACT'
                             }
                         ]
                     },

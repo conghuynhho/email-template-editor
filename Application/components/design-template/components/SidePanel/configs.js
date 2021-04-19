@@ -2630,22 +2630,22 @@ const sidePanelConfig = [
                             type: 'SELECT_SINGLE',
                             id: 'actionType',
                             label: 'Action type',
-                            defaultValue: 'openWebsite',
+                            defaultValue: 'web',
                             options: [
                                 {
-                                    name: 'openWebsite',
+                                    name: 'web',
                                     label: 'Open website'
                                 },
                                 {
-                                    name: 'sendEmail',
+                                    name: 'email',
                                     label: 'Send Email'
                                 },
                                 {
-                                    name: 'callPhoneNumber',
+                                    name: 'phone',
                                     label: 'Call Phone Number'
                                 },
                                 {
-                                    name: 'sendSMS',
+                                    name: 'sms',
                                     label: 'Send SMS'
                                 }
                             ],
@@ -2664,7 +2664,7 @@ const sidePanelConfig = [
                             id: 'url',
                             label: 'URL',
                             defaultValue: '',
-                            keyShow: 'openWebsite',
+                            keyShow: 'web',
                             style: {
                                 styleParent: {
                                     width: '100%'
@@ -2678,7 +2678,7 @@ const sidePanelConfig = [
                             type: 'SELECT_SINGLE',
                             id: 'target',
                             label: 'Target',
-                            keyShow: 'openWebsite',
+                            keyShow: 'web',
                             defaultValue: '_blank',
                             options: [
                                 {
@@ -2702,10 +2702,10 @@ const sidePanelConfig = [
                         // send email
                         {
                             type: 'TEXT_INPUT',
-                            id: 'mailTo',
+                            id: 'email',
                             label: 'Mail To',
                             defaultValue: '',
-                            keyShow: 'sendEmail',
+                            keyShow: 'email',
                             style: {
                                 styleParent: {
                                     width: '100%'
@@ -2719,7 +2719,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'subject',
                             label: 'Subject',
-                            keyShow: 'sendEmail',
+                            keyShow: 'email',
                             defaultValue: '',
                             style: {
                                 styleParent: {
@@ -2734,7 +2734,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'body',
                             label: 'Body',
-                            keyShow: 'sendEmail',
+                            keyShow: 'email',
                             defaultValue: '',
                             style: {
                                 styleParent: {
@@ -2750,7 +2750,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'phoneCall',
                             label: 'Phone',
-                            keyShow: 'callPhoneNumber',
+                            keyShow: 'phone',
                             defaultValue: '',
                             style: {
                                 styleParent: {
@@ -2766,7 +2766,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'phoneSendSMS',
                             label: 'Phone',
-                            keyShow: 'sendSMS',
+                            keyShow: 'sms',
                             defaultValue: '',
                             style: {
                                 styleParent: {
