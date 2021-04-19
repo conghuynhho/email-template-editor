@@ -66,7 +66,7 @@ const ShortcutBar = () => {
                         className={classnames(
                             styles['element-shortcut'], 
                             styles['view'],
-                            {[styles['active']] : !isOpenPreview}
+                            {[styles['active']] : isOpenPreview}
                         )}
                         onClick={onClickPreview}
                     >           

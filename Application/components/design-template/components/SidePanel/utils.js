@@ -119,7 +119,8 @@ export const exportHTML = (nestedData) => {
     }
     
     const bodyValues = getObjectPropSafely(()=>nestedData.body.values);
-    // const contentWidth = getObjectPropSafely(()=>bodyValues.contentWidth);
+    const contentWidth = getObjectPropSafely(()=>bodyValues.contentWidth);
+    const contentWidthNumber = Number(contentWidth.replace('px',''));
     // const contentAlign = getObjectPropSafely(()=>bodyValues.contentAlign);
     const preheaderText = getObjectPropSafely(()=>bodyValues.preheaderText);
     const fontFamily = getObjectPropSafely(()=>bodyValues.fontFamily);
@@ -430,7 +431,7 @@ export const exportHTML = (nestedData) => {
                                 height: auto;
                                 float: none;
                                 width: ${imageAutoWidth ? '100%' : imageMaxWidth };
-                                max-width: ${(columnWidth * percentWidth) - rightPadding - leftPadding } ;
+                                max-width: ${(columnWidth * percentWidth) - Number(rightPadding) - Number(leftPadding) } ;
                             "
                             width="138.6"
                             class="v-src-width v-src-max-width"
@@ -480,7 +481,7 @@ export const exportHTML = (nestedData) => {
                 const columnPadding = getObjectPropSafely(()=>column.values.padding);
                 const border = getObjectPropSafely(()=>column.values.border);
                 const columnBGColor = getObjectPropSafely(()=>column.values.backgroundColor);
-                const columnWidth = 600 * cellPercent;
+                const columnWidth = contentWidthNumber * cellPercent;
 
                 const contents = (getObjectPropSafely(()=>column.contents).map(content => {
                     const containerPadding = getObjectPropSafely(()=> content.values.containerPadding);
@@ -522,7 +523,7 @@ export const exportHTML = (nestedData) => {
                 }));
 
                 return `
-                    <!--[if (mso)|(IE)]><td align="center" width="${600 * cellPercent}" style=" ${columnBGColor ? `background-color: ${columnBGColor}` : ''} width: ${columnWidth}px;padding: ${columnPadding || '0px'}; ${getBorderStyle(border)}" valign="top"><![endif]-->
+                    <!--[if (mso)|(IE)]><td align="center" width="${columnWidth}" style=" ${columnBGColor ? `background-color: ${columnBGColor}` : ''} width: ${columnWidth}px;padding: ${columnPadding || '0px'}; ${getBorderStyle(border)}" valign="top"><![endif]-->
                         <div
                             class="u-col u-col-${widthClassName}"
                             style="
@@ -568,7 +569,7 @@ export const exportHTML = (nestedData) => {
                         style="
                             margin: 0 auto;
                             min-width: 320px;
-                            max-width: 600px;
+                            max-width: ${contentWidth};
                             overflow-wrap: break-word;
                             word-wrap: break-word;
                             word-break: break-word;
@@ -584,7 +585,7 @@ export const exportHTML = (nestedData) => {
                                 ${generateBGImage(rowBGImage)}
                             "
                         >
-                            <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:${rowPadding || '0px'};background-color:${rowBGColor || 'transparent'};" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: ${rowContentBGColor || 'transparent'};"><![endif]-->
+                            <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:${rowPadding || '0px'};background-color:${rowBGColor || 'transparent'};" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width: ${contentWidth};"><tr style="background-color: ${rowContentBGColor || 'transparent'};"><![endif]-->
                             ${columns.join('')}
                             <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
                         </div>
@@ -687,34 +688,34 @@ export const exportHTML = (nestedData) => {
                     text-align: center !important;
                     }
                 }
-                @media only screen and (min-width: 620px) {
+                @media only screen and (min-width:  ${(contentWidthNumber + 20) || 620 }px) {
                     .u-row {
-                    width: 600px !important;
+                    width: ${contentWidth || '600px'} !important;
                     }
                     .u-row .u-col {
                     vertical-align: top;
                     }
                     .u-row .u-col-16p67 {
-                        width: 100.02000000000002px !important;
+                        width: ${ (contentWidthNumber / 6)}px !important;
                     }
                     .u-row .u-col-66p67 {
-                        width: 400.02px !important;
+                        width: ${ (contentWidthNumber * 4 / 6)}px !important;
                     }
                     .u-row .u-col-25{
-                        width: 150px !important;
+                        width: ${(contentWidthNumber / 4)}px !important;
                     }
                     .u-row .u-col-33p33 {
-                    width: 199.98px !important;
+                    width: ${ (contentWidthNumber / 3)}px !important;
                     }
                     .u-row .u-col-50 {
-                    width: 300px !important;
+                    width: ${(contentWidthNumber / 2)}px !important;
                     }
                     .u-row .u-col-100 {
-                    width: 600px !important;
+                    width: ${(contentWidthNumber)}px !important;
                     }
                 }
 
-                @media (max-width: 620px) {
+                @media (max-width: ${contentWidthNumber + 20}px) {
                     .u-row-container {
                     max-width: 100% !important;
                     padding-left: 0px !important;
