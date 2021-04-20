@@ -1500,16 +1500,7 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'phone': {
-                                    'number': '9707070707'
-                                },
-                                'mail': {
-                                    'mailTo': 'abc@xyz',
-                                    'subject': 'send email for',
-                                    'body': 'this is email content'
-                                },
-                                'text': 'NEWS',
-                                'actionType': 'callPhoneNumber'
+                                'text': 'NEWS'
                             },
                             {
                                 'key': '1606924033905',
@@ -1520,8 +1511,7 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'text': 'SERVICE',
-                                'actionType': 'sendSMS'
+                                'text': 'SERVICE'
                             }
                         ]
                     },
@@ -1613,8 +1603,7 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'text': 'ABOUT',
-                                'actionType': 'openWebsite'
+                                'text': 'ABOUT'
                             },
                             {
                                 'key': '1606924033905',
@@ -1625,8 +1614,7 @@ export const designData = {
                                         'target': '_self'
                                     }
                                 },
-                                'text': 'CONTACT',
-                                'actionType': 'sendEmail'
+                                'text': 'CONTACT'
                             }
                         ]
                     },
@@ -1649,6 +1637,26 @@ export const designData = {
                 'location': {
                     'collection': 'contents',
                     'id': '12'
+                }
+            },
+            '13': {
+                'location': {
+                    'collection': 'contents',
+                    'id': '12'
+                },
+                'type': 'html',
+                'values': {
+                    'html': '<strong>Hello, world!</strong>',
+                    'containerPadding': '10px',
+                    'hideOnDesktop': true,
+                    '_meta': {
+                        'htmlID': 'u_content_html_1',
+                        'htmlClassNames': 'u_content_html'
+                    },
+                    'selectable': true,
+                    'draggable': true,
+                    'duplicatable': true,
+                    'deletable': true
                 }
             },
             '15': {
@@ -1728,6 +1736,17 @@ export const designData = {
                             'href': '',
                             'target': '_blank'
                         }
+                        
+                        // 'name': 'email',
+                        // 'attrs': {
+                        //     'href': 'mailto:{{email}}?subject={{subject}}&body={{body}}'
+                        // },
+                        // 'values': {
+                        //     'email': 'conghuynhho12@gmail.com',
+                        //     'subject': 'HELLO',
+                        //     'body': 'HAHHAHAH'
+                        // }
+
                     },
                     'buttonColors': {
                         'color': '#463a41',
@@ -1742,7 +1761,20 @@ export const designData = {
                     'textAlign': 'center',
                     'lineHeight': '120%',
                     'padding': '12px 22px',
-                    'border': {},
+                    'border': {
+                        // 'borderBottomColor': '#ff3d3d',
+                        // 'borderBottomStyle': 'solid',
+                        // 'borderBottomWidth': '5px',
+                        // 'borderLeftColor': '#ff3d3d',
+                        // 'borderLeftStyle': 'solid',
+                        // 'borderLeftWidth': '5px',
+                        // 'borderRightColor': '#ff3d3d',
+                        // 'borderRightStyle': 'solid',
+                        // 'borderRightWidth': '5px',
+                        // 'borderTopColor': '#ff3d3d',
+                        // 'borderTopStyle': 'solid',
+                        // 'borderTopWidth': '5px'
+                    },
                     'borderRadius': '0px',
                     'hideDesktop': false,
                     'hideMobile': false,
@@ -2454,6 +2486,7 @@ export const designData = {
             },
             '14': {
                 'contents': [
+                    '13',
                     '15',
                     '16',
                     '17'

@@ -1,0 +1,30 @@
+.preview-modal-style{
+}
+
+.html-content-styles{
+  width: 70%;
+  background-color: none;
+  margin: 0 auto;
+  max-width: 1300px;
+}
+.html-iframe{
+  width: 100%;
+  margin: 0 auto;
+  height: 78vh;
+  padding: 0;
+  outline: none !important; 
+  border: 1px solid rgb(193, 193, 193);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+}
+
+.desktop-status-bar{
+  width: 100%;
+  height: 30px;
+  background-image: url('https://editor.unlayer.com/1.2.29/images/desktop.svg');
+  background-color: #F2F2F2;
+  background-repeat: no-repeat;
+  border: 1px solid rgb(193, 193, 193);;
+  border-radius: 4px 4px 0 0;
+  background-position: 10px center;
+}

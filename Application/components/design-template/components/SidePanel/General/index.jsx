@@ -38,6 +38,8 @@ import {getObjectPropSafely, random} from 'Utils/index.ts';
 import {
     getContentIDFromHtmlID
 } from 'Components/design-template/components/Workspace/utils';
+import {getActionType, getTarget, getTypeOfImage} from '../utils';
+import {values} from 'lodash';
 
 const PATH = 'Components/design-template/components/SidePanel/General/index.jsx';
 
@@ -175,11 +177,63 @@ const Style = props => {
                 break;
             }
             case `actionType${itemIndex}`: {
-                const actionTypeMenu = getObjectPropSafely(() => content.values.menu.items[itemIndex].actionType) || '';
+                const name = getObjectPropSafely(() => content.values.menu.items[itemIndex].link.name) || '';
 
-                if (receivedValues && receivedValues !== actionTypeMenu) {
+                if (receivedValues && receivedValues !== name) {
                     const newContent = produce(content, draft => {
-                        draft.values.menu.items[itemIndex].actionType = receivedValues;
+                        let link = {};
+                        
+                        switch (receivedValues) {
+                            case 'web': {
+                                link = {
+                                    name: 'web',
+                                    values: {
+                                        href: '',
+                                        target: '_self'
+                                    }
+                                };
+                                break;
+                            }
+                            case 'email': {
+                                link = {
+                                    attrs: {
+                                        'href': 'mailto:{{email}}?subject={{subject}}&body={{body}}'
+                                    },
+                                    name: 'email',
+                                    values: {
+                                        email: '',
+                                        body: '',
+                                        subject: ''
+                                    }
+                                };
+                                break;
+                            }
+                            case 'phone': {
+                                link = {
+                                    attrs: {
+                                        'href': 'tel:{{phone}}'
+                                    },
+                                    name: 'phone',
+                                    values: {
+                                        phone: ''
+                                    }
+                                };
+                                break;
+                            }
+                            case 'sms': {
+                                link = {
+                                    attrs: {
+                                        'href': 'sms:{{phone}}'
+                                    },
+                                    name: 'sms',
+                                    values: {
+                                        phone: ''
+                                    }
+                                };
+                                break;
+                            }
+                        }
+                        draft.values.menu.items[itemIndex].link = link;
                     });
 
                     dispatchStore({
@@ -228,17 +282,17 @@ const Style = props => {
                 }
                 break;
             }
-            case `mailTo${itemIndex}`:
+            case `email${itemIndex}`:
             case `subject${itemIndex}`:
             case `body${itemIndex}`: {
                 const newIdChild = idChild.replace(itemIndex + '', '');
 
-                const existValue = getObjectPropSafely(() => content.values.menu.items[itemIndex].mail[newIdChild]) || '';
+                const existValue = getObjectPropSafely(() => content.values.menu.items[itemIndex].link.values[newIdChild]) || '';
 
                 if (receivedValues && receivedValues !== existValue) {
                     const newContent = produce(content, draft => {
-                        draft.values.menu.items[itemIndex].mail = {
-                            ...draft.values.menu.items[itemIndex].mail,
+                        draft.values.menu.items[itemIndex].link.values = {
+                            ...draft.values.menu.items[itemIndex].link.values,
                             [newIdChild]: receivedValues
                         };
                     });
@@ -255,13 +309,11 @@ const Style = props => {
             }
             case `phoneCall${itemIndex}`:
             case `phoneSendSMS${itemIndex}`: {
-                const phoneNumber = getObjectPropSafely(() => content.values.menu.items[itemIndex].phone.number) || '';
+                const phone = getObjectPropSafely(() => content.values.menu.items[itemIndex].link.values.phone) || '';
                 
-                if (receivedValues && receivedValues !== phoneNumber) {
+                if (receivedValues && receivedValues !== phone) {
                     const newContent = produce(content, draft => {
-                        draft.values.menu.items[itemIndex].phone = {
-                            number: receivedValues
-                        };
+                        draft.values.menu.items[itemIndex].link.values.phone = receivedValues;
                     });
 
                     dispatchStore({
@@ -295,7 +347,7 @@ const Style = props => {
         }
     };
 
-    const switchCaseComponent = (element, idParent, numberOfMenu = 0, itemIndex = 0) => {
+    const switchCaseComponent = (element, key, numberOfMenu = 0, itemIndex = 0) => {
         try {
             if (element && Object.values(element).length) {
                 const {
@@ -304,6 +356,7 @@ const Style = props => {
                     tooltip = '',
                     defaultValue,
                     id: idChild = '',
+                    keyParent: idParent = '',
                     style = {},
                     message = '',
                     listBlock = [],
@@ -318,6 +371,12 @@ const Style = props => {
                     isShowMessageRight = false
                 } = element;
 
+                // console.log(values, 'values');
+                // console.log(idChild, 'idChild');
+                // console.log(idParent, 'idParent');
+                // console.log(key, 'key');
+                // console.log(element.type, 'elementType');
+
                 let value = '';
                 let actionTypeMenu = '';
 
@@ -328,10 +387,24 @@ const Style = props => {
                     case 'preheaderText': value = getObjectPropSafely(() => values.preheaderText); break;
                     case 'linkColor': value = getObjectPropSafely(() => values.linkStyle.linkColor); break;
                     case 'linkUnderline': value = getObjectPropSafely(() => values.linkStyle.linkUnderline) ? 'underline' : 'none'; break;
+                    case 'selectRadioImage': value = getTypeOfImage(getObjectPropSafely(()=>values.src.url), options); break;
                     default:
                         value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${idChild}`) || '');
                         break;
                 }
+
+                if (key === 'action') {
+                    switch (idChild) {
+                        case 'name':
+                            value = getActionType(value);
+                            break;
+                        case 'target': 
+                            value = getTarget(value);
+                            break;
+                        default:
+                            break;
+                    }
+                } 
 
                 if (numberOfMenu > 0) {
                     for (let i = 0; i < numberOfMenu; ++i) {
@@ -339,48 +412,47 @@ const Style = props => {
                         switch (idChild) {
                             case `menuText${i}`: {
                                 value = getObjectPropSafely(() => menuItems[i].text) || ''; 
-                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].link.name) || 'web';
                                 break;
                             }
                             case `actionType${i}`: {
-                                value = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite'; 
+                                value = getObjectPropSafely(() => menuItems[i].link.name) || 'web'; 
                                 break;
                             }
                             case `url${i}`: {
-                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].link.name) || 'web';
                                 value = getObjectPropSafely(() => menuItems[i].link.values.href) || ''; 
                                 break;
                             }
-                            case `mailTo${i}`: {
-                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
-                                value = getObjectPropSafely(() =>  menuItems[i].mail.mailTo) || '';
+                            case `email${i}`: {
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].link.name) || 'web';
+                                value = getObjectPropSafely(() =>  menuItems[i].link.values.email) || '';
                                 break;
                             }
                             case `subject${i}`: {
-                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
-                                value = getObjectPropSafely(() => menuItems[i].mail.subject) || ''; 
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].link.name) || 'web';
+                                value = getObjectPropSafely(() => menuItems[i].link.values.subject) || ''; 
                                 break;
                             }
                             case `body${i}`: {
-                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
-                                value = getObjectPropSafely(() => menuItems[i].mail.body) || ''; 
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].link.name) || 'web';
+                                value = getObjectPropSafely(() => menuItems[i].link.values.body) || ''; 
                                 break;
                             }
                             case `phoneCall${i}`:
                             case `phoneSendSMS${i}`: {
-                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
-                                value = getObjectPropSafely(() => menuItems[i].phone.number) || ''; 
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].link.name) || 'web';
+                                value = getObjectPropSafely(() => menuItems[i].link.values.phone) || ''; 
                                 break;
                             }
                             case `target${i}`: {
-                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].actionType) || 'openWebsite';
+                                actionTypeMenu = getObjectPropSafely(() => menuItems[i].link.name) || 'web';
                                 value = getObjectPropSafely(() => menuItems[i].link.values.target) || '';
                             }
                         } 
                     }
-                }
-   
-                const valueStyle = typeof value === 'boolean' ? value : value.replace(new RegExp(`${unit}`,'gi'), '');
+                } 
+                const valueStyle = typeof value === 'boolean' ? value : (typeof value === 'string' ? value.replace(new RegExp(`${unit}`,'gi'), '') : value );
 
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
@@ -431,7 +503,7 @@ const Style = props => {
                         return (
                             <SelectRadio
                                 styleLabel={{height: 10}}
-                                defaultName={defaultValue}
+                                defaultName={valueStyle || defaultValue}
                                 sources={options}
                             // onChange={handleOnChange}
                             />
@@ -574,10 +646,10 @@ const Style = props => {
 
                         if (keyShow) {
                             switch (keyShow) {
-                                case 'openWebsite': isShow = keyShow === actionTypeMenu ? true : false; break;
-                                case 'sendEmail': isShow = keyShow === actionTypeMenu ? true : false; break;
-                                case 'callPhoneNumber': isShow = keyShow === actionTypeMenu ? true : false; break;
-                                case 'sendSMS': isShow = keyShow === actionTypeMenu ? true : false; break;
+                                case 'web': isShow = keyShow === actionTypeMenu ? true : false; break;
+                                case 'email': isShow = keyShow === actionTypeMenu ? true : false; break;
+                                case 'phone': isShow = keyShow === actionTypeMenu ? true : false; break;
+                                case 'sms': isShow = keyShow === actionTypeMenu ? true : false; break;
                             }
                         }
 

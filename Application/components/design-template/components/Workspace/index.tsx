@@ -9,13 +9,13 @@ import {actionType} from 'Components/design-template/components/ContextStore/con
 import {Droppable, Draggable} from 'react-beautiful-dnd';
 import {Icon} from '@antscorp/components';
 import {getObjectPropSafely} from 'Utils';
+// import {exportHTML} from 'Components/design-template/components/SidePanel/utils.js';
 
 const Workspace = (props) => {
     const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
     const {viewMode, activeElement} = store;
     const nestedData = hierarchyDesignData(store);
 
-    console.log('html',exportHtml(store));
     const {
         typeDraggingWorkspace = '',
         getSourceIndexes,

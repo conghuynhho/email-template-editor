@@ -1305,13 +1305,18 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'SELECT_SINGLE',
-                            id: 'actionType',
+                            id: 'name',
+                            keyParent: 'href',
                             label: 'Action type',
                             defaultValue: 1,
                             options: [
                                 {
                                     name: 1,
                                     label: 'Open website'
+                                },
+                                {
+                                    name: 2,
+                                    label: 'Same target'
                                 }
                             ],
                             style: {
@@ -1322,7 +1327,8 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'TEXT_INPUT',
-                            id: 'url',
+                            id: 'href',
+                            keyParent: 'href.values',
                             label: 'URL',
                             defaultValue: '',
                             style: {
@@ -1336,6 +1342,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'SELECT_SINGLE',
+                            keyParent: 'href.values',
                             id: 'target',
                             label: 'Target',
                             defaultValue: 1,
@@ -1360,8 +1367,9 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'FILL_COLOR',
-                            id: 'backgroundColorButton',
+                            id: 'backgroundColor',
                             label: 'Background color',
+                            keyParent: 'buttonColors',
                             defaultValue: '#F75F2D',
                             style: {
                                 styleParent: {
@@ -1371,8 +1379,9 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'FILL_COLOR',
-                            id: 'textColorButton',
+                            id: 'color',
                             label: 'Text color',
+                            keyParent: 'buttonColors',
                             defaultValue: '#FFFFFF',
                             style: {
                                 styleParent: {
@@ -1384,6 +1393,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'width',
                             label: 'Width',
+                            keyParent: 'size',
                             defaultValue: '100',
                             unit: '%',
                             isShowUnit: true,
@@ -1399,6 +1409,7 @@ const sidePanelConfig = [
                         {
                             type: 'SWITCH',
                             id: 'autoWidth',
+                            keyParent: 'size',
                             isShowMessageLeft: true,
                             message: 'Auto width',
                             defaultValue: true,
@@ -1410,7 +1421,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'ALIGNMENT',
-                            id: 'alignments',
+                            id: 'textAlign',
                             label: 'Alignments',
                             defaultValue: 'left',
                             style: {
@@ -1457,26 +1468,27 @@ const sidePanelConfig = [
                                 }
                             }
                         },
-                        // {
-                        //     type: 'TEXT_INPUT',
-                        //     id: 'buttonPaddingText',
-                        //     label: '',
-                        //     unit: 'px',
-                        //     isShowUnit: true,
-                        //     defaultValue: '10',
-                        //     style: {
-                        //         styleParent: {
-                        //             width: '100%'
-                        //         },
-                        //         styleChild: {
-                        //             width: 40
-                        //         }
-                        //     }
-                        // },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'padding',
+                            label: 'Button Padding',
+                            unit: 'px',
+                            keyShow: 'padding',
+                            isShowUnit: true,
+                            defaultValue: '10',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
                         {
                             type: 'COMPONENT_CHILD',
-                            id: 'childButtonPadding',
-                            // keyShow: 'moreOptionsButtonPadding',
+                            id: 'padding',
+                            keyShow: 'padding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',
@@ -1485,6 +1497,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'buttonPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -1501,6 +1514,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'buttonPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -1517,6 +1531,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'buttonPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -1533,6 +1548,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'buttonPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -1551,9 +1567,11 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'TEXT_INPUT',
-                            id: 'roundedBorder',
+                            id: 'borderRadius',
                             label: 'Rounded border',
                             defaultValue: '5',
+                            unit: 'px',
+                            isShowUnit: true,
                             style: {
                                 styleParent: {
                                     width: '100%'
@@ -1565,7 +1583,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'LABEL',
-                            id: 'border',
+                            id: 'borderLabel',
                             label: 'Border',
                             style: {
                                 styleParent: {
@@ -1584,7 +1602,7 @@ const sidePanelConfig = [
                                     width: '40%'
                                 }
                             }
-                        },
+                        },                       
                         // {
                         //     type: 'FILL_COLOR',
                         //     id: 'borderColorButton',
@@ -1634,8 +1652,8 @@ const sidePanelConfig = [
                         // },
                         {
                             type: 'COMPONENT_CHILD',
-                            id: 'childBorder',
-                            // keyShow: 'moreOptionsBorder',
+                            id: 'border',
+                            // keyShow: 'isMoreOptionBorder',
                             elementChild: [
                                 {
                                     type: 'LABEL',
@@ -1649,7 +1667,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderTop',
+                                    id: 'borderTopStyle',
                                     defaultValue: 'solid',
                                     tooltip: 'Border top',
                                     options: [
@@ -1692,7 +1710,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'inputBorderTop',
+                                    id: 'borderTopWidth',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -1707,7 +1725,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBorderTop',
+                                    id: 'borderTopColor',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -1727,7 +1745,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderRight',
+                                    id: 'borderRightStyle',
                                     defaultValue: 'solid',
                                     tooltip: 'Border right',
                                     options: [
@@ -1770,7 +1788,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'inputBorderRight',
+                                    id: 'borderRightWidth',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -1785,7 +1803,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBorderRight',
+                                    id: 'borderRightColor',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -1805,7 +1823,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderBottom',
+                                    id: 'borderBottomStyle',
                                     defaultValue: 'solid',
                                     tooltip: 'Border bottom',
                                     options: [
@@ -1848,7 +1866,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'input',
+                                    id: 'borderBottomWidth',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -1863,7 +1881,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBoderBottom',
+                                    id: 'borderBottomColor',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -1883,7 +1901,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'LINE_STYLE',
-                                    id: 'borderLeft',
+                                    id: 'borderLeftStyle',
                                     defaultValue: 'solid',
                                     tooltip: 'Border left',
                                     options: [
@@ -1926,7 +1944,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'TEXT_INPUT',
-                                    id: 'inputBorderLeft',
+                                    id: 'borderLeftWidth',
                                     defaultValue: '1',
                                     unit: 'px',
                                     isShowUnit: true,
@@ -1941,7 +1959,7 @@ const sidePanelConfig = [
                                 },
                                 {
                                     type: 'FILL_COLOR',
-                                    id: 'colorBorderLeft',
+                                    id: 'borderLeftColor',
                                     defaultValue: '#000000',
                                     style: {
                                         styleParent: {
@@ -1957,15 +1975,38 @@ const sidePanelConfig = [
                             }
                         },
                         {
+                            type: 'LABEL',
+                            id: 'textContainerPaddingLabel',
+                            label: 'Container padding',
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'SWITCH',
+                            id: 'moreOptionsContainerPadding',
+                            isShowMessageLeft: true,
+                            message: 'More options',
+                            defaultValue: false,
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        },
+                        {
                             type: 'TEXT_INPUT',
                             id: 'containerPadding',
-                            label: 'Container padding',
+                            // label: 'Container padding',
+                            keyShow: 'containerPadding',
                             defaultValue: '10',
                             unit: 'px',
                             isShowUnit: true,
                             style: {
                                 styleParent: {
-                                    width: '50%'
+                                    width: '100%'
                                 },
                                 styleChild: {
                                     width: 40
@@ -1973,14 +2014,82 @@ const sidePanelConfig = [
                             }
                         },
                         {
-                            type: 'SWITCH',
-                            id: 'moreOptionsPaddingButton',
-                            isShowMessageLeft: true,
-                            message: 'More options',
-                            defaultValue: false,
+                            type: 'COMPONENT_CHILD',
+                            id: 'containerPadding',
+                            keyShow: 'containerPadding',
+                            elementChild: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'top',
+                                    label: 'Top',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'right',
+                                    label: 'Right',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'bottom',
+                                    label: 'Bottom',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'left',
+                                    label: 'Left',
+                                    defaultValue: '10',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                }
+                            ],
                             style: {
                                 styleParent: {
-                                    width: '50%'
+                                    width: '100%'
                                 }
                             }
                         }
@@ -2150,7 +2259,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'containerPadding',
                             label: '',
-                            keyShow: 'moreOptions',
+                            keyShow: 'containerPadding',
                             defaultValue: '10',
                             unit: 'px',
                             isShowUnit: true,
@@ -2166,7 +2275,7 @@ const sidePanelConfig = [
                         {
                             type: 'COMPONENT_CHILD',
                             id: 'containerPadding',
-                            keyShow: 'moreOptions',
+                            keyShow: 'containerPadding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',
@@ -2175,6 +2284,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2191,6 +2301,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2207,6 +2318,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2223,6 +2335,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2345,26 +2458,27 @@ const sidePanelConfig = [
                                 }
                             }
                         },
-                        // {
-                        //     type: 'TEXT_INPUT',
-                        //     id: 'textContainerPaddingText',
-                        //     label: '',
-                        //     defaultValue: '10',
-                        //     unit: 'px',
-                        //     isShowUnit: true,
-                        //     style: {
-                        //         styleParent: {
-                        //             width: '100%'
-                        //         },
-                        //         styleChild: {
-                        //             width: 40
-                        //         }
-                        //     }
-                        // }
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'containerPadding',
+                            label: '',
+                            defaultValue: '10',
+                            keyShow: 'containerPadding',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
                         {
                             type: 'COMPONENT_CHILD',
-                            id: 'childTextPadding',
-                            // keyShow: 'moreOptionsButtonPadding',
+                            id: 'containerPadding',
+                            keyShow: 'containerPadding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',
@@ -2373,6 +2487,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2389,6 +2504,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2405,6 +2521,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2421,6 +2538,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -2512,22 +2630,22 @@ const sidePanelConfig = [
                             type: 'SELECT_SINGLE',
                             id: 'actionType',
                             label: 'Action type',
-                            defaultValue: 'openWebsite',
+                            defaultValue: 'web',
                             options: [
                                 {
-                                    name: 'openWebsite',
+                                    name: 'web',
                                     label: 'Open website'
                                 },
                                 {
-                                    name: 'sendEmail',
+                                    name: 'email',
                                     label: 'Send Email'
                                 },
                                 {
-                                    name: 'callPhoneNumber',
+                                    name: 'phone',
                                     label: 'Call Phone Number'
                                 },
                                 {
-                                    name: 'sendSMS',
+                                    name: 'sms',
                                     label: 'Send SMS'
                                 }
                             ],
@@ -2546,7 +2664,7 @@ const sidePanelConfig = [
                             id: 'url',
                             label: 'URL',
                             defaultValue: '',
-                            keyShow: 'openWebsite',
+                            keyShow: 'web',
                             style: {
                                 styleParent: {
                                     width: '100%'
@@ -2560,7 +2678,7 @@ const sidePanelConfig = [
                             type: 'SELECT_SINGLE',
                             id: 'target',
                             label: 'Target',
-                            keyShow: 'openWebsite',
+                            keyShow: 'web',
                             defaultValue: '_blank',
                             options: [
                                 {
@@ -2584,10 +2702,10 @@ const sidePanelConfig = [
                         // send email
                         {
                             type: 'TEXT_INPUT',
-                            id: 'mailTo',
+                            id: 'email',
                             label: 'Mail To',
                             defaultValue: '',
-                            keyShow: 'sendEmail',
+                            keyShow: 'email',
                             style: {
                                 styleParent: {
                                     width: '100%'
@@ -2601,7 +2719,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'subject',
                             label: 'Subject',
-                            keyShow: 'sendEmail',
+                            keyShow: 'email',
                             defaultValue: '',
                             style: {
                                 styleParent: {
@@ -2616,7 +2734,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'body',
                             label: 'Body',
-                            keyShow: 'sendEmail',
+                            keyShow: 'email',
                             defaultValue: '',
                             style: {
                                 styleParent: {
@@ -2632,7 +2750,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'phoneCall',
                             label: 'Phone',
-                            keyShow: 'callPhoneNumber',
+                            keyShow: 'phone',
                             defaultValue: '',
                             style: {
                                 styleParent: {
@@ -2648,7 +2766,7 @@ const sidePanelConfig = [
                             type: 'TEXT_INPUT',
                             id: 'phoneSendSMS',
                             label: 'Phone',
-                            keyShow: 'sendSMS',
+                            keyShow: 'sms',
                             defaultValue: '',
                             style: {
                                 styleParent: {
@@ -3441,6 +3559,7 @@ const sidePanelConfig = [
                         {
                             type: 'SELECT_RADIO',
                             id: 'selectRadioImage',
+                            keyParent: 'src',
                             defaultValue: 'uploadImage',
                             options: [
                                 {
@@ -3470,7 +3589,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'TEXT_INPUT',
-                            id: 'alternalText',
+                            id: 'altText',
                             label: 'Alternal Text',
                             defaultValue: 'Banner',
                             style: {
@@ -3490,7 +3609,8 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'SELECT_SINGLE',
-                            id: 'actionType',
+                            id: 'name',
+                            keyParent: 'href',
                             label: 'Action Type',
                             defaultValue: 1,
                             options: [
@@ -3525,6 +3645,7 @@ const sidePanelConfig = [
                         {
                             type: 'SELECT_SINGLE',
                             id: 'target',
+                            keyParent: 'href',
                             label: 'Target',
                             defaultValue: 1,
                             options: [
@@ -3551,9 +3672,11 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'TEXT_INPUT',
-                            id: 'width',
-                            label: 'Top',
+                            keyParent: 'src',
+                            id: 'maxWidth',
+                            label: 'Auto Width',
                             defaultValue: '100',
+                            keyShow: 'src.autoWidth',
                             unit: '%',
                             isShowUnit: true,
                             style: {
@@ -3567,6 +3690,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'SWITCH',
+                            keyParent: 'src',
                             id: 'autoWidth',
                             isShowMessageLeft: true,
                             message: 'Auto Width',
@@ -3579,7 +3703,7 @@ const sidePanelConfig = [
                         },
                         {
                             type: 'ALIGNMENT',
-                            id: 'alignments',
+                            id: 'textAlign',
                             label: 'Alignments',
                             defaultValue: 'left',
                             style: {
@@ -3610,26 +3734,27 @@ const sidePanelConfig = [
                                 }
                             }
                         },
-                        // {
-                        //     type: 'TEXT_INPUT',
-                        //     id: 'imageContainerPaddingText',
-                        //     label: '',
-                        //     defaultValue: '10',
-                        //     unit: 'px',
-                        //     isShowUnit: true,
-                        //     style: {
-                        //         styleParent: {
-                        //             width: '100%'
-                        //         },
-                        //         styleChild: {
-                        //             width: 40
-                        //         }
-                        //     }
-                        // },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'containerPadding',
+                            label: '',
+                            keyShow: 'containerPadding',
+                            defaultValue: '10',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
                         {
                             type: 'COMPONENT_CHILD',
-                            id: 'childImagePadding',
-                            // keyShow: 'moreOptionsButtonPadding',
+                            id: 'containerPadding',
+                            keyShow: 'containerPadding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',
@@ -3638,6 +3763,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3654,6 +3780,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3670,6 +3797,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3686,6 +3814,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3732,11 +3861,11 @@ const sidePanelConfig = [
         resource: {
             style: [
                 {
-                    id: 'html',
+                    id: 'htmlContent',
                     elements: [
                         {
                             type: 'TEXT_AREA',
-                            id: 'htmlContent',
+                            id: 'html',
                             label: 'HTML Content',
                             defaultValue: '',
                             style: {
@@ -3771,30 +3900,33 @@ const sidePanelConfig = [
                                 }
                             }
                         },
-                        // {
-                        //     type: 'TEXT_INPUT',
-                        //     id: 'htmlContainerPaddingText',
-                        //     label: '',
-                        //     defaultValue: '10',
-                        //     unit: 'px',
-                        //     isShowUnit: true,
-                        //     style: {
-                        //         styleParent: {
-                        //             width: '100%'
-                        //         },
-                        //         styleChild: {
-                        //             width: 40
-                        //         }
-                        //     }
-                        // },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'containerPadding',
+                            label: '',
+                            keyShow: 'containerPadding',
+                            defaultValue: '10',
+                            unit: 'px',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
                         {
                             type: 'COMPONENT_CHILD',
-                            id: 'childHtmlPadding',
+                            id: 'containerPadding',
+                            keyShow: 'containerPadding',
                             // keyShow: 'moreOptionsButtonPadding',
                             elementChild: [
                                 {
                                     type: 'TEXT_INPUT',
                                     id: 'top',
+                                    upLineKey: 'containerPaddings',
                                     label: 'Top',
                                     defaultValue: '10',
                                     unit: 'px',
@@ -3815,6 +3947,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3831,6 +3964,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3847,6 +3981,7 @@ const sidePanelConfig = [
                                     defaultValue: '10',
                                     unit: 'px',
                                     isShowUnit: true,
+                                    upLineKey: 'containerPaddings',
                                     style: {
                                         styleParent: {
                                             width: '25%'
@@ -3871,7 +4006,7 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'SWITCH',
-                            id: 'responsive',
+                            id: 'hideOnDesktop',
                             isShowMessageRight: true,
                             message: 'Hide on desktop',
                             defaultValue: false,

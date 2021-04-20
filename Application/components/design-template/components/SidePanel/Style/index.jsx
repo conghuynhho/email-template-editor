@@ -44,6 +44,8 @@ import {
     updateUsageCounters,
     getContentIDFromHtmlID
 } from 'Components/design-template/components/Workspace/utils';
+import {string} from 'prop-types';
+import {getPaddingChild, defaultBorder} from '../utils';
 
 // hooks
 
@@ -563,6 +565,8 @@ const Style = props => {
                     keySelected = '',
                     keyActive = ''
                 } = element;
+                
+                // let value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
 
                 let value = '';
                 let selectedValue = '';
@@ -617,6 +621,18 @@ const Style = props => {
                         }
                         break;
                     }
+                    case 'buttonPaddings': {
+                        const padding = getObjectPropSafely(()=>values.padding);
+                        const [a, b, c, d] = (padding.replace(/[^.0-9\s]/g,'')).split(' ');
+
+                        switch (idChild) {
+                            case 'top': value = a; break;
+                            case 'right' : value = b || a; break;
+                            case 'bottom' : value = c || a; break;
+                            case 'left' : value = d || b || a; break;
+                        }
+                        break;
+                    }
                     case 'columnBorderWidth':
                     case 'columnBorderStyle':
                     case 'columnBorderColor': {
@@ -634,7 +650,30 @@ const Style = props => {
                     }
                 }
 
+<<<<<<< HEAD
                 const valueStyle = typeof value === 'boolean' ? value : (typeof value === 'object' ? value.label : value.replace(new RegExp(`${unit}`,'gi'), ''));
+=======
+                // console.log((idParent + '.' || '') + (type ? key : idChild));
+                // console.log('hello', value);
+
+                // const valueStyle = typeof value === 'boolean' ? value : (typeof value === 'object' ? value.label : value.replace(new RegExp(`${unit}`,'gi'), ''));
+
+                if (type && key === 'border') {
+                    value = Object.values(value).length ? getObjectPropSafely(()=>value[idChild]) : defaultBorder[idChild];
+                }
+
+                const valueStyle = typeof value === 'boolean' ? value : (typeof value === 'string' ? value.replace(new RegExp(`${unit}`, 'gi'), '') : value);
+                
+                // console.log(values, 'values');
+                // console.log(value, 'valueAfter');
+                // console.log(idParent, 'idParent');
+                // console.log(key, 'key');
+                // console.log(idChild, 'idChild');
+                // console.log(type, 'type');
+                // console.log(unit, 'unit'); 
+                // console.log(valueStyle, 'valueStyle');
+                // console.log(element.type, 'elementType');
+>>>>>>> 09d37d64a370598039060746ed41a386d5ca493f
 
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
@@ -834,6 +873,18 @@ const Style = props => {
                     case typeComponent.TEXT_INPUT: {
                         let isShow = true;
 
+                        if (keyShow) {
+                            const isValid = getObjectPropSafely(() => eval(`content.values.${keyShow}`));
+
+                            // console.log(isValid, 'isValid');
+                            // console.log(keyShow, 'keyShow');
+                            // console.log(content, 'content');
+                            if (typeof isValid === 'string') {isShow = isValid.split(' ').length > 1 ? false : true}
+                            if (typeof isValid === 'boolean') {isShow = !isValid}
+                            if (typeof isValid === 'undefined') {isShow = false}
+                            // console.log(isShow, 'isShow');
+                        }
+
                         switch (keyShow) {
                             case 'moreOptionsPadding': {
                                 isShow = listPaddings.length > 1 ? false : true;
@@ -860,8 +911,7 @@ const Style = props => {
                             case 'moreOptionsContainerPadding': {
                                 isShow = containerPaddings.length > 1 ? false : true;
                                 break;
-                            }
-                        }
+                            }}
 
                         const handleOnChange = (value) => {
                             if (type === typeComponent.COMPONENT_CHILD) {
@@ -879,8 +929,9 @@ const Style = props => {
                                     label={label || null}
                                     styleLabel={{height: 30}}
                                     style={getObjectPropSafely(() => style.styleChild) || {width: 100}}
+                                    // value={textStyleValue || valueStyle}
                                     value={valueStyle}
-                                    onChange={handleOnChange}
+                                    onChange={(value) => handleOnChange(value)}
                                 />
                                 {
                                     isShowUnit ? (
@@ -962,7 +1013,7 @@ const Style = props => {
                                     }
                                     <Switch
                                         style={{marginLeft: 0}}
-                                        default={isActive}
+                                        default={valueStyle || isActive}
                                         backgroundColor='#9cce24'
                                         size='12'
                                         onClick={(isShow) => updateComponent(idParent, idChild, isShow)}
@@ -1027,8 +1078,20 @@ const Style = props => {
                         ) : null;
                     }
                     case typeComponent.COMPONENT_CHILD: {
-                        let isShow = false;
+                        let isShow = true;
 
+                        if (keyShow) {
+                            const isValid = getObjectPropSafely(() => eval(`content.values.${keyShow}`));
+
+                            if (typeof isValid === 'string') {isShow = isValid.split(' ').length > 1 ? true : false}
+                            if (typeof isValid === 'boolean') {isShow = isValid}
+                            // console.log(isValid, 'isValid');
+                            // console.log(keyShow, 'keyShow');
+                            // console.log(content, 'content');
+                            // console.log(elementChild, 'elementChild');
+                            // console.log(isShow, 'isS');
+                            // isShow = typeof isValid === 'boolean' ? isValid : true;
+                        }
                         switch (keyShow) {
                             case 'moreOptionsPadding': {
                                 isShow = listPaddings.length > 1 ? true : false; break;
@@ -1044,8 +1107,7 @@ const Style = props => {
                             }
                             case 'moreOptionsContainerPadding': {
                                 isShow = containerPaddings.length > 1 ? true : false; break;
-                            }
-                        }
+                            }}
 
                         return isShow ? (
                             <div className={classnames(styles['content-child'])}>
@@ -1376,6 +1438,7 @@ const Style = props => {
                     }
                 }
             }
+            
         } catch (error) {
             // handleError(error, {
             //     path: PATH,
@@ -1386,6 +1449,7 @@ const Style = props => {
     };
 
     const renderComponent = (elements, id, type = '') => {
+        
         try {
             if (elements && elements.length) {
                 return elements.map((item,index) => {

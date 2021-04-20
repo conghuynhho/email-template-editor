@@ -9,7 +9,7 @@ export const DATA_TYPE = {
     WIDTH: 'width',
     BUTTON: 'button',
     AUTO_WIDTH: 'autoWidth',
-    ALIGNMENT: 'alignments',
+    ALIGNMENTS: 'alignments',
     LINE_HEIGHT: 'lineHeight',
     BUTTON_PADDING: 'buttonPadding',
     MORE_OPTIONS_BUTTON_PADDING: 'moreOptionsButtonPadding',
@@ -28,8 +28,6 @@ export const DATA_TYPE = {
     CONTAINER_PADDING_IMAGE_LABEL: 'containerPaddingImageLabel',
     IMAGE_MORE_OPTION: 'imageMoreOptions',
     CHILD_IMAGE_PADDING: 'childImagePadding',
-    CHILD_BUTTON_PADDING: 'childButtonPadding',
+    CHILD_BUTTON_PADDING: 'childButtonPadding'
 
 };
-
-DATA_TYPE.BORDER

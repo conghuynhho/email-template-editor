@@ -27,6 +27,7 @@ import {
 } from 'Components/design-template/components/Workspace/utils';
 import {getObjectPropSafely, getOffset} from 'Utils';
 import produce from 'immer';
+import PreviewModal from 'Components/design-template/components/PreviewModal';
 
 const LayoutDesign = () => {
     const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
@@ -39,6 +40,7 @@ const LayoutDesign = () => {
         usageCounters, 
         contents,
         isEditing = false
+        // isOpenPreview = false
     } = store;
 
     const [typeDraggingWorkspace, setTypeDraggingWorkspace] = useState('');
@@ -791,7 +793,7 @@ const LayoutDesign = () => {
                 </div>
 
                 <ShortcutBar />
-
+                <PreviewModal />
                 {toggleDeleteForm.isDeleteFormOpening && <DeleteForm />}
 
             </div>

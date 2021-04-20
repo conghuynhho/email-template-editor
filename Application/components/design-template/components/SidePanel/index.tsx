@@ -51,7 +51,7 @@ const SidePanel = () => {
                     return <Image config={config} activeElementValues={element.content} />;
                 }
                 case typeElement.HTML: {
-                    return <Html config={config} />;
+                    return <Html config={config} content={element.content} />;
                 }
             }
         } catch (error) {
