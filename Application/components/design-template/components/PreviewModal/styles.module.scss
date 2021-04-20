@@ -1,30 +1,103 @@
-.preview-modal-style{
+.preview-modal-style {
 }
-
-.html-content-styles{
-  width: 70%;
+.html-content-styles {
+  width: 100%;
   background-color: none;
-  margin: 0 auto;
-  max-width: 1300px;
-}
-.html-iframe{
-  width: 100%;
-  margin: 0 auto;
-  height: 78vh;
-  padding: 0;
-  outline: none !important; 
-  border: 1px solid rgb(193, 193, 193);
-  border-top: none;
-  border-radius: 0 0 4px 4px;
+  height: 80vh;
+  overflow-y: scroll;
+  // margin: 0 auto;
+  // max-width: 1300px;
+  .desktop-preview-content-wrapper {
+    width: 90%;
+    // max-width: 1300px;
+    margin: 0 auto;
+    .html-iframe {
+      margin: 0 auto;
+      height: 78vh;
+      padding: 0;
+      outline: none !important;
+      border: 1px solid rgb(193, 193, 193);
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      display: block;
+      width: 100%;
+    }
+
+    .desktop-status-bar {
+      display: block;
+      width: 100%;
+      height: 30px;
+      background-image: url("https://editor.unlayer.com/1.2.29/images/desktop.svg");
+      background-color: #f2f2f2;
+      background-repeat: no-repeat;
+      border: 1px solid rgb(193, 193, 193);
+      border-radius: 4px 4px 0 0;
+      background-position: 10px center;
+    }
+  }
+
+  .mobile-preview-content-wrapper {
+    background-image: url("https://editor.unlayer.com/1.2.29/images/mobile.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 1;
+    position: relative;
+    margin: 15px auto;
+    display: block;
+    border: none;
+    height: 748px;
+    width: 364px;
+
+    .mobile-layout {
+    }
+    .html-iframe {
+      outline: none !important;
+      // display: block;
+      // width: 100%;
+      border: none;
+      width: 324px;
+      height: 583px;
+      position: absolute;
+      inset: 82px 21px 83px 19px;
+      
+    }
+  }
 }
 
-.desktop-status-bar{
-  width: 100%;
-  height: 30px;
-  background-image: url('https://editor.unlayer.com/1.2.29/images/desktop.svg');
-  background-color: #F2F2F2;
-  background-repeat: no-repeat;
-  border: 1px solid rgb(193, 193, 193);;
-  border-radius: 4px 4px 0 0;
-  background-position: 10px center;
+.preview-header {
+  display: flex;
+  .w-100 {
+    width: 100%;
+  }
+  .preview-title {
+    width: auto;
+  }
+  .preview-button-group {
+    width: 100%;
+    text-align: center;
+
+    .preview-desktop,
+    .preview-mobile {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 16px;
+      background-color: #fff;
+      color: #6c757d;
+      border: 1px solid #6c757d;
+      border-radius: 4px;
+      min-width: 70px;
+      cursor: pointer;
+    }
+    .preview-mobile {
+      border-left: none;
+      border-radius: 0px 4px 4px 0;
+    }
+    .preview-desktop {
+      border-radius: 4px 0 0 4px;
+    }
+    .active {
+      background-color: #6c757d;
+      color: #fff;
+    }
+  }
 }

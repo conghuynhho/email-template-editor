@@ -292,7 +292,7 @@ export const exportHTML = (nestedData) => {
                 const menuFontFamily = getObjectPropSafely(()=>content.values.fontFamily);
                 const menuAlign = getObjectPropSafely(()=>content.values.align);
                 const menuFontSize = getObjectPropSafely(()=>content.values.fontSize);
-                // const menuLinkColor = getObjectPropSafely(()=>content.values.linkColor);
+                const menuLinkColor = getObjectPropSafely(()=>content.values.linkColor);
                 const menuPadding = getObjectPropSafely(()=>content.values.padding);
                 const menuTextColor = getObjectPropSafely(()=>content.values.textColor);
                 const menuLayout = getObjectPropSafely(()=>content.values.layout);
@@ -302,18 +302,27 @@ export const exportHTML = (nestedData) => {
                     <div class="menu" style="text-align: ${menuAlign || 'center'}">
                         <!--[if (mso)|(IE)]><table role="presentation" border="0" cellpadding="0" cellspacing="0" align=${menuAlign || 'center'}><tr><![endif]-->
 
-                        ${Array.isArray(menuItem) && menuItem.length > 0 && ((menuItem.map((item, index) => (`
+                        ${Array.isArray(menuItem) && menuItem.length > 0 && ((menuItem.map((item, index) => {
+        const itemName = getObjectPropSafely(()=>item.link.name);
+        const itemText = getObjectPropSafely(()=>item.text);
+        const webLink = getObjectPropSafely(()=>item.link.values.href);
+        const itemTarget = getObjectPropSafely(()=>item.link.values.target) || '_blank';
+        const isShowATag = (webLink && itemName === 'web') ? true : false; 
+        const itemHref = getObjectPropSafely(()=>item.link);
+
+        return (`
                                 <!--[if (mso)|(IE)]><td style="padding:${menuPadding || '0px'}"><![endif]-->
-                                <span
+                                ${isShowATag ? `<a href=${getHrefButton(itemHref)} target=${itemTarget}` : '<span'}
                                 style="
                                     padding: ${menuPadding || '0px'} ;
                                     display: ${menuLayout === 'horizontal' ? 'inline' : (menuLayout === 'vertical' ? 'block' : 'inline')};
-                                    color: ${menuTextColor || '#000000'};
+                                    color: ${isShowATag ? menuLinkColor : (menuTextColor || '#000000')};
                                     font-size: ${menuFontSize ?? '14px'} ;
                                     font-family: ${getObjectPropSafely(()=>menuFontFamily.value) || '\'Montserrat\', sans-serif'};
+                                    ${isShowATag && 'text-decoration: none;'}
                                 "
                                 >
-                                ${getObjectPropSafely(()=>item.text) || ''}
+                                ${itemText || ''}
                                 </span>
                                 <!--[if (mso)|(IE)]></td><![endif]-->
 
@@ -324,7 +333,7 @@ export const exportHTML = (nestedData) => {
                                     </span>
                                     <!--[if (mso)|(IE)]></td><![endif]-->
                                 ` : ''}
-                            `)))).join('')}
+                            `);}))).join('')}
 
                         <!--[if (mso)|(IE)]></tr></table><![endif]-->
                     </div>
@@ -488,12 +497,13 @@ export const exportHTML = (nestedData) => {
                     const imageID = getObjectPropSafely(()=>content.values._meta.htmlID);
                     const dividerWidth = getObjectPropSafely(()=>content.values.width);
                     const hideDesktop = getObjectPropSafely(()=>content.values.hideDesktop);
+                    const hideMobile = getObjectPropSafely(()=>content.values.hideMobile);
 
                     return `
                     ${hideDesktop ? '<!--[if !mso]><!-->' : ''}
                         <table
                             ${imageID && imageID.indexOf('image') > 0 && `id:${imageID}`}
-                            ${hideDesktop ? 'class: "hide-desktop"' : ''}
+                            ${hideDesktop ? (hideMobile ? 'class: "hide-desktop hide-mobile"' : 'class :"hide-desktop"') : ''}
                             style="${hideDesktop ? 'display:none; mso-hide: all;' : ''} font-family: ${fontFamily?.value || '"Montserrat", sans-serif'}"
                             role="presentation"
                             cellpadding="0"
