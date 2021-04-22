@@ -7,11 +7,12 @@ import React, {useContext, useState} from 'react';
 import {Modal, ModalBody, ModalHeader} from 'reactstrap';
 import {exportHTML} from 'Components/design-template/components/SidePanel/utils.js';
 import {hierarchyDesignData} from 'Components/design-template/components/Workspace/utils';
+import {previewModeConstants} from 'Components/design-template/components/PreviewModal/constants.js';
 // import file from 'Component/design-template/components/PreviewModal/review.html';
 
 const PreviewModal = () => {
     const {state : store, dispatch: dispatchStore} = useContext(StoreContext);
-    const [isDesktop, setIsDesktop] = useState(true);
+    const [previewMode, setPreviewMode] = useState(previewModeConstants.PREVIEW_DESKTOP);
 
     const {isOpenPreview} = store;
     const toggle = ()=>{
@@ -21,8 +22,8 @@ const PreviewModal = () => {
         });
     };
     const updateIsDesktop = (isDesktopState) => {
-        if (isDesktopState === isDesktop) {return }
-        setIsDesktop(isDesktopState);
+        if (isDesktopState === previewMode) {return }
+        setPreviewMode(isDesktopState);
     };
     const renderHTML = (store) => {
         const nestedData = hierarchyDesignData(store);
@@ -39,19 +40,20 @@ const PreviewModal = () => {
                     <div className={classnames(styles['preview-header'])}>
                         <strong className={classnames(styles['preview-title'])}>Preview</strong>
                         <div className={classnames(styles['preview-button-group'])}>
-                            <div className={classnames(styles['preview-desktop'],{[styles['active']] : isDesktop})} onClick={()=>updateIsDesktop(true)}>Desktop</div>
-                            <div className={classnames(styles['preview-mobile'], {[styles['active']] : !isDesktop})} onClick={()=>updateIsDesktop(false)}>Mobile</div>
+                            <div className={classnames(styles['preview-desktop'],{[styles['active']] : previewMode === previewModeConstants.PREVIEW_DESKTOP})} onClick={()=>updateIsDesktop(previewModeConstants.PREVIEW_DESKTOP)}>Desktop</div>
+                            <div className={classnames(styles['preview-mobile'], {[styles['active']] : previewMode === previewModeConstants.PREVIEW_MOBILE})} onClick={()=>updateIsDesktop(previewModeConstants.PREVIEW_MOBILE)}>Mobile</div>
                         </div>
                     </div>
                 </ModalHeader>
                 <ModalBody >
                     <div className={classnames([styles['html-content-styles']])}>
-                        {isDesktop ? (
+                        {previewMode === previewModeConstants.PREVIEW_DESKTOP && (
                             <div className={classnames(styles['desktop-preview-content-wrapper'])}>
                                 <div className={classnames(styles['desktop-status-bar'])} />
                                 <iframe className={classnames(styles['html-iframe'])} srcDoc={html} title="Unlayer Preview (Desktop)"  />
                             </div>
-                        ) : (
+                        )} 
+                        {previewMode === previewModeConstants.PREVIEW_MOBILE && (
                             <div className={classnames(styles['mobile-preview-content-wrapper'])}>
                                 {/* <div className={classnames(styles['mobile-layout'])} /> */}
                                 <iframe className={classnames(styles['html-iframe'])} srcDoc={html} title="Unlayer Preview (Mobile)" />

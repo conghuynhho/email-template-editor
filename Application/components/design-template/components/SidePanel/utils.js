@@ -145,7 +145,6 @@ export const exportHTML = (nestedData) => {
                 // return eval(getObjectPropSafely(()=>href.attrs.href));
                 return `${href.name}:${phoneNumber}`;
             }
-        
             default:
                 return '';
         }
@@ -159,6 +158,20 @@ export const exportHTML = (nestedData) => {
         const result = [right,left];
 
         return result;
+    };
+    const generateBGImage = (bg) => {
+        if (!bg) {return ''}
+        const bgImageURL = getObjectPropSafely(()=>bg.url);
+
+        if (!bgImageURL) {return ''}
+        const bgImageRepeat = getObjectPropSafely(()=>bg.repeat);
+        const bgImageCenter = getObjectPropSafely(()=>bg.center);
+
+        return `
+                    background-image: url(${bgImageURL});
+                    background-repeat: ${bgImageRepeat ? 'repeat' : 'no-repeat'};
+                    background-position: ${bgImageCenter ? 'center top' : 'left top'};
+                `;
     };
     
     const switchCaseRenderHTMLContent = (content,columnWidth) => {
@@ -454,20 +467,6 @@ export const exportHTML = (nestedData) => {
             default:
                 break;
         }
-    };
-    const generateBGImage = (bg) => {
-        if (!bg) {return ''}
-        const bgImageURL = getObjectPropSafely(()=>bg.url);
-
-        if (!bgImageURL) {return ''}
-        const bgImageRepeat = getObjectPropSafely(()=>bg.repeat);
-        const bgImageCenter = getObjectPropSafely(()=>bg.center);
-
-        return `
-                    background-image: url(${bgImageURL});
-                    background-repeat: ${bgImageRepeat ? 'repeat' : 'no-repeat'};
-                    background-position: ${bgImageCenter ? 'center top' : 'left top'};
-                `;
     };
 
     const generateRows = (rows) => {
