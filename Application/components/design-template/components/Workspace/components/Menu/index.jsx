@@ -27,7 +27,8 @@ const Menu = (props) => {
                 fontFamily: getObjectPropSafely(() => data.values.fontFamily.value), 
                 color: getObjectPropSafely(() => data.values.textColor), 
                 display: getObjectPropSafely(() => data.values.layout) === 'horizontal' ? 'inline-block' : 'block', 
-                textDecoration: 'none'
+                textDecoration: 'none',
+                opacity: (data.values.hideDesktop) ? '0.25' : '1'
             };
 
             return (

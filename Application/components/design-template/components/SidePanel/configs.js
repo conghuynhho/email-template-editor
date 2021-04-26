@@ -1281,6 +1281,7 @@ const sidePanelConfig = [
                             id: 'responsive',
                             isShowMessageRight: true,
                             message: 'Hide on desktop',
+                            hideDesktop: false,
                             defaultValue: false,
                             style: {
                                 styleParent: {
@@ -2360,7 +2361,7 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'SWITCH',
-                            id: 'hideDesktop',
+                            id: 'responsive',
                             isShowMessageRight: true,
                             message: 'Hide on desktop',
                             defaultValue: false,
@@ -4006,7 +4007,7 @@ const sidePanelConfig = [
                     elements: [
                         {
                             type: 'SWITCH',
-                            id: 'hideOnDesktop',
+                            id: 'responsive',
                             isShowMessageRight: true,
                             message: 'Hide on desktop',
                             defaultValue: false,

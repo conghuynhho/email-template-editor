@@ -79,6 +79,7 @@ const Row = (props) => {
     const styleRow = {
         padding: getObjectPropSafely(() => data.values.padding),
         backgroundColor: getObjectPropSafely(() => data.values.backgroundColor),
+        opacity: (data.values.hideDesktop) ? '0.25' : '1',
         ...(fullWidth ? styleBackgroundImage : {})
     };
 
@@ -828,7 +829,7 @@ const Row = (props) => {
                                                             'layer-selectable', 
                                                             styles['layer-content'],
                                                             {[styles['layer-selected']]: activeElement === contentID}
-                                                        )}                                                  
+                                                        )}  
                                                     >
                                                         {renderSelector({
                                                             isShowAddTop: false, 

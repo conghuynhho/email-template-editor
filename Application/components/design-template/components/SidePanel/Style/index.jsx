@@ -281,6 +281,11 @@ const Style = props => {
                     }
                     break;
                 }
+                case 'responsive': {
+                    newRow = produce(row, draft => {
+                        draft.values.hideDesktop = receivedValues;
+                    });
+                }
             }
 
             dispatchStore({
@@ -425,6 +430,12 @@ const Style = props => {
                             draft.values.icons.icons.push(icon);
                         });
                     }
+                    break;
+                }
+                case 'responsive': {
+                    newContent = produce(content, draft => {
+                        draft.values.hideDesktop = receivedValues;
+                    });
                     break;
                 }
                 default: {
@@ -1021,8 +1032,11 @@ const Style = props => {
                             case 'moreOptionsContainerPadding': {
                                 isActive = containerPaddings.length > 1 ? true : false; break;
                             }
+                            case 'responsive': {
+                                (getObjectPropSafely(() => content.values.hideDesktop)) ? isActive = content.values.hideDesktop : isActive = row.values.hideDesktop;
+                                break;
+                            }
                         }
-
                         return (
                             <>
                                 {

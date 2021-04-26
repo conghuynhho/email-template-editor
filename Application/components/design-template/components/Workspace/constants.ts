@@ -1648,7 +1648,7 @@ export const designData = {
                 'values': {
                     'html': '<strong>Hello, world!</strong>',
                     'containerPadding': '10px',
-                    'hideOnDesktop': true,
+                    'hideDesktop': false,
                     '_meta': {
                         'htmlID': 'u_content_html_1',
                         'htmlClassNames': 'u_content_html'

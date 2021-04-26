@@ -21,7 +21,8 @@ const Text = (props) => {
         textAlign: getObjectPropSafely(() => data.values.textAlign),
         lineHeight: getObjectPropSafely(() => data.values.lineHeight),
         color: getObjectPropSafely(() => data.values.color), 
-        overflowWrap: 'break-word'
+        overflowWrap: 'break-word',
+        opacity: (data.values.hideDesktop) ? '0.25' : '1'
     };
     const text = getObjectPropSafely(() => data.values.text);
 

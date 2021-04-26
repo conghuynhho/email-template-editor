@@ -14,7 +14,8 @@ const Button = (props) => {
     const id = getObjectPropSafely(() => data.values._meta.htmlID);
     const classTitle = getObjectPropSafely(() => data.values._meta.htmlClassNames);
     const style = {
-        padding: getObjectPropSafely(() => data.values.containerPadding)
+        padding: getObjectPropSafely(() => data.values.containerPadding),
+        opacity: (data.values.hideDesktop) ? '0.25' : '1'
     };
     const styleExtra = {
         textAlign: getObjectPropSafely(() => data.values.textAlign)

@@ -8,7 +8,8 @@ const Image = (props) => {
     const classTitle = getObjectPropSafely(() => data.values._meta.htmlClassNames);
     const src = getObjectPropSafely(() => data.values.src.url);
     const style = {
-        padding: getObjectPropSafely(() => data.values.containerPadding)
+        padding: getObjectPropSafely(() => data.values.containerPadding),
+        opacity: (data.values.hideDesktop) ? '0.25' : '1'
     };
     const styleExtra = {
         position: 'relative',

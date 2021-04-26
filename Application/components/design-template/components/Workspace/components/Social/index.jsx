@@ -28,7 +28,8 @@ const Social = (props) => {
                 display: 'inline-block',
                 width: '32px',
                 height: '32px',
-                marginRight: ((socials.length - 1) !== index) ? Number(getObjectPropSafely(() => data.values.spacing)) : 0
+                marginRight: ((socials.length - 1) !== index) ? Number(getObjectPropSafely(() => data.values.spacing)) : 0,
+                opacity: (data.values.hideDesktop) ? '0.25' : '1'
             };
 
             return (
