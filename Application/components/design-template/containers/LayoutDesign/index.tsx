@@ -30,6 +30,7 @@ import produce from 'immer';
 import PreviewModal from 'Components/design-template/components/PreviewModal';
 import axios from 'axios';
 import {buildDesignData} from 'Components/design-template/components/Workspace/utils';
+import Spinner from 'Components/design-template/components/UI/Spinner';
 
 const LayoutDesign = () => {
     const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
@@ -66,6 +67,7 @@ const LayoutDesign = () => {
     const [activeRowIndex, setActiveRowIndex] = useState(-1);
     const [typeDragDropSidePanel, setTypeDragDropSidePanel] = useState('');
     const [targetElement, setTargetElement] = useState('');
+    const [isFetchAPI, setIsFetchAPI] = useState(true);
 
     const getDragItHereRowIndexes = (rowIndex, destinationRowIdx, rowArea) => {
         setDragItHereIndex(rowIndex); 
@@ -764,18 +766,21 @@ const LayoutDesign = () => {
         const result = axios.get(api);
 
         result.then(res => {
-            const payload = buildDesignData(getObjectPropSafely(()=>res.data.data.list_gallery[3].design));
+            const payload = buildDesignData(getObjectPropSafely(()=>res.data.data.list_gallery[0].design));
 
-            dispatchStore({
-                type: actionType.INITIAL_DATA,
-                payload: payload.design
-            });
+            if (res.status >= 200 && res.status <= 299) {
+                dispatchStore({
+                    type: actionType.INITIAL_DATA,
+                    payload: payload.design
+                });
+                setIsFetchAPI(false);
+            }
 
         });
 
     }, []);
 
-    return (
+    return isFetchAPI ? <div className={classnames(styles['spinner-container'])}><Spinner /></div> : (
         <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
             <div className={classnames(
                 styles['grid-container'],
