@@ -51,7 +51,7 @@ const Text = (props) => {
             className={styles[classTitle]}
             // style={{...style}}
         >           
-            {isEditing && activeElement === id ? (
+            {!data.values.hideDesktop && isEditing && activeElement === id ? (
                 <Editor
                     apiKey={'pj3be4r7csm282qh8gsssq1cywkvjh2j7iic281901rof8aw'}
                     initialValue={text}

@@ -1033,7 +1033,7 @@ const Style = props => {
                                 isActive = containerPaddings.length > 1 ? true : false; break;
                             }
                             case 'responsive': {
-                                (getObjectPropSafely(() => content.values.hideDesktop)) ? isActive = content.values.hideDesktop : isActive = row.values.hideDesktop;
+                                (getObjectPropSafely(() => content.values.hideDesktop)) ? isActive = content.values.hideDesktop : isActive = getObjectPropSafely(() => row.values.hideDesktop);
                                 break;
                             }
                         }
