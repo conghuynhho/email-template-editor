@@ -412,6 +412,7 @@ export const exportHTML = (nestedData) => {
                 const imageAction = getObjectPropSafely(()=>content.values.action);
                 const imageActionLink = getObjectPropSafely(()=>content.values.action.values.href);
                 const imageAutoWidth = getObjectPropSafely(()=>content.values.src.autoWidth);
+                const imageWidth = getObjectPropSafely(()=>content.values.src.width);
                 // const imageHeight = getObjectPropSafely(()=>content.values.src.height);
                 const imageMaxWidth = ( imageAutoWidth === false ? getObjectPropSafely(()=>content.values.src.maxWidth)  : '100%');
                 const imageURL = getObjectPropSafely(()=>content.values.src.url);
@@ -453,9 +454,9 @@ export const exportHTML = (nestedData) => {
                                 height: auto;
                                 float: none;
                                 width: ${imageAutoWidth ? '100%' : imageMaxWidth };
-                                max-width: ${(columnWidth * percentWidth) - Number(rightPadding) - Number(leftPadding) } ;
+                                max-width: ${(imageAutoWidth === undefined || imageAutoWidth === true) ? imageWidth : (columnWidth * percentWidth) - Number(rightPadding) - Number(leftPadding)}px ;
                             "
-                            width="138.6"
+                            width=${(imageAutoWidth === undefined || imageAutoWidth === true) ? imageWidth : (columnWidth * percentWidth) - Number(rightPadding) - Number(leftPadding)}
                             class="v-src-width v-src-max-width"
                             />
                             ${imageActionLink ? '</a>' : ''}
@@ -521,8 +522,7 @@ export const exportHTML = (nestedData) => {
                                         "
                                         align="left"
                                     >
-                                    ${switchCaseRenderHTMLContent(content, columnWidth)}
-
+                                        ${switchCaseRenderHTMLContent(content, columnWidth)}
                                     </td>
                                 </tr>
                             </tbody>
@@ -615,7 +615,7 @@ export const exportHTML = (nestedData) => {
             padding: 0;
             -webkit-text-size-adjust: 100%;
             background-color: ${getObjectPropSafely(()=>bodyValues.backgroundColor) || '#e8d4bb'};
-        "
+            "
         >
             <!--[if IE]><div class="ie-container"><![endif]-->
             <!--[if mso]><div class="mso-container"><![endif]-->
@@ -629,7 +629,7 @@ export const exportHTML = (nestedData) => {
                 vertical-align: top;
                 min-width: 320px;
                 margin: 0 auto;
-                background-color: #e8d4bb;
+                background-color: ${getObjectPropSafely(()=>bodyValues.backgroundColor) || '#e8d4bb'};
                 width: 100%;
             "
             cellpadding="0"
@@ -637,14 +637,41 @@ export const exportHTML = (nestedData) => {
             >
                 <tbody>
                 ${preheaderText ? `
-                    <tr style="vertical-align: top"> 
-                        <td style="display:none !important;visibility:hidden;mso-hide:all;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
-                        ${preheaderText}
+                    <tr>
+                        <td
+                            style="
+                            display: none !important;
+                            visibility: hidden;
+                            mso-hide: all;
+                            font-size: 1px;
+                            color: #ffffff;
+                            line-height: 1px;
+                            max-height: 0px;
+                            max-width: 0px;
+                            opacity: 0;
+                            overflow: hidden;
+                            "
+                        >
+                            ${preheaderText}
                         </td>
                     </tr>
                 ` : ''}
 
-                ${generateRows(getObjectPropSafely(()=>nestedData.body.rows,[]))}
+                <tr style="vertical-align: top">
+                    <td
+                        style="
+                        word-break: break-word;
+                        border-collapse: collapse !important;
+                        vertical-align: top;
+                        "
+                    >
+                    <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color: ${getObjectPropSafely(()=>bodyValues.backgroundColor) || '#e8d4bb'};"><![endif]-->
+                        ${generateRows(getObjectPropSafely(()=>nestedData.body.rows,[]))}
+                    <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+                    </td>
+                </tr>
+
+                
                 </tbody>
             </table>
             <!--[if mso]></div><![endif]-->

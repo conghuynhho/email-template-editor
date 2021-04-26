@@ -15,7 +15,7 @@ const Workspace = (props) => {
     const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
     const {viewMode, activeElement} = store;
     const nestedData = hierarchyDesignData(store);
-    
+
     console.log('store', store);
     console.log(nestedData, 'nestedData');
     // console.log(exportHTML(nestedData));

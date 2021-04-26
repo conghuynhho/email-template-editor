@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import classnames from 'classnames';
 import SidePanel from 'Components/design-template/components/SidePanel';
 import Workspace from 'Components/design-template/components/Workspace';
@@ -28,6 +28,8 @@ import {
 import {getObjectPropSafely, getOffset} from 'Utils';
 import produce from 'immer';
 import PreviewModal from 'Components/design-template/components/PreviewModal';
+import axios from 'axios';
+import {buildDesignData} from 'Components/design-template/components/Workspace/utils';
 
 const LayoutDesign = () => {
     const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
@@ -756,13 +758,28 @@ const LayoutDesign = () => {
 
     };
 
+    useEffect(() => {
+        const api = 'https://sandbox-email.ants.vn/api/gallery/index?page=1&limit=6&_token=5474r2x214r26474z274y4v5r426q2j5t2b4s494u5&_user_id=1600007645&_account_id=1600001262&_lang=en';
+
+        const result = axios.get(api);
+
+        result.then(res => {
+            const payload = buildDesignData(getObjectPropSafely(()=>res.data.data.list_gallery[3].design));
+
+            dispatchStore({
+                type: actionType.INITIAL_DATA,
+                payload: payload.design
+            });
+
+        });
+
+    }, []);
+
     return (
         <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-
             <div className={classnames(
                 styles['grid-container'],
                 {[styles['side-panel-left']] : sidePanelMode === CONSTANTS.SIDE_PANEL_MODE.LEFT}
-               
             )}
             style={!isEditing ? {overflowY: 'scroll', height: '100vh'} : {}}
             onMouseMove={onMouseMoveItem}
