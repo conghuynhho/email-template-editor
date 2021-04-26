@@ -7,6 +7,7 @@ import Line from 'Components/design-template/components/SidePanel/containers/Lin
 import Columns from 'Components/design-template/components/SidePanel/containers/Columns';
 import General from 'Components/design-template/components/SidePanel/containers/General';
 import Menu from 'Components/design-template/components/SidePanel/containers/Menu';
+import Social from 'Components/design-template/components/SidePanel/containers/Social';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
 import Image from 'Components/design-template/components/SidePanel/containers/Image';
 import Html from 'Components/design-template/components/SidePanel/containers/Html';
@@ -52,6 +53,9 @@ const SidePanel = () => {
                 }
                 case typeElement.HTML: {
                     return <Html config={config} content={element.content} />;
+                }
+                case typeElement.SOCIAL: {
+                    return <Social config={config} />;
                 }
             }
         } catch (error) {

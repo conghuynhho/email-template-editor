@@ -4020,6 +4020,324 @@ const sidePanelConfig = [
                 }
             ]
         }
+    },
+    /// ////////////////////////////////////
+    {
+        id: 'Social',
+        name: 'Social',
+        type: 'SOCIAL',
+        resource: {
+            general: [
+                {
+                    id: 'socialOne',
+                    style: {
+                        background: 'rgb(216 233 237)',
+                        paddingRight: 10
+                    },
+                    isShowIconTrash: true,
+                    elements: [
+                        // {
+                        //     type: 'TYPE_SOCIAL',
+                        //     id: 'typeSocial',
+                        //     defaultValue: 'Facebook'
+                        // },
+                        {
+                            type: 'LABEL',
+                            id: 'labelSocial',
+                            label: 'URL',
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'DELETE_BUTTON',
+                            id: 'deleteButton',
+                            icon: 'icon-ants-trash',
+                            style: {
+                                styleParent: {
+                                    width: '50%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'url',
+                            label: '',
+                            defaultValue: 'https://facebook.com/',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                },
+                                styleChild: {
+                                    width: '100%'
+                                }
+                            }                          
+                        }
+                    ]
+                }
+            ],
+            style: [
+                {
+                    elements: [
+                        {
+                            type: 'LINE_STYLE',
+                            id: 'iconsType',
+                            label: 'Icons type',
+                            defaultValue: 'Circle White',
+                            options: [
+                                {
+                                    label: 'Circle',
+                                    name: 'circle'
+                                },
+                                {
+                                    label: 'Circle Black',
+                                    name: 'circle-black'
+                                },
+                                {
+                                    label: 'Circle White',
+                                    name: 'circle-white'
+                                },
+                                {
+                                    label: 'Round',
+                                    name: 'rounded'
+                                },
+                                {
+                                    label: 'Round Black',
+                                    name: 'rounded-black'
+                                },
+                                {
+                                    label: 'Square',
+                                    name: 'squared'
+                                },
+                                {
+                                    label: 'Square Black',
+                                    name: 'squared-black'
+                                }                     
+                            ],
+                            style: {
+                                styleChild: {
+                                    width: 110
+                                }
+                            }
+                        },
+                        {
+                            type: 'LABEL',
+                            id: 'moreIcon',
+                            label: 'Show More Option',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'OPTION_ICON',
+                            id: 'moreOption',
+                            defaultValue: [
+                                'Facebook',
+                                'Instagram',
+                                'Twitter',
+                                'Linkedin',
+                                'Pinterest',
+                                'Vimeo',
+                                'Youtube',
+                                'Snapchat',
+                                'WhatsApp',
+                                'Reddit',
+                                'Messenger',
+                                'Tripadvisor',
+                                'Meetup',
+                                'ProductHunt',
+                                'RSS',
+                                'Tinder',
+                                'Tumblr',
+                                'AppleMusic',
+                                'Spotify',
+                                'SoundCloud',
+                                'Yelp',
+                                'Medium',
+                                'Skype',
+                                'Flickr',
+                                'GitHub',
+                                'GooglePlus',
+                                'Discord',
+                                'Telegram',
+                                'TikTok',
+                                'Email'
+                            ]
+                        },
+                        {
+                            type: 'ALIGNMENT',
+                            id: 'align',
+                            label: 'Alignments',
+                            defaultValue: 'center',
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'LABEL',
+                            id: 'spacingLabel',
+                            label: 'Icon Spacing',
+                            style: {
+                                styleParent: {
+                                    width: '30%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'spacing',
+                            defaultValue: '10',
+                            style: {
+                                styleParent: {
+                                    width: '70%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
+                        {   
+                            type: 'LABEL',
+                            id: 'containerPaddingLabel',
+                            label: 'Container Padding'
+                        },
+                        {
+                            type: 'SWITCH',
+                            id: 'moreOptionsContainerPadding',
+                            isShowMessageLeft: true,
+                            message: 'More options',
+                            defaultValue: false,
+                            style: {
+                                styleParent: {
+                                    width: '40%'
+                                }
+                            }
+                        },
+                        {
+                            type: 'TEXT_INPUT',
+                            id: 'containerPadding',
+                            label: '',
+                            defaultValue: '10',
+                            unit: 'px',
+                            keyShow: 'moreOptionsContainerPadding',
+                            isShowUnit: true,
+                            style: {
+                                styleParent: {
+                                    width: '60%'
+                                },
+                                styleChild: {
+                                    width: 40
+                                }
+                            }
+                        },
+                        {
+                            type: 'COMPONENT_CHILD',
+                            id: 'childContainerPadding',
+                            keyShow: 'moreOptionsContainerPadding',
+                            elementChild: [
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'top',
+                                    label: 'Top',
+                                    defaultValue: '10',
+                                    upLineKey: 'containerPaddings',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'right',
+                                    label: 'Right',
+                                    defaultValue: '10',
+                                    upLineKey: 'containerPaddings',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'bottom',
+                                    label: 'Bottom',
+                                    defaultValue: '10',
+                                    upLineKey: 'containerPaddings',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'TEXT_INPUT',
+                                    id: 'left',
+                                    label: 'Left',
+                                    defaultValue: '10',
+                                    upLineKey: 'containerPaddings',
+                                    unit: 'px',
+                                    isShowUnit: true,
+                                    style: {
+                                        styleParent: {
+                                            width: '25%'
+                                        },
+                                        styleChild: {
+                                            width: 40
+                                        }
+                                    }
+                                }
+                            ],
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'responsiveDesign',
+                    label: 'Responsive design',
+                    elements: [
+                        {
+                            type: 'SWITCH',
+                            id: 'responsive',
+                            isShowMessageRight: true,
+                            message: 'Hide on desktop',
+                            defaultValue: false,
+                            style: {
+                                styleParent: {
+                                    width: '100%'
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
     }
 ];
 

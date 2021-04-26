@@ -22,7 +22,8 @@ export const typeComponent = {
     TAB_COLUMN: 'TAB_COLUMN',
     LIST_COMPONENTS: 'LIST_COMPONENTS',
     DELETE_BUTTON: 'DELETE_BUTTON',
-    ADD_MENU: 'ADD_MENU'
+    ADD_MENU: 'ADD_MENU',
+    OPTION_ICON: 'OPTION_ICON'
 };
 
 export const typeElement = {
@@ -34,6 +35,7 @@ export const typeElement = {
     MENU: 'MENU',
     IMAGE: 'IMAGE',
     HTML: 'HTML',
+    SOCIAL: 'SOCIAL',
     LIST_COMPONENTS: 'LIST_COMPONENTS'
 };
 

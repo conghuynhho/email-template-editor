@@ -398,6 +398,35 @@ const Style = props => {
                     }
                     break;
                 }
+                case 'iconsType': {
+                    if (receivedValues) {
+                        newContent = produce(content, draft => {
+                            draft.values.icons.iconType = receivedValues;
+                        });
+                    }
+                    break;
+                }
+                case 'spacing': {
+                    if (receivedValues) {
+                        newContent = produce(content, draft => {
+                            draft.values.spacing = receivedValues;
+                        });
+                    }
+                    break;
+                }
+                case 'moreOption': {
+                    if (receivedValues) {
+                        newContent = produce(content, draft => {
+                            const icon = {
+                                url : `https://${receivedValues.toLowerCase()}.com/`,
+                                name : receivedValues
+                            };
+
+                            draft.values.icons.icons.push(icon);
+                        });
+                    }
+                    break;
+                }
                 default: {
                     if (receivedValues && receivedValues !== '%') {
                         newContent = produce(content, draft => {
@@ -600,6 +629,10 @@ const Style = props => {
                         value = getObjectPropSafely(() => values.fontFamily.label);
                         break;
                     }
+                    case 'iconsType': {
+                        value = getObjectPropSafely(() => values.icons.iconType);
+                        break;
+                    }
                     default: {
                         value = getObjectPropSafely(() => eval(`values.${idParent && (idParent + '.' || '')}${type ? key : idChild}`) || '');
                         break;
@@ -650,9 +683,6 @@ const Style = props => {
                     }
                 }
 
-<<<<<<< HEAD
-                const valueStyle = typeof value === 'boolean' ? value : (typeof value === 'object' ? value.label : value.replace(new RegExp(`${unit}`,'gi'), ''));
-=======
                 // console.log((idParent + '.' || '') + (type ? key : idChild));
                 // console.log('hello', value);
 
@@ -673,7 +703,6 @@ const Style = props => {
                 // console.log(unit, 'unit'); 
                 // console.log(valueStyle, 'valueStyle');
                 // console.log(element.type, 'elementType');
->>>>>>> 09d37d64a370598039060746ed41a386d5ca493f
 
                 switch (element.type) {
                     case typeComponent.CHECKBOX: {
@@ -1435,6 +1464,49 @@ const Style = props => {
                         //         })}
                         //     </div>
                         // );
+                    }
+                    case typeComponent.OPTION_ICON: {
+                        const getIcon = (name) => {
+                            return `https://cdn.tools.unlayer.com/social/icons/${content.values.icons.iconType}/${name.toLowerCase()}.png`;
+                        };
+                        const icons = defaultValue.filter((icon) => !content.values.icons.icons.find((p) => icon === p.name));
+
+                        const handleOnClick = (value) => {
+                            if (value) {
+                                updateComponent(idParent, idChild, value);
+                            }
+                        };
+
+                        return (
+                            <div>
+                                {
+                                    icons.map((icon, index) => {
+                                        return (
+                                            <a
+                                                key={index}
+                                                style={{
+                                                    display: 'inline-block',
+                                                    width: '32px',
+                                                    height: '32px',
+                                                    backgroundColor: 'rgb(204, 204, 204)',
+                                                    borderRadius: '20px',
+                                                    margin: '3px',
+                                                    cursor: 'pointer'
+                                                }}
+                                                onClick={() => handleOnClick(icon)}
+                                            >
+                                                <img 
+                                                    alt={icon} 
+                                                    src={getIcon(icon)}
+                                                    style={{width: 32, height: 32}}
+                                                />
+                                            </a>
+                                        );
+                                    })
+                                }
+                                
+                            </div>
+                        );
                     }
                 }
             }

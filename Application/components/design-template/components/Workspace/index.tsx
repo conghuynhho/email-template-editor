@@ -1,13 +1,13 @@
-import React, {Fragment, useContext} from 'react';
+import {Icon} from '@antscorp/components';
 import classnames from 'classnames';
 import {StoreContext} from 'Components/design-template/components/ContextStore';
+import {actionType} from 'Components/design-template/components/ContextStore/constants';
 import Row from 'Components/design-template/components/Workspace/components/Row';
 import styles from 'Components/design-template/components/Workspace/styles.module.scss';
+import {hierarchyDesignData} from 'Components/design-template/components/Workspace/utils';
 import {CONSTANTS, typeDnD} from 'Components/design-template/constants';
-import {hierarchyDesignData, exportHtml} from 'Components/design-template/components/Workspace/utils';
-import {actionType} from 'Components/design-template/components/ContextStore/constants';
-import {Droppable, Draggable} from 'react-beautiful-dnd';
-import {Icon} from '@antscorp/components';
+import React, {Fragment, useContext} from 'react';
+import {Draggable, Droppable} from 'react-beautiful-dnd';
 import {getObjectPropSafely} from 'Utils';
 // import {exportHTML} from 'Components/design-template/components/SidePanel/utils.js';
 
@@ -83,7 +83,6 @@ const Workspace = (props) => {
                             draggableId={`draggable-row-${index}`} 
                             index={index}>
                             {(provided) => {
-                                
                                 return (
                                     <>
                                         <div 

@@ -302,6 +302,9 @@ export const getActiveElement = (data, activeElement) => {
         case activeElement.indexOf('row') > -1:
             type = 'columns';
             break;
+        case activeElement.indexOf('social') > -1:
+            type = 'social';
+            break;
         default:
             type = 'general';
 

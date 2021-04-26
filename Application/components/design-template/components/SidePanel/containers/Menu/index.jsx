@@ -54,7 +54,7 @@ const Menu = (props) => {
         try {
             const style = getObjectPropSafely(() => config.resource.style) || [];
             const general = getObjectPropSafely(() => config.resource.general) || [];
-
+            
             return (
                 <>
                     <div className={classnames(styles['block-full'])} style={{width: 'calc(100 % - 6px)'}}>

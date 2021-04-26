@@ -7,6 +7,7 @@ import Image from 'Components/design-template/components/Workspace/components/Im
 import Text from 'Components/design-template/components/Workspace/components/Text';
 import Button from 'Components/design-template/components/Workspace/components/Button';
 import Menu from 'Components/design-template/components/Workspace/components/Menu';
+import Social from '../Social';
 import RenderCode from 'Components/design-template/components/Workspace/components/RenderCode';
 import {Icon} from '@antscorp/components';
 import {CONSTANTS, typeDnD} from 'Components/design-template/constants';
@@ -776,6 +777,11 @@ const Row = (props) => {
                 case 'html': {
                     return (
                         <RenderCode data={content} />
+                    );
+                }
+                case 'social': {
+                    return (
+                        <Social data={content} />
                     );
                 }
             }

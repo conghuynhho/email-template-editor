@@ -59,6 +59,8 @@ const Style = props => {
     const contentId = activeElement.includes('content') ? getContentIDFromHtmlID(store, activeElement) : '';
     const content = getObjectPropSafely(() => store.contents[contentId]) || {};
     const menuItems = activeElement.includes('menu') ? getObjectPropSafely(() => values.menu.items) : [];
+
+    const socialItems = activeElement.includes('social') ? getObjectPropSafely(() => values.icons.icons) : [];
     const [config, setConfig] = useState({});
 
     useEffect(() => {
@@ -265,11 +267,11 @@ const Style = props => {
                 break;
             }
             case `url${itemIndex}` : {
-                const url = getObjectPropSafely(() => content.values.menu.items[itemIndex].link.values.href) || '';
+                const url = getObjectPropSafely(() => content.values.menu.items[itemIndex].link.values.href) || getObjectPropSafely(() => content.values.icons.icons[itemIndex].url) || '';
 
                 if (receivedValues && receivedValues !== url) {
                     const newContent = produce(content, draft => {
-                        draft.values.menu.items[itemIndex].link.values.href = receivedValues;
+                        (getObjectPropSafely(() => draft.values.menu.items[itemIndex].link.values.href)) ? draft.values.menu.items[itemIndex].link.values.href = receivedValues : (getObjectPropSafely(() => draft.values.icons.icons[itemIndex].url)) ? draft.values.icons.icons[itemIndex].url = receivedValues : '';
                     });
 
                     dispatchStore({
@@ -408,7 +410,6 @@ const Style = props => {
 
                 if (numberOfMenu > 0) {
                     for (let i = 0; i < numberOfMenu; ++i) {
-
                         switch (idChild) {
                             case `menuText${i}`: {
                                 value = getObjectPropSafely(() => menuItems[i].text) || ''; 
@@ -851,7 +852,7 @@ const Style = props => {
                         const onClickDelete = () => {
                             if (typeof itemIndex === 'number') {
                                 const newContent = produce(content, draft => {
-                                    draft.values.menu.items.splice(itemIndex, 1);
+                                    (content.type === 'menu') ? draft.values.menu.items.splice(itemIndex, 1) : draft.values.icons.icons.splice(itemIndex, 1);
                                 });
 
                                 dispatchStore({
@@ -952,6 +953,31 @@ const Style = props => {
                                     id: `menu${i}`,
                                     elements: draft[0].elements.map((elem, index) => ({
                                         ...draft[0].elements[index],
+                                        id: `${draft[0].elements[index].id}${i}`
+                                    })),
+                                    itemIndex: i
+                                });
+                            });
+                        }
+                    }
+
+                    newConfig = produce(newConfig, draft => {
+                        if (newConfig.length > 1) {
+                            draft.splice(0, 1);
+                        }
+                    });
+                }
+                if (activeElement.includes('social')) {
+                    for (let i = 0; i < socialItems.length; i++) {
+                        if (socialItems.length) {
+                            newConfig = produce(newConfig, draft => {
+                                draft.splice(i + 1, 0, {
+                                    ...draft[0],
+                                    id: `social${i}`,
+                                    elements: draft[0].elements.map((elem, index) => ({
+                                        ...draft[0].elements[index],
+                                        label: `${(index === 0) ? socialItems[i].name : ''}`,
+                                        defaultValue: `${(index === 2 ? socialItems[i].url : '')}`,
                                         id: `${draft[0].elements[index].id}${i}`
                                     })),
                                     itemIndex: i
