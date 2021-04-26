@@ -1,4 +1,4 @@
-import {debounce, result} from 'lodash';
+import {debounce, result, cloneDeep} from 'lodash';
 import {string} from 'prop-types';
 import {getObjectPropSafely} from 'Utils';
 import {typeElement} from 'Components/design-template/constants';
@@ -458,7 +458,8 @@ export const getTypeOfImage = (imageLink) => {
 //     return useCallback(debounce(fnToDebounce, durationInMs), [fnToDebounce, durationInMs]);
 // };
 
-export const buildDesignData = (nestedData) => {
+export const buildDesignData = (data) => {
+    const nestedData = cloneDeep(data);
     const body = getObjectPropSafely(()=>nestedData.body);
     let columns = {};
     let contents = {};
@@ -497,7 +498,7 @@ export const buildDesignData = (nestedData) => {
                     ...contents,
                     ...saveContent
                 };
-                contentsIDArray.push(contentID);
+                contentsIDArray.push(contentID + '');
             });
             const saveColumn = {
                 [columnID]: {
@@ -511,7 +512,7 @@ export const buildDesignData = (nestedData) => {
                 ...columns,
                 ...saveColumn
             };
-            columnsIDArray.push(columnID);
+            columnsIDArray.push(columnID + '');
         });
         const saveRow = {
             [rowID]: {
@@ -526,14 +527,14 @@ export const buildDesignData = (nestedData) => {
             ...rows,
             ...saveRow
         };
-        rowsIDArray.push(rowID);
+        rowsIDArray.push(rowID + '');
     });
 
     const bodies = {
         2: {
             location: {
                 collection: 'bodies',
-                id : 2 
+                id : '2' 
             },
             rows: rowsIDArray,
             values: getObjectPropSafely(()=> body.values)
