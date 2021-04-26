@@ -17,11 +17,9 @@ const reducer = (state, action) => {
 
     switch (type) {
         case actionType.INITIAL_DATA: {
-            console.log(payload, 'aslkfdasdjfkhasfdjhasf');
             if (!getObjectPropSafely(() => Object.keys(payload).length)) {
                 return state;
             }
-            console.log('2222222222222');
             const newState = {
                 ...state,
                 ...payload

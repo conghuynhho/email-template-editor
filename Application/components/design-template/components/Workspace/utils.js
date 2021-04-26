@@ -468,24 +468,28 @@ export const buildDesignData = (nestedData) => {
     const schemaVersion = getObjectPropSafely(()=>nestedData.schemaVersion);
 
     const nestedRows = getObjectPropSafely(()=>nestedData.body.rows);
-    let countRow = 0;
-    let countColumn = 0;
-    let countContent = 0;
+    let countID = 2;
+    // let countRow = 0;
+    // let countColumn = 0;
+    // let countContent = 0;
     let rowsIDArray = [];
 
     nestedRows.forEach((row) => {
         const nestedColumns = getObjectPropSafely(()=>row.columns);
         let columnsIDArray = [];
+        const rowID = ++countID;
 
         nestedColumns.forEach((column) => {
             const nestedContents = getObjectPropSafely(()=>column.contents);
             let contentsIDArray = [];
+            const columnID = ++countID;
 
             nestedContents.forEach(content => {
+                const contentID = ++countID;
                 const saveContent = {
-                    [countContent]: {
+                    [contentID]: {
                         ...content,
-                        location: {collection: 'columns', id: `${countContent}`}
+                        location: {collection: 'columns', id: `${contentID}`}
                     }
                 };
 
@@ -493,14 +497,13 @@ export const buildDesignData = (nestedData) => {
                     ...contents,
                     ...saveContent
                 };
-                contentsIDArray.push(countContent);
-                countContent++;
+                contentsIDArray.push(contentID);
             });
             const saveColumn = {
-                [countColumn]: {
+                [columnID]: {
                     contents: contentsIDArray,
                     values: getObjectPropSafely(()=>column.values),
-                    location: {collection: 'columns', id: `${countColumn}`}
+                    location: {collection: 'columns', id: `${columnID}`}
                 }
             };
 
@@ -508,15 +511,14 @@ export const buildDesignData = (nestedData) => {
                 ...columns,
                 ...saveColumn
             };
-            columnsIDArray.push(countColumn);
-            countColumn++;
+            columnsIDArray.push(columnID);
         });
         const saveRow = {
-            [countRow]: {
+            [rowID]: {
                 cells: getObjectPropSafely(()=>row.cells),
                 columns: columnsIDArray,
                 values: getObjectPropSafely(()=>row.values),
-                location: {collection: 'rows', id: `${countRow}`}
+                location: {collection: 'rows', id: `${rowID}`}
             }
         };
 
@@ -524,8 +526,7 @@ export const buildDesignData = (nestedData) => {
             ...rows,
             ...saveRow
         };
-        rowsIDArray.push(countRow);
-        countRow++;
+        rowsIDArray.push(rowID);
     });
 
     const bodies = {
@@ -546,8 +547,8 @@ export const buildDesignData = (nestedData) => {
             rows: rows,
             contents: contents,
             schemaVersion: schemaVersion,
-            idCounters: idCounters
-            // page: {1: {body: '2', schemaVersion: 5, location: {collection: 'page', id: '1'}}}
+            idCounters: idCounters,
+            page: {1: {body: '2', schemaVersion: 5, location: {collection: 'page', id: '1'}}}
         }
     };
 
