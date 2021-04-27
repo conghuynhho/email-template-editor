@@ -767,14 +767,16 @@ const LayoutDesign = () => {
 
         result.then(res => {
             const payload = buildDesignData(getObjectPropSafely(()=>res.data.data.list_gallery[0].design));
+            const timeOutSpinner = setTimeout(()=>setIsFetchAPI(false), 100);
 
-            if (res.status >= 200 && res.status <= 299) {
-                dispatchStore({
-                    type: actionType.INITIAL_DATA,
-                    payload: payload.design
-                });
-                setIsFetchAPI(false);
-            }
+            // if (res.status >= 200 && res.status <= 299) {
+            //     dispatchStore({
+            //         type: actionType.INITIAL_DATA,
+            //         payload: payload.design
+            //     });
+            //     setIsFetchAPI(false);
+            //     clearTimeout(timeOutSpinner);
+            // }
 
         });
 

@@ -59,7 +59,6 @@ const Style = props => {
     } = props;
     const [config, setConfig] = useState({});
     const [activeColumn, setActiveColumn] = useState(0);
-
     const {state: store = {}, dispatch: dispatchStore} = useContext(StoreContext);
     const {
         activeElement,
@@ -112,6 +111,7 @@ const Style = props => {
     };
 
     const updateComponent = (idParent, idChild, receivedValues) => {
+        console.log(idChild, idParent, receivedValues);
         if (activeElement.includes('row')) {
             let newRow = {};
             let newColumn = {};
@@ -952,7 +952,7 @@ const Style = props => {
                                     styleLabel={{height: 30}}
                                     style={getObjectPropSafely(() => style.styleChild) || {width: 100}}
                                     value={valueStyle || defaultValue}
-                                // onChange={handleOnChange}
+                                    onChange={(content)=>updateComponent(idParent,idChild,content)}
                                 />
                                 {
                                     isShowUnit ? (
