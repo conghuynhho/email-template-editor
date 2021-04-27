@@ -24,7 +24,7 @@ const Html = props => {
                 <div className={classnames(styles['block-full'])} style={{width: 'calc(100 % - 6px)'}}>
                     <div className={classnames(styles['section-label-title'])}>{translate(config.name, config.name)}</div>
                     <hr style={{marginTop: 5, marginBottom: 5}} />
-                    <Style style={style} values={values} />
+                    <Style style={style} values={values} content={content} />
                 </div>
             );
         } catch (error) {
