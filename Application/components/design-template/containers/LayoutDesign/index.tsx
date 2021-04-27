@@ -764,20 +764,22 @@ const LayoutDesign = () => {
         const api = 'https://sandbox-email.ants.vn/api/gallery/index?page=1&limit=6&_token=5474r2x214r26474z274y4v5r426q2j5t2b4s494u5&_user_id=1600007645&_account_id=1600001262&_lang=en';
 
         const result = axios.get(api);
+        const timeOutSpinner = setTimeout(()=>setIsFetchAPI(false), 6000);
 
         result.then(res => {
             const payload = buildDesignData(getObjectPropSafely(()=>res.data.data.list_gallery[0].design));
-            const timeOutSpinner = setTimeout(()=>setIsFetchAPI(false), 100);
 
-            // if (res.status >= 200 && res.status <= 299) {
-            //     dispatchStore({
-            //         type: actionType.INITIAL_DATA,
-            //         payload: payload.design
-            //     });
-            //     setIsFetchAPI(false);
-            //     clearTimeout(timeOutSpinner);
-            // }
-
+            if (res.status >= 200 && res.status <= 299) {
+                dispatchStore({
+                    type: actionType.INITIAL_DATA,
+                    payload: payload.design
+                });
+                setIsFetchAPI(false);
+                clearTimeout(timeOutSpinner);
+            }
+        }).catch(()=>{
+            setIsFetchAPI(false);
+            clearTimeout(timeOutSpinner);
         });
 
     }, []);
