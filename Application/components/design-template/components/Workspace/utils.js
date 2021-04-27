@@ -1,4 +1,4 @@
-import {debounce, result} from 'lodash';
+import {debounce, result, cloneDeep} from 'lodash';
 import {string} from 'prop-types';
 import {getObjectPropSafely} from 'Utils';
 import {typeElement} from 'Components/design-template/constants';
@@ -20,16 +20,15 @@ export const hierarchyDesignData = (data) => {
         const columnKeys = getObjectPropSafely(() => data.rows[row].columns);
 
         const columns = columnKeys.map(columnKey => {
-
             for (const key in data.columns) {
-                if (key === columnKey) {
+                if (Number(key) === Number(columnKey)) {
                     const contentKeys = getObjectPropSafely(
                         () => data.columns[key].contents
                     );
 
                     const contents = contentKeys.map((contentKey) => {
                         for (const key in data.contents) {
-                            if (key === contentKey) {
+                            if (Number(key) === Number(contentKey)) {
                                 return {
                                     type: getObjectPropSafely(() => data.contents[key].type),
                                     slug: undefined,
@@ -46,6 +45,8 @@ export const hierarchyDesignData = (data) => {
                 }
             }
         });
+
+        // console.log(columns, 'asdklfjdlksfjasd');
 
         rows.push({
             cells: getObjectPropSafely(() => data.rows[row].cells),
@@ -717,4 +718,101 @@ export const exportHtml = (store) => {
     </table>
     </body>`;
     return html;
+};
+export const buildDesignData = (data) => {
+    const nestedData = cloneDeep(data);
+    const body = getObjectPropSafely(()=>nestedData.body);
+    let columns = {};
+    let contents = {};
+    let rows = {};
+    const idCounters = {...getObjectPropSafely(()=>nestedData.counters)};
+    // const usageCounters = {};
+    const schemaVersion = getObjectPropSafely(()=>nestedData.schemaVersion);
+
+    const nestedRows = getObjectPropSafely(()=>nestedData.body.rows);
+    let countID = 2;
+    // let countRow = 0;
+    // let countColumn = 0;
+    // let countContent = 0;
+    let rowsIDArray = [];
+
+    nestedRows.forEach((row) => {
+        const nestedColumns = getObjectPropSafely(()=>row.columns);
+        let columnsIDArray = [];
+        const rowID = ++countID;
+
+        nestedColumns.forEach((column) => {
+            const nestedContents = getObjectPropSafely(()=>column.contents);
+            let contentsIDArray = [];
+            const columnID = ++countID;
+
+            nestedContents.forEach(content => {
+                const contentID = ++countID;
+                const saveContent = {
+                    [contentID]: {
+                        ...content,
+                        location: {collection: 'columns', id: `${contentID}`}
+                    }
+                };
+
+                contents = {
+                    ...contents,
+                    ...saveContent
+                };
+                contentsIDArray.push(contentID + '');
+            });
+            const saveColumn = {
+                [columnID]: {
+                    contents: contentsIDArray,
+                    values: getObjectPropSafely(()=>column.values),
+                    location: {collection: 'columns', id: `${columnID}`}
+                }
+            };
+
+            columns = {
+                ...columns,
+                ...saveColumn
+            };
+            columnsIDArray.push(columnID + '');
+        });
+        const saveRow = {
+            [rowID]: {
+                cells: getObjectPropSafely(()=>row.cells),
+                columns: columnsIDArray,
+                values: getObjectPropSafely(()=>row.values),
+                location: {collection: 'rows', id: `${rowID}`}
+            }
+        };
+
+        rows = {
+            ...rows,
+            ...saveRow
+        };
+        rowsIDArray.push(rowID + '');
+    });
+
+    const bodies = {
+        2: {
+            location: {
+                collection: 'bodies',
+                id : '2' 
+            },
+            rows: rowsIDArray,
+            values: getObjectPropSafely(()=> body.values)
+        }
+    };
+
+    const saveDesignData = {
+        design: {
+            bodies: bodies,
+            columns: columns,
+            rows: rows,
+            contents: contents,
+            schemaVersion: schemaVersion,
+            idCounters: idCounters,
+            page: {1: {body: '2', schemaVersion: 5, location: {collection: 'page', id: '1'}}}
+        }
+    };
+
+    return saveDesignData;
 };

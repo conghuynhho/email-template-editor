@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import classnames from 'classnames';
 import SidePanel from 'Components/design-template/components/SidePanel';
 import Workspace from 'Components/design-template/components/Workspace';
@@ -28,6 +28,9 @@ import {
 import {getObjectPropSafely, getOffset} from 'Utils';
 import produce from 'immer';
 import PreviewModal from 'Components/design-template/components/PreviewModal';
+import axios from 'axios';
+import {buildDesignData} from 'Components/design-template/components/Workspace/utils';
+import Spinner from 'Components/design-template/components/UI/Spinner';
 
 const LayoutDesign = () => {
     const {state: store, dispatch: dispatchStore} = useContext(StoreContext);
@@ -64,6 +67,7 @@ const LayoutDesign = () => {
     const [activeRowIndex, setActiveRowIndex] = useState(-1);
     const [typeDragDropSidePanel, setTypeDragDropSidePanel] = useState('');
     const [targetElement, setTargetElement] = useState('');
+    const [isFetchAPI, setIsFetchAPI] = useState(true);
 
     const getDragItHereRowIndexes = (rowIndex, destinationRowIdx, rowArea) => {
         setDragItHereIndex(rowIndex); 
@@ -756,13 +760,31 @@ const LayoutDesign = () => {
 
     };
 
-    return (
-        <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+    useEffect(() => {
+        const api = 'https://sandbox-email.ants.vn/api/gallery/index?page=1&limit=6&_token=5474r2x214r26474z274y4v5r426q2j5t2b4s494u5&_user_id=1600007645&_account_id=1600001262&_lang=en';
 
+        const result = axios.get(api);
+
+        result.then(res => {
+            const payload = buildDesignData(getObjectPropSafely(()=>res.data.data.list_gallery[0].design));
+
+            if (res.status >= 200 && res.status <= 299) {
+                dispatchStore({
+                    type: actionType.INITIAL_DATA,
+                    payload: payload.design
+                });
+                setIsFetchAPI(false);
+            }
+
+        });
+
+    }, []);
+
+    return isFetchAPI ? <div className={classnames(styles['spinner-container'])}><Spinner /></div> : (
+        <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
             <div className={classnames(
                 styles['grid-container'],
                 {[styles['side-panel-left']] : sidePanelMode === CONSTANTS.SIDE_PANEL_MODE.LEFT}
-               
             )}
             style={!isEditing ? {overflowY: 'scroll', height: '100vh'} : {}}
             onMouseMove={onMouseMoveItem}

@@ -684,7 +684,7 @@ const Row = (props) => {
             }
 
             if (targetElement.includes('u_row') || targetElement.includes('u_content')) {
-    
+                
                 const elm = document.querySelector(`#${targetElement}`);
 
                 const height = targetElement && document.getElementById(targetElement).offsetHeight;

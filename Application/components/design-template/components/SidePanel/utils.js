@@ -145,7 +145,6 @@ export const exportHTML = (nestedData) => {
                 // return eval(getObjectPropSafely(()=>href.attrs.href));
                 return `${href.name}:${phoneNumber}`;
             }
-        
             default:
                 return '';
         }
@@ -159,6 +158,20 @@ export const exportHTML = (nestedData) => {
         const result = [right,left];
 
         return result;
+    };
+    const generateBGImage = (bg) => {
+        if (!bg) {return ''}
+        const bgImageURL = getObjectPropSafely(()=>bg.url);
+
+        if (!bgImageURL) {return ''}
+        const bgImageRepeat = getObjectPropSafely(()=>bg.repeat);
+        const bgImageCenter = getObjectPropSafely(()=>bg.center);
+
+        return `
+                    background-image: url(${bgImageURL});
+                    background-repeat: ${bgImageRepeat ? 'repeat' : 'no-repeat'};
+                    background-position: ${bgImageCenter ? 'center top' : 'left top'};
+                `;
     };
     
     const switchCaseRenderHTMLContent = (content,columnWidth) => {
@@ -292,7 +305,7 @@ export const exportHTML = (nestedData) => {
                 const menuFontFamily = getObjectPropSafely(()=>content.values.fontFamily);
                 const menuAlign = getObjectPropSafely(()=>content.values.align);
                 const menuFontSize = getObjectPropSafely(()=>content.values.fontSize);
-                // const menuLinkColor = getObjectPropSafely(()=>content.values.linkColor);
+                const menuLinkColor = getObjectPropSafely(()=>content.values.linkColor);
                 const menuPadding = getObjectPropSafely(()=>content.values.padding);
                 const menuTextColor = getObjectPropSafely(()=>content.values.textColor);
                 const menuLayout = getObjectPropSafely(()=>content.values.layout);
@@ -302,18 +315,27 @@ export const exportHTML = (nestedData) => {
                     <div class="menu" style="text-align: ${menuAlign || 'center'}">
                         <!--[if (mso)|(IE)]><table role="presentation" border="0" cellpadding="0" cellspacing="0" align=${menuAlign || 'center'}><tr><![endif]-->
 
-                        ${Array.isArray(menuItem) && menuItem.length > 0 && ((menuItem.map((item, index) => (`
+                        ${Array.isArray(menuItem) && menuItem.length > 0 && ((menuItem.map((item, index) => {
+        const itemName = getObjectPropSafely(()=>item.link.name);
+        const itemText = getObjectPropSafely(()=>item.text);
+        const webLink = getObjectPropSafely(()=>item.link.values.href);
+        const itemTarget = getObjectPropSafely(()=>item.link.values.target) || '_blank';
+        const isShowATag = (webLink && itemName === 'web') ? true : false; 
+        const itemHref = getObjectPropSafely(()=>item.link);
+
+        return (`
                                 <!--[if (mso)|(IE)]><td style="padding:${menuPadding || '0px'}"><![endif]-->
-                                <span
+                                ${isShowATag ? `<a href=${getHrefButton(itemHref)} target=${itemTarget}` : '<span'}
                                 style="
                                     padding: ${menuPadding || '0px'} ;
                                     display: ${menuLayout === 'horizontal' ? 'inline' : (menuLayout === 'vertical' ? 'block' : 'inline')};
-                                    color: ${menuTextColor || '#000000'};
+                                    color: ${isShowATag ? menuLinkColor : (menuTextColor || '#000000')};
                                     font-size: ${menuFontSize ?? '14px'} ;
                                     font-family: ${getObjectPropSafely(()=>menuFontFamily.value) || '\'Montserrat\', sans-serif'};
+                                    ${isShowATag && 'text-decoration: none;'}
                                 "
                                 >
-                                ${getObjectPropSafely(()=>item.text) || ''}
+                                ${itemText || ''}
                                 </span>
                                 <!--[if (mso)|(IE)]></td><![endif]-->
 
@@ -324,7 +346,7 @@ export const exportHTML = (nestedData) => {
                                     </span>
                                     <!--[if (mso)|(IE)]></td><![endif]-->
                                 ` : ''}
-                            `)))).join('')}
+                            `);}))).join('')}
 
                         <!--[if (mso)|(IE)]></tr></table><![endif]-->
                     </div>
@@ -390,6 +412,7 @@ export const exportHTML = (nestedData) => {
                 const imageAction = getObjectPropSafely(()=>content.values.action);
                 const imageActionLink = getObjectPropSafely(()=>content.values.action.values.href);
                 const imageAutoWidth = getObjectPropSafely(()=>content.values.src.autoWidth);
+                const imageWidth = getObjectPropSafely(()=>content.values.src.width);
                 // const imageHeight = getObjectPropSafely(()=>content.values.src.height);
                 const imageMaxWidth = ( imageAutoWidth === false ? getObjectPropSafely(()=>content.values.src.maxWidth)  : '100%');
                 const imageURL = getObjectPropSafely(()=>content.values.src.url);
@@ -431,9 +454,9 @@ export const exportHTML = (nestedData) => {
                                 height: auto;
                                 float: none;
                                 width: ${imageAutoWidth ? '100%' : imageMaxWidth };
-                                max-width: ${(columnWidth * percentWidth) - Number(rightPadding) - Number(leftPadding) } ;
+                                max-width: ${(imageAutoWidth === undefined || imageAutoWidth === true) ? imageWidth : (columnWidth * percentWidth) - Number(rightPadding) - Number(leftPadding)}px ;
                             "
-                            width="138.6"
+                            width=${(imageAutoWidth === undefined || imageAutoWidth === true) ? imageWidth : (columnWidth * percentWidth) - Number(rightPadding) - Number(leftPadding)}
                             class="v-src-width v-src-max-width"
                             />
                             ${imageActionLink ? '</a>' : ''}
@@ -445,20 +468,6 @@ export const exportHTML = (nestedData) => {
             default:
                 break;
         }
-    };
-    const generateBGImage = (bg) => {
-        if (!bg) {return ''}
-        const bgImageURL = getObjectPropSafely(()=>bg.url);
-
-        if (!bgImageURL) {return ''}
-        const bgImageRepeat = getObjectPropSafely(()=>bg.repeat);
-        const bgImageCenter = getObjectPropSafely(()=>bg.center);
-
-        return `
-                    background-image: url(${bgImageURL});
-                    background-repeat: ${bgImageRepeat ? 'repeat' : 'no-repeat'};
-                    background-position: ${bgImageCenter ? 'center top' : 'left top'};
-                `;
     };
 
     const generateRows = (rows) => {
@@ -488,12 +497,13 @@ export const exportHTML = (nestedData) => {
                     const imageID = getObjectPropSafely(()=>content.values._meta.htmlID);
                     const dividerWidth = getObjectPropSafely(()=>content.values.width);
                     const hideDesktop = getObjectPropSafely(()=>content.values.hideDesktop);
+                    const hideMobile = getObjectPropSafely(()=>content.values.hideMobile);
 
                     return `
                     ${hideDesktop ? '<!--[if !mso]><!-->' : ''}
                         <table
                             ${imageID && imageID.indexOf('image') > 0 && `id:${imageID}`}
-                            ${hideDesktop ? 'class: "hide-desktop"' : ''}
+                            ${hideDesktop ? (hideMobile ? 'class: "hide-desktop hide-mobile"' : 'class :"hide-desktop"') : ''}
                             style="${hideDesktop ? 'display:none; mso-hide: all;' : ''} font-family: ${fontFamily?.value || '"Montserrat", sans-serif'}"
                             role="presentation"
                             cellpadding="0"
@@ -512,8 +522,7 @@ export const exportHTML = (nestedData) => {
                                         "
                                         align="left"
                                     >
-                                    ${switchCaseRenderHTMLContent(content, columnWidth)}
-
+                                        ${switchCaseRenderHTMLContent(content, columnWidth)}
                                     </td>
                                 </tr>
                             </tbody>
@@ -606,7 +615,7 @@ export const exportHTML = (nestedData) => {
             padding: 0;
             -webkit-text-size-adjust: 100%;
             background-color: ${getObjectPropSafely(()=>bodyValues.backgroundColor) || '#e8d4bb'};
-        "
+            "
         >
             <!--[if IE]><div class="ie-container"><![endif]-->
             <!--[if mso]><div class="mso-container"><![endif]-->
@@ -620,7 +629,7 @@ export const exportHTML = (nestedData) => {
                 vertical-align: top;
                 min-width: 320px;
                 margin: 0 auto;
-                background-color: #e8d4bb;
+                background-color: ${getObjectPropSafely(()=>bodyValues.backgroundColor) || '#e8d4bb'};
                 width: 100%;
             "
             cellpadding="0"
@@ -628,14 +637,41 @@ export const exportHTML = (nestedData) => {
             >
                 <tbody>
                 ${preheaderText ? `
-                    <tr style="vertical-align: top"> 
-                        <td style="display:none !important;visibility:hidden;mso-hide:all;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
-                        ${preheaderText}
+                    <tr>
+                        <td
+                            style="
+                            display: none !important;
+                            visibility: hidden;
+                            mso-hide: all;
+                            font-size: 1px;
+                            color: #ffffff;
+                            line-height: 1px;
+                            max-height: 0px;
+                            max-width: 0px;
+                            opacity: 0;
+                            overflow: hidden;
+                            "
+                        >
+                            ${preheaderText}
                         </td>
                     </tr>
                 ` : ''}
 
-                ${generateRows(getObjectPropSafely(()=>nestedData.body.rows,[]))}
+                <tr style="vertical-align: top">
+                    <td
+                        style="
+                        word-break: break-word;
+                        border-collapse: collapse !important;
+                        vertical-align: top;
+                        "
+                    >
+                    <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color: ${getObjectPropSafely(()=>bodyValues.backgroundColor) || '#e8d4bb'};"><![endif]-->
+                        ${generateRows(getObjectPropSafely(()=>nestedData.body.rows,[]))}
+                    <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+                    </td>
+                </tr>
+
+                
                 </tbody>
             </table>
             <!--[if mso]></div><![endif]-->

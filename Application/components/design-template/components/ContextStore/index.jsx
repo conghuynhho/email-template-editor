@@ -20,7 +20,6 @@ const reducer = (state, action) => {
             if (!getObjectPropSafely(() => Object.keys(payload).length)) {
                 return state;
             }
-
             const newState = {
                 ...state,
                 ...payload
