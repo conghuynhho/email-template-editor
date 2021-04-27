@@ -1,6 +1,6 @@
 import {forEach} from 'lodash';
 import {getObjectPropSafely} from 'Utils/index.ts';
-import {previewModeConstants} from 'Components/design-template/components/PreviewModal/constants.js';
+import {CONSTANTS} from 'Components/design-template/constants';
 
 export const getPaddingChild = (padding) => {
     const result = {};
@@ -501,11 +501,11 @@ export const exportHTML = (nestedData, previewMode) => {
                     const hideMobile = getObjectPropSafely(()=>content.values.hideMobile);
 
                     return `
-                    ${hideDesktop && previewMode === previewModeConstants.PREVIEW_DESKTOP ? '<!--[if !mso]><!-->' : ''}
+                    ${hideDesktop && previewMode === CONSTANTS.VIEW_MODE.DESKTOP ? '<!--[if !mso]><!-->' : ''}
                         <table
                             ${imageID && imageID.indexOf('image') > 0 && `id:${imageID}`}
-                            ${hideDesktop && previewMode === previewModeConstants.PREVIEW_DESKTOP ? 'class :"hide-desktop"' : (hideMobile && previewMode === previewModeConstants.PREVIEW_MOBILE ? 'class: "hide-mobile"' : '' )}
-                            style="${(hideDesktop && previewMode === previewModeConstants.PREVIEW_DESKTOP) || (hideMobile && previewMode === previewModeConstants.PREVIEW_MOBILE) ? 'display:none; mso-hide: all;' : ''} font-family: ${fontFamily?.value || '"Montserrat", sans-serif'}"
+                            ${hideDesktop && previewMode === CONSTANTS.VIEW_MODE.DESKTOP ? 'class :"hide-desktop"' : (hideMobile && previewMode === CONSTANTS.VIEW_MODE.MOBILE ? 'class: "hide-mobile"' : '' )}
+                            style="${(hideDesktop && previewMode === CONSTANTS.VIEW_MODE.DESKTOP) || (hideMobile && previewMode === CONSTANTS.VIEW_MODE.MOBILE) ? 'display:none; mso-hide: all;' : ''} font-family: ${fontFamily?.value || '"Montserrat", sans-serif'}"
                             role="presentation"
                             cellpadding="0"
                             cellspacing="0"
@@ -528,7 +528,7 @@ export const exportHTML = (nestedData, previewMode) => {
                                 </tr>
                             </tbody>
                         </table>
-                    ${hideDesktop && previewMode === previewModeConstants.PREVIEW_DESKTOP ? '<!--<![endif]-->' : ''}
+                    ${hideDesktop && previewMode === CONSTANTS.VIEW_MODE.DESKTOP ? '<!--<![endif]-->' : ''}
                     `;
                 }));
 
