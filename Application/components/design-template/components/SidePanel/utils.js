@@ -1,5 +1,6 @@
 import {forEach} from 'lodash';
 import {getObjectPropSafely} from 'Utils/index.ts';
+import {previewModeConstants} from 'Components/design-template/components/PreviewModal/constants.js';
 
 export const getPaddingChild = (padding) => {
     const result = {};
@@ -113,7 +114,7 @@ const getBorderStyle = (border) => {
     return result;
 };
 
-export const exportHTML = (nestedData) => {
+export const exportHTML = (nestedData, previewMode) => {
     if (!nestedData) {
         return;
     }
@@ -500,11 +501,11 @@ export const exportHTML = (nestedData) => {
                     const hideMobile = getObjectPropSafely(()=>content.values.hideMobile);
 
                     return `
-                    ${hideDesktop ? '<!--[if !mso]><!-->' : ''}
+                    ${hideDesktop && previewMode === previewModeConstants.PREVIEW_DESKTOP ? '<!--[if !mso]><!-->' : ''}
                         <table
                             ${imageID && imageID.indexOf('image') > 0 && `id:${imageID}`}
-                            ${hideDesktop ? (hideMobile ? 'class: "hide-desktop hide-mobile"' : 'class :"hide-desktop"') : ''}
-                            style="${hideDesktop ? 'display:none; mso-hide: all;' : ''} font-family: ${fontFamily?.value || '"Montserrat", sans-serif'}"
+                            ${hideDesktop && previewMode === previewModeConstants.PREVIEW_DESKTOP ? 'class :"hide-desktop"' : (hideMobile && previewMode === previewModeConstants.PREVIEW_MOBILE ? 'class: "hide-mobile"' : '' )}
+                            style="${(hideDesktop && previewMode === previewModeConstants.PREVIEW_DESKTOP) || (hideMobile && previewMode === previewModeConstants.PREVIEW_MOBILE) ? 'display:none; mso-hide: all;' : ''} font-family: ${fontFamily?.value || '"Montserrat", sans-serif'}"
                             role="presentation"
                             cellpadding="0"
                             cellspacing="0"
@@ -527,7 +528,7 @@ export const exportHTML = (nestedData) => {
                                 </tr>
                             </tbody>
                         </table>
-                    ${hideDesktop ? '<!--<![endif]-->' : ''}
+                    ${hideDesktop && previewMode === previewModeConstants.PREVIEW_DESKTOP ? '<!--<![endif]-->' : ''}
                     `;
                 }));
 

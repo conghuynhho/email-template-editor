@@ -16,6 +16,8 @@ const Workspace = (props) => {
     const {viewMode, activeElement} = store;
     const nestedData = hierarchyDesignData(store);
 
+    console.log(store, 'store');
+
     const {
         typeDraggingWorkspace = '',
         getSourceIndexes,
